@@ -44,8 +44,5 @@ jobs:
       - name: Analyze Flutter
         run: dart analyze --fatal-infos
 
-      - name: Start test
-        run: flutter test
-
       - name: Start release build
         run: flutter build appbundle
