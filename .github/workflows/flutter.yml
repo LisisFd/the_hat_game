@@ -8,21 +8,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
       - uses: actions/checkout@v3
+
+      - name: Install flutter
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           cache: true
           cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
           cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:'
+      
       - name: Check version
-      - run: flutter --version
+        run: flutter --version
 
-      - name: Install dependency
-      - run: flutter pub get
+      - name: Install dependencies
+        run: flutter pub get
 
       - name: Verify formatting
         run: dart format --output=none .
 
       - name: Analyze Flutter
         run: dart analyze --fatal-infos
+
+      - name: Start test
+        run: flutter test
+
+      - name: Start release build
+        run: flutter build appbundle
