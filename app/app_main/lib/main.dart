@@ -1,20 +1,12 @@
 import "dart:async";
 
 import 'package:app_core/app_core.dart';
-import 'package:app_core/config.dart';
-import 'package:app_core/localization.dart';
-import 'package:app_core/theme.dart';
+import 'package:app_main/services.dart';
 import 'package:core_flutter/core_flutter.dart';
-import 'package:core_flutter/diagnostics.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_localization/core_localization.dart';
 import 'package:core_ui/core_ui.dart';
-import 'package:core_ui/localizations.dart';
 import 'package:core_utils/core_utils.dart';
-import 'package:hotel_domain/hotel_domain.dart';
-import 'package:hotel_domain/localization.dart';
-import 'package:hotel_domain_ui/localization.dart';
-import 'package:property_information/localization.dart';
 
 Future runFullApp() async {
   var container = await initFullApp();
@@ -49,6 +41,8 @@ Future initDependencyInjection() async {
       container,
     );
   });
+  RootAppNavigation navigation = getWidgetService<RootAppNavigation>();
+  navigation.registerRoutes();
 }
 
 Future _runWithDependencyInjection(
@@ -64,14 +58,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    RootAppNavigation navigation = getWidgetService<RootAppNavigation>();
     LocalizationService localizationService =
         getWidgetService<LocalizationService>();
-    return MaterialApp.router(
-        scrollBehavior: AppScrollBehavior(),
+    return MaterialApp(
         onGenerateTitle: (context) => context.localization().common_appName,
         debugShowCheckedModeBanner: false,
         theme: MyAppTheme.createMaterial(),
         themeMode: ThemeMode.light,
+        onGenerateInitialRoutes: navigation.onGenerateInitialRoutes,
+        onGenerateRoute: navigation.onGenerateRoute,
+        key: navigation.rootContainer.navigatorKey,
         supportedLocales: localizationService.supportedLocales,
         localizationsDelegates: [
           AppLocalizations.delegate,

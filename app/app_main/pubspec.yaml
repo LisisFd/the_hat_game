@@ -37,6 +37,8 @@ dependencies:
     path: "../../flutter_core/controller/core_flutter"
   core_localization:
     path: "../../flutter_core/controller/core_localization"
+  core_storage:
+    path: "../../flutter_core/controller/core_storage"
   #------------------DOMAIN------------------------
   core_utils:
     path: "../../flutter_core/domain/core_utils"
