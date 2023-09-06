@@ -22,12 +22,6 @@ jobs:
       - name: Check version
         run: flutter --version
 
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Verify formatting
-        run: dart format --output=none .
-
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v2
@@ -40,8 +34,14 @@ jobs:
         run: |
           git pull --recurse-submodules
           git submodule update --remote --recursive
-          ./flutter_core/tools/run-build-runner.sh
+          ./flutter_core/tools/run-build-runner.sh      
 
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none .
 
       - name: Analyze Flutter
         run: dart analyze --fatal-infos
