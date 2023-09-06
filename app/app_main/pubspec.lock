@@ -10,16 +10,9 @@ packages:
     source: hosted
     version: "2.0.8"
   app_core:
-    dependency: transitive
-    description:
-      path: "app/app_core"
-      relative: true
-    source: path
-    version: "1.0.0+1"
-  app_main:
     dependency: "direct main"
     description:
-      path: "app/app_main"
+      path: "../app_core"
       relative: true
     source: path
     version: "1.0.0+1"
@@ -106,70 +99,70 @@ packages:
   core_api:
     dependency: transitive
     description:
-      path: "flutter_core/domain/core_api"
+      path: "../../flutter_core/domain/core_api"
       relative: true
     source: path
     version: "0.0.1"
   core_crypto:
     dependency: transitive
     description:
-      path: "flutter_core/domain/core_crypto"
+      path: "../../flutter_core/domain/core_crypto"
       relative: true
     source: path
     version: "0.0.1"
   core_firebase:
     dependency: transitive
     description:
-      path: "flutter_core/controller/core_firebase"
+      path: "../../flutter_core/controller/core_firebase"
       relative: true
     source: path
     version: "0.0.1"
   core_flutter:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      path: "flutter_core/controller/core_flutter"
+      path: "../../flutter_core/controller/core_flutter"
       relative: true
     source: path
     version: "0.0.1"
   core_get_it:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      path: "flutter_core/domain/core_get_it"
+      path: "../../flutter_core/domain/core_get_it"
       relative: true
     source: path
     version: "0.0.1"
   core_in_app_review:
     dependency: transitive
     description:
-      path: "flutter_core/controller/core_in_app_review"
+      path: "../../flutter_core/controller/core_in_app_review"
       relative: true
     source: path
     version: "0.0.1"
   core_localization:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      path: "flutter_core/controller/core_localization"
+      path: "../../flutter_core/controller/core_localization"
       relative: true
     source: path
     version: "0.0.1"
   core_storage:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      path: "flutter_core/controller/core_storage"
+      path: "../../flutter_core/controller/core_storage"
       relative: true
     source: path
     version: "0.0.1"
   core_ui:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      path: "flutter_core/view/core_ui"
+      path: "../../flutter_core/view/core_ui"
       relative: true
     source: path
     version: "0.0.1"
   core_utils:
-    dependency: transitive
+    dependency: "direct main"
     description:
-      path: "flutter_core/domain/core_utils"
+      path: "../../flutter_core/domain/core_utils"
       relative: true
     source: path
     version: "0.0.1"

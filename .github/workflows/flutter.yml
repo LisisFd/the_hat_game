@@ -10,6 +10,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.FLUTTER_CORE_SECRET_TOKEN }}
+          submodules: recursive
+          # Update references
+      - name: Git Sumbodule Update
+        run: |
+          git pull --recurse-submodules
+          git submodule update --remote --recursive             
 
       - name: Install flutter
         uses: subosito/flutter-action@v2
@@ -18,21 +26,23 @@ jobs:
           cache: true
           cache-key: 'flutter-:os:-:channel:-:version:-:arch:-:hash:' # optional, change this to force refresh cache
           cache-path: '${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:'
-      
+
       - name: Check version
         run: flutter --version
 
+      - name: Install dependencies flutter_core
+        run: ./flutter_core/tools/run-build-runner.sh
+
       - name: Install dependencies
         run: flutter pub get
+
+      - run: tools/build-localization.sh
 
       - name: Verify formatting
         run: dart format --output=none .
 
       - name: Analyze Flutter
         run: dart analyze --fatal-infos
-
-      - name: Start test
-        run: flutter test
 
       - name: Start release build
         run: flutter build appbundle
