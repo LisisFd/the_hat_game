@@ -32,8 +32,11 @@ jobs:
 
       - name: Install dependencies flutter_core
         run: ./flutter_core/tools/run-build-runner.sh
+
       - name: Install dependencies
         run: flutter pub get
+
+      - run: tools/build-localization.sh
 
       - name: Verify formatting
         run: dart format --output=none .
