@@ -1,12 +1,15 @@
 import "dart:async";
 
 import 'package:app_core/app_core.dart';
+import 'package:app_main/localization.dart';
 import 'package:app_main/services.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_localization/core_localization.dart';
 import 'package:core_ui/core_ui.dart';
 import 'package:core_utils/core_utils.dart';
+
+import 'localizations/generated/app_localizations.dart';
 
 Future runFullApp() async {
   var container = await initFullApp();
@@ -62,7 +65,7 @@ class MyApp extends StatelessWidget {
     LocalizationService localizationService =
         getWidgetService<LocalizationService>();
     return MaterialApp(
-        onGenerateTitle: (context) => context.localization().common_appName,
+        onGenerateTitle: (context) => context.localization().appName,
         debugShowCheckedModeBanner: false,
         theme: MyAppTheme.createMaterial(),
         themeMode: ThemeMode.light,
