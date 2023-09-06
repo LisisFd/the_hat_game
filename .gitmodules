@@ -1,3 +1,3 @@
 [submodule "flutter_core"]
 	path = flutter_core
-	url = https://github.com/LisisFd/flutter_core
+	url = git@github.com:LisisFd/flutter_core.git
