@@ -1,9 +1,9 @@
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
-class _RouteUrl {
-  static const String home = "/home";
-}
+// class _RouteUrl {
+//   static const String home = "/home";
+// }
 
 class AppRoutes extends IRouteNavigationBuilder {
   final RootAppNavigation router;
