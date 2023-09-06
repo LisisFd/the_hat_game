@@ -10,6 +10,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          # Update references
+      - name: Git Sumbodule Update
+        run: |
+          git pull --recurse-submodules
+          git submodule update --remote --recursive
+          ./flutter_core/tools/run-build-runner.sh             
 
       - name: Install flutter
         uses: subosito/flutter-action@v2
@@ -21,19 +29,6 @@ jobs:
 
       - name: Check version
         run: flutter --version
-
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
-      # Update references
-      - name: Git Sumbodule Update
-        run: |
-          git pull --recurse-submodules
-          git submodule update --remote --recursive
-          ./flutter_core/tools/run-build-runner.sh      
 
 
       - name: Install dependencies
