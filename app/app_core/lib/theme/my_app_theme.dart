@@ -1,9 +1,9 @@
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_ui/core_ui.dart';
 
-import 'app_color_scheme.dart';
-
 class ThemeConstants {
+  static const textColor = Color(0xFF332E30);
+  static const appColor = Color(0xFFFEAE62);
   static const heightBigButton = 64.0;
   static const minWidthBigButton = 320.0;
   static const maxWidthForm = 400.0;
@@ -25,7 +25,7 @@ class ThemeConstants {
 
   static const EdgeInsetsGeometry defaultCardPadding =
       EdgeInsetsDirectional.all(ThemeConstants.paddingPoint * 2);
-  static const Color primaryColor = Color(0xFF1C50D0);
+  static const Color primaryColor = ThemeConstants.appColor;
   static const Color textOnPrimaryColor = Color(0xFFFFFFFF);
   static const Color hideColor = Color(0xFFA7A5AF);
 
@@ -74,6 +74,7 @@ class MyAppTheme extends CustomAppThemeData {
       defaultTextStyle: const TextStyle(
         fontFamilyFallback: ThemeConstants.fallback,
         fontFamily: ThemeConstants.fontFamily,
+        color: ThemeConstants.textColor,
       ),
       appBarTextButtonStyle: const TextStyle(
           decoration: TextDecoration.none,
@@ -91,247 +92,19 @@ class MyAppTheme extends CustomAppThemeData {
     return AppThemeData<MyAppTheme>(material: material, custom: _createTheme());
   }
 
-  static ColorScheme _getScheme() {
-    return AppColorScheme.colorScheme;
+  static ColorScheme getColorScheme() {
+    return ColorScheme.fromSeed(seedColor: ThemeConstants.appColor);
   }
 
   static ThemeData createMaterial() {
     final ThemeData theme = ThemeData(
       useMaterial3: true,
-      colorScheme: _getScheme(),
-      appBarTheme: AppBarTheme(
-          backgroundColor: _getScheme().background, scrolledUnderElevation: 0),
-      iconTheme: IconThemeData(color: AppColorScheme.secondary, size: 30),
+      colorScheme: getColorScheme(),
+      iconTheme: const IconThemeData(size: 30),
       fontFamily: ThemeConstants.fontFamily,
       textTheme: _textTheme(),
       primaryTextTheme: _textTheme(),
       brightness: Brightness.light,
-      popupMenuTheme: PopupMenuThemeData(
-        color: AppColorScheme.card,
-        surfaceTintColor: AppColorScheme.card,
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        border: const OutlineInputBorder(),
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColorScheme.placeholder),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderSide:
-              BorderSide(color: AppColorScheme.placeholder.withOpacity(0.5)),
-        ),
-        alignLabelWithHint: true,
-        hintStyle:
-            _textTheme().bodyLarge?.copyWith(color: AppColorScheme.placeholder),
-        helperStyle:
-            _textTheme().bodySmall?.copyWith(color: AppColorScheme.placeholder),
-        labelStyle:
-            MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
-          if (states.contains(MaterialState.error)) {
-            return _textTheme()
-                    .bodyLarge
-                    ?.copyWith(color: _getScheme().error) ??
-                const TextStyle();
-          } else if (states.contains(MaterialState.disabled)) {
-            return _textTheme()
-                    .bodyLarge
-                    ?.copyWith(color: AppColorScheme.placeholder) ??
-                const TextStyle();
-          }
-          return _textTheme().bodyLarge?.copyWith(
-                  color: AppColorScheme.secondary.withOpacity(0.7)) ??
-              const TextStyle();
-        }),
-        floatingLabelStyle:
-            MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
-          if (states.contains(MaterialState.error)) {
-            return _textTheme()
-                    .bodyLarge
-                    ?.copyWith(color: _getScheme().error) ??
-                const TextStyle();
-          } else if (states.contains(MaterialState.focused)) {
-            return _textTheme()
-                    .bodyLarge
-                    ?.copyWith(color: _getScheme().primary) ??
-                const TextStyle();
-          }
-          return _textTheme()
-                  .bodyLarge
-                  ?.copyWith(color: AppColorScheme.secondary) ??
-              const TextStyle();
-        }),
-        prefixIconColor:
-            MaterialStateColor.resolveWith((Set<MaterialState> states) {
-          if (states.contains(MaterialState.disabled)) {
-            return AppColorScheme.placeholder;
-          }
-          return AppColorScheme.secondary;
-        }),
-        suffixIconColor:
-            MaterialStateColor.resolveWith((Set<MaterialState> states) {
-          if (states.contains(MaterialState.disabled)) {
-            return AppColorScheme.placeholder;
-          }
-          return AppColorScheme.secondary;
-        }),
-        helperMaxLines: 4,
-      ),
-      listTileTheme: ListTileThemeData(
-        contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 24),
-        iconColor: AppColorScheme.secondary,
-        minLeadingWidth: 0,
-        minVerticalPadding: 22,
-        selectedTileColor: AppColorScheme.neutralTonal.c95.withOpacity(.5),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return AppColorScheme.placeholder;
-              }
-              return _getScheme().onPrimary;
-            },
-          ),
-          overlayColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.hovered) ||
-                  states.contains(MaterialState.focused)) {
-                return AppColorScheme.primaryTonal.c30;
-              } else if (states.contains(MaterialState.pressed)) {
-                return AppColorScheme.primaryTonal.c20;
-              }
-              return _getScheme().primary;
-            },
-          ),
-          splashFactory: InkRipple.splashFactory,
-          backgroundColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return _getScheme().background;
-              }
-              return _getScheme().primary;
-            },
-          ),
-          textStyle: MaterialStateProperty.all(_textTheme().labelLarge),
-        ),
-      ),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: _getScheme().primary,
-          backgroundColor: Colors.transparent,
-          textStyle: _textTheme().labelLarge,
-          side: BorderSide(color: _getScheme().primary),
-        ),
-      ),
-      filledButtonTheme: FilledButtonThemeData(
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return AppColorScheme.placeholder;
-              }
-              return _getScheme().onSurface;
-            },
-          ),
-          overlayColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.hovered)) {
-                return AppColorScheme.neutralTonal.c90;
-              } else if (states.contains(MaterialState.focused)) {
-                return AppColorScheme.neutralTonal.c80;
-              } else if (states.contains(MaterialState.pressed)) {
-                return AppColorScheme.neutralTonal.c70;
-              }
-              return AppColorScheme.neutralTonal.c95;
-            },
-          ),
-          backgroundColor: MaterialStateProperty.resolveWith(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.disabled)) {
-                return _getScheme().background;
-              }
-              return AppColorScheme.neutralTonal.c95;
-            },
-          ),
-          textStyle: MaterialStateProperty.all(_textTheme().labelLarge),
-        ),
-      ),
-      segmentedButtonTheme: SegmentedButtonThemeData(
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all(AppColorScheme.secondary),
-          backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-              if (states.contains(MaterialState.selected)) {
-                return _getScheme().background;
-              }
-              return Colors.white;
-            },
-          ),
-          textStyle: MaterialStateProperty.all(_textTheme().labelLarge),
-        ),
-      ),
-      checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.disabled)) {
-              return AppColorScheme.stroke;
-            } else if (states.contains(MaterialState.selected)) {
-              return _getScheme().primary;
-            }
-            return AppColorScheme.placeholder;
-          },
-        ),
-      ),
-      radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.disabled)) {
-              return AppColorScheme.stroke;
-            } else if (states.contains(MaterialState.selected)) {
-              return _getScheme().primary;
-            }
-            return AppColorScheme.placeholder;
-          },
-        ),
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          textStyle: _textTheme().labelLarge,
-        ),
-      ),
-      chipTheme: ThemeConstants.chipThemeDefault,
-      progressIndicatorTheme:
-          ProgressIndicatorThemeData(linearTrackColor: _getScheme().primary),
-      navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: AppColorScheme.card,
-        surfaceTintColor: AppColorScheme.card,
-        shadowColor: AppColorScheme.card,
-      ),
-      dialogTheme: DialogTheme(
-        backgroundColor: AppColorScheme.card,
-        shadowColor: AppColorScheme.card,
-        surfaceTintColor: AppColorScheme.card,
-      ),
-      cardColor: AppColorScheme.card,
-      cardTheme: CardTheme(
-        color: AppColorScheme.card,
-        surfaceTintColor: AppColorScheme.card,
-        elevation: 0,
-        shadowColor: AppColorScheme.card,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: BorderSide(
-            color: AppColorScheme.stroke,
-          ),
-        ),
-      ),
-      bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: AppColorScheme.card,
-        surfaceTintColor: AppColorScheme.card,
-      ),
-      dividerTheme: const DividerThemeData(
-        space: 0,
-      ),
     );
     return theme;
   }

@@ -1,9 +1,9 @@
+import 'package:app_core/app_core.dart';
 import 'package:core_flutter/core_flutter.dart';
-import 'package:core_ui/core_ui.dart';
 
 class MainScreenArguments {}
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   static Widget pageBuilder(
       BuildContext context, PageArgumentsGeneric arguments) {
     return const MainScreen();
@@ -12,8 +12,13 @@ class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
   Widget build(BuildContext context) {
-    return const AppWrap(
+    return MyAppWrap(
         body: Center(
       child: SizedBox(
         width: 200,
