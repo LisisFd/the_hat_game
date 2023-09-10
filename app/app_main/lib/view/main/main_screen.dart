@@ -18,7 +18,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
-    return MyAppWrap(
+    return const MyAppWrap(
         body: Center(
       child: SizedBox(
         width: 200,
