@@ -1,6 +1,8 @@
 import 'package:app_main/localizations/generated/app_localizations.dart';
 import 'package:core_flutter/core_flutter.dart';
 
+export 'localizations/localizations.dart';
+
 extension AppLocalizationExtension on BuildContext {
   AppLocalizations localization() {
     return AppLocalizations.of(this)!;
