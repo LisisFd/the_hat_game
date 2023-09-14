@@ -2,8 +2,6 @@
 
 BASEDIR=$(dirname "$0")
 
-cd "$BASEDIR"
-../core/tools/run-build-runner.sh
 
 cd "$BASEDIR"
 cd ../app/app_main
