@@ -7,7 +7,7 @@ part 'settings.g.dart';
 class TheHatAppSettings implements IJsonWrite<TheHatAppSettings> {
   final int countWordsOnPlayer;
   final bool animation;
-  final int timePlayerTurn;
+  final double timePlayerTurn;
   final bool lastWord;
 
   @override
