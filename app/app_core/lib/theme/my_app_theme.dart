@@ -99,6 +99,13 @@ class MyAppTheme extends CustomAppThemeData {
   static ThemeData createMaterial() {
     final ThemeData theme = ThemeData(
       useMaterial3: true,
+      appBarTheme: AppBarTheme(
+        backgroundColor: getColorScheme().secondary,
+        titleTextStyle: _textTheme().titleLarge?.copyWith(
+              color: getColorScheme().onSecondary,
+            ),
+        iconTheme: IconThemeData(color: getColorScheme().onSecondary),
+      ),
       colorScheme: getColorScheme(),
       iconTheme: const IconThemeData(size: 30),
       fontFamily: ThemeConstants.fontFamily,
@@ -176,11 +183,11 @@ class MyAppTheme extends CustomAppThemeData {
       //     fontWeight: FontWeight.w400,
       //     fontSize: 24,
       //   ),
-      //   titleLarge: TextStyle(
-      //     fontFamilyFallback: ThemeConstants.fallback,
-      //     fontWeight: FontWeight.w400,
-      //     fontSize: 22,
-      //   ),
+      titleLarge: TextStyle(
+        fontFamilyFallback: ThemeConstants.fallback,
+        fontWeight: FontWeight.w400,
+        fontSize: 22,
+      ),
       //   titleMedium: TextStyle(
       //       fontFamilyFallback: ThemeConstants.fallback,
       //       fontWeight: FontWeight.w500,
