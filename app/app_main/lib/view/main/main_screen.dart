@@ -27,7 +27,9 @@ class _MainScreenState extends State<MainScreen> {
     AppLocalizations localize = context.localization();
     List<Widget> menu = [
       MenuButton(
-        onPressed: () {},
+        onPressed: () => RootAppNavigation.of(context).push(
+            _routes.teamsScreen(),
+            transition: TransitionAnimations.disable()),
         child: Text(localize.screen_main_btn_play),
       ),
       MenuButton(
