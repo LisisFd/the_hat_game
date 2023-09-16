@@ -15,7 +15,7 @@ class TheHatAppService extends ITheHatAppService {
 
   final Logger _logger = Logger("TheHatAppService");
 
-  late final Teams _teams;
+  late final List<String> _teams;
   final BehaviorSubject<TheHatAppSettings> _appSettings =
       BehaviorSubject<TheHatAppSettings>.updateNotNull(
           const TheHatAppSettings());
@@ -24,7 +24,7 @@ class TheHatAppService extends ITheHatAppService {
   IBehaviorSubjectReadonly<TheHatAppSettings> get appSettings => _appSettings;
 
   @override
-  Teams get teams => _teams;
+  List<String> get teams => _teams;
 
   TheHatAppService({required this.storage, required this.teamsRepository});
 
@@ -48,7 +48,7 @@ class TheHatAppService extends ITheHatAppService {
   }
 
   Future<void> _initTeams() async {
-    _teams = await teamsRepository.getTeams();
+    _teams = await teamsRepository.getTeamsByLocale('');
   }
 }
 

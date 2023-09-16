@@ -1,5 +1,7 @@
 import 'package:app_core/app_core.dart';
+import 'package:app_main/controllers/controllers.dart';
 import 'package:core_flutter/core_flutter.dart';
+import 'package:core_get_it/core_get_it.dart';
 import 'package:core_ui/core_ui.dart';
 
 class TeamsScreenArguments {}
@@ -20,32 +22,13 @@ class _TeamsScreenState extends State<TeamsScreen> {
   static const int _minTeamCount = 2;
   static const int _minPlayers = 4;
   static const int _maxPlayers = 10;
+  final ITheHatAppService appService = getWidgetService<ITheHatAppService>();
   final _listTeamsKey = GlobalKey<AnimatedListState>();
 
-  int _totalPlayers = _minPlayers;
-
-  final List<String> _teams = [
-    'First',
-    'Second',
-    'Another',
-    'Firs',
-    'Secon',
-    'Anothr',
-    'Fist',
-    'Seond',
-    'Aoher',
-    'Fit',
-    'Seond',
-    'Anther',
-    'Fst',
-    'Sond',
-    'ther',
-    '1',
-    '2',
-    '3',
-    '5',
-  ];
+  late final List<String> _teams = appService.teams;
   late final List<String> _currentTeams = _teams.sublist(0, _minTeamCount);
+
+  int _totalPlayers = _minPlayers;
 
   void _addItem() {
     int length = _currentTeams.length;
