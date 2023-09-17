@@ -4,8 +4,6 @@ import 'package:app_main/models/entities/entities.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
-class SettingsScreenArguments {}
-
 class SettingsScreen extends StatefulWidget {
   static Widget pageBuilder(
       BuildContext context, PageArgumentsGeneric arguments) {

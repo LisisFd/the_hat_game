@@ -7,6 +7,7 @@ class _RouteUrl {
   static const String main = "/main";
   static const String settings = "/settings";
   static const String teams = "/set-up/teams";
+  static const String words = "/set-up/words";
 }
 
 class AppRoutes extends IRouteNavigationBuilder {
@@ -18,21 +19,33 @@ class AppRoutes extends IRouteNavigationBuilder {
 
   FullRouteInfo mainScreen() {
     return [
-      RouteArgument<MainScreenArguments>(_RouteUrl.main, MainScreenArguments())
+      const RouteArgument(
+        _RouteUrl.main,
+      )
     ];
   }
 
   FullRouteInfo settingsScreen() {
     return [
-      RouteArgument<SettingsScreenArguments>(
-          _RouteUrl.settings, SettingsScreenArguments())
+      const RouteArgument(
+        _RouteUrl.settings,
+      )
     ];
   }
 
   FullRouteInfo teamsScreen() {
     return [
-      RouteArgument<TeamsScreenArguments>(
-          _RouteUrl.teams, TeamsScreenArguments())
+      const RouteArgument(
+        _RouteUrl.teams,
+      )
+    ];
+  }
+
+  FullRouteInfo wordsScreen() {
+    return [
+      const RouteArgument(
+        _RouteUrl.teams,
+      )
     ];
   }
 
@@ -49,6 +62,9 @@ class AppRoutes extends IRouteNavigationBuilder {
         RouteEndpoint.page(_RouteUrl.settings, SettingsScreen.pageBuilder));
     rootContainer.registerRoute(
       RouteEndpoint.page(_RouteUrl.teams, TeamsScreen.pageBuilder),
+    );
+    rootContainer.registerRoute(
+      RouteEndpoint.page(_RouteUrl.words, WordsScreen.pageBuilder),
     );
     // rootContainer.registerRoute(
     //     RouteEndpoint.pageWithArgument<FamilyMembersArguments>(_RouteUrl.family,

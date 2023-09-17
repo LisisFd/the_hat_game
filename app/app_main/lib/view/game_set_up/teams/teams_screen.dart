@@ -6,8 +6,6 @@ import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_ui/core_ui.dart';
 
-class TeamsScreenArguments {}
-
 class TeamsScreen extends StatefulWidget {
   const TeamsScreen({super.key});
 
