@@ -2,10 +2,8 @@
 
 BASEDIR=$(dirname "$0")
 
-cd "$BASEDIR"
-../core/tools/run-build-runner.sh
 
 cd "$BASEDIR"
 cd ../app/app_main
 flutter pub get
-flutter packages pub run build_runner build
+flutter packages pub run build_runner build --delete-conflicting-outputs

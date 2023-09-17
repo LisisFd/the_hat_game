@@ -6,4 +6,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appName => 'The Hat';
+
+  @override
+  String get screen_main_btn_play => 'Play';
+
+  @override
+  String get screen_main_btn_settings => 'Settings';
+
+  @override
+  String get screen_main_btn_rules => 'Rules';
 }

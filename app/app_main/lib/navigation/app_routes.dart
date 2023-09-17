@@ -5,6 +5,8 @@ import '../view/view.dart';
 
 class _RouteUrl {
   static const String main = "/main";
+  static const String settings = "/settings";
+  static const String teams = "/set-up/teams";
 }
 
 class AppRoutes extends IRouteNavigationBuilder {
@@ -20,6 +22,20 @@ class AppRoutes extends IRouteNavigationBuilder {
     ];
   }
 
+  FullRouteInfo settingsScreen() {
+    return [
+      RouteArgument<SettingsScreenArguments>(
+          _RouteUrl.settings, SettingsScreenArguments())
+    ];
+  }
+
+  FullRouteInfo teamsScreen() {
+    return [
+      RouteArgument<TeamsScreenArguments>(
+          _RouteUrl.teams, TeamsScreenArguments())
+    ];
+  }
+
   FullRouteInfo _getInitialRoute() {
     return mainScreen();
   }
@@ -29,6 +45,11 @@ class AppRoutes extends IRouteNavigationBuilder {
     rootContainer.registerRoute(RouteEndpoint.redirect("/", _getInitialRoute));
     rootContainer.registerRoute(
         RouteEndpoint.page(_RouteUrl.main, MainScreen.pageBuilder));
+    rootContainer.registerRoute(
+        RouteEndpoint.page(_RouteUrl.settings, SettingsScreen.pageBuilder));
+    rootContainer.registerRoute(
+      RouteEndpoint.page(_RouteUrl.teams, TeamsScreen.pageBuilder),
+    );
     // rootContainer.registerRoute(
     //     RouteEndpoint.pageWithArgument<FamilyMembersArguments>(_RouteUrl.family,
     //         FamilyMembersArguments.keyBuilder, FamilyMembers.pageBuilder));

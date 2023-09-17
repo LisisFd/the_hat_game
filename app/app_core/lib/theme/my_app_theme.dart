@@ -99,6 +99,13 @@ class MyAppTheme extends CustomAppThemeData {
   static ThemeData createMaterial() {
     final ThemeData theme = ThemeData(
       useMaterial3: true,
+      appBarTheme: AppBarTheme(
+        backgroundColor: getColorScheme().secondary,
+        titleTextStyle: _textTheme().titleLarge?.copyWith(
+              color: getColorScheme().onSecondary,
+            ),
+        iconTheme: IconThemeData(color: getColorScheme().onSecondary),
+      ),
       colorScheme: getColorScheme(),
       iconTheme: const IconThemeData(size: 30),
       fontFamily: ThemeConstants.fontFamily,
@@ -146,82 +153,82 @@ class MyAppTheme extends CustomAppThemeData {
 
   static TextTheme _textTheme() {
     return const TextTheme(
-      displayLarge: TextStyle(
-        fontFamilyFallback: ThemeConstants.fallback,
-        fontWeight: FontWeight.w400,
-        fontSize: 57,
-      ),
-      displayMedium: TextStyle(
-        fontFamilyFallback: ThemeConstants.fallback,
-        fontWeight: FontWeight.w400,
-        fontSize: 45,
-      ),
-      displaySmall: TextStyle(
-        fontFamilyFallback: ThemeConstants.fallback,
-        fontWeight: FontWeight.w400,
-        fontSize: 36,
-      ),
+      // displayLarge: TextStyle(
+      //   fontFamilyFallback: ThemeConstants.fallback,
+      //   fontWeight: FontWeight.w400,
+      //   fontSize: 57,
+      // ),
+      // displayMedium: TextStyle(
+      //   fontFamilyFallback: ThemeConstants.fallback,
+      //   fontWeight: FontWeight.w400,
+      //   fontSize: 45,
+      // ),
+      // displaySmall: TextStyle(
+      //   fontFamilyFallback: ThemeConstants.fallback,
+      //   fontWeight: FontWeight.w400,
+      //   fontSize: 36,
+      // ),
       headlineLarge: TextStyle(
         fontFamilyFallback: ThemeConstants.fallback,
         fontWeight: FontWeight.w400,
         fontSize: 32,
       ),
-      headlineMedium: TextStyle(
-        fontFamilyFallback: ThemeConstants.fallback,
-        fontWeight: FontWeight.w400,
-        fontSize: 28,
-      ),
-      headlineSmall: TextStyle(
-        fontFamilyFallback: ThemeConstants.fallback,
-        fontWeight: FontWeight.w400,
-        fontSize: 24,
-      ),
+      //   headlineMedium: TextStyle(
+      //     fontFamilyFallback: ThemeConstants.fallback,
+      //     fontWeight: FontWeight.w400,
+      //     fontSize: 28,
+      //   ),
+      //   headlineSmall: TextStyle(
+      //     fontFamilyFallback: ThemeConstants.fallback,
+      //     fontWeight: FontWeight.w400,
+      //     fontSize: 24,
+      //   ),
       titleLarge: TextStyle(
         fontFamilyFallback: ThemeConstants.fallback,
         fontWeight: FontWeight.w400,
         fontSize: 22,
       ),
-      titleMedium: TextStyle(
-          fontFamilyFallback: ThemeConstants.fallback,
-          fontWeight: FontWeight.w500,
-          fontSize: 16,
-          letterSpacing: 0.15),
-      titleSmall: TextStyle(
-          fontFamilyFallback: ThemeConstants.fallback,
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
-          letterSpacing: 0.1),
-      labelLarge: TextStyle(
-          fontFamilyFallback: ThemeConstants.fallback,
-          fontWeight: FontWeight.w500,
-          fontSize: 14,
-          letterSpacing: 0.1),
-      labelMedium: TextStyle(
-          fontFamilyFallback: ThemeConstants.fallback,
-          fontWeight: FontWeight.w500,
-          fontSize: 12,
-          letterSpacing: 0.5),
-      labelSmall: TextStyle(
-          fontFamilyFallback: ThemeConstants.fallback,
-          fontWeight: FontWeight.w500,
-          fontSize: 11,
-          letterSpacing: 0.5),
-      bodyLarge: TextStyle(
-          fontFamilyFallback: ThemeConstants.fallback,
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
-          letterSpacing: 0.5),
-      bodyMedium: TextStyle(
-          fontFamilyFallback: ThemeConstants.fallback,
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-          letterSpacing: 0.25),
-      bodySmall: TextStyle(
-          fontFamilyFallback: ThemeConstants.fallback,
-          fontWeight: FontWeight.w400,
-          color: ThemeConstants.hideColor,
-          fontSize: 12,
-          letterSpacing: 0.4),
+      //   titleMedium: TextStyle(
+      //       fontFamilyFallback: ThemeConstants.fallback,
+      //       fontWeight: FontWeight.w500,
+      //       fontSize: 16,
+      //       letterSpacing: 0.15),
+      //   titleSmall: TextStyle(
+      //       fontFamilyFallback: ThemeConstants.fallback,
+      //       fontWeight: FontWeight.w500,
+      //       fontSize: 14,
+      //       letterSpacing: 0.1),
+      //   labelLarge: TextStyle(
+      //       fontFamilyFallback: ThemeConstants.fallback,
+      //       fontWeight: FontWeight.w500,
+      //       fontSize: 14,
+      //       letterSpacing: 0.1),
+      //   labelMedium: TextStyle(
+      //       fontFamilyFallback: ThemeConstants.fallback,
+      //       fontWeight: FontWeight.w500,
+      //       fontSize: 12,
+      //       letterSpacing: 0.5),
+      //   labelSmall: TextStyle(
+      //       fontFamilyFallback: ThemeConstants.fallback,
+      //       fontWeight: FontWeight.w500,
+      //       fontSize: 11,
+      //       letterSpacing: 0.5),
+      //   bodyLarge: TextStyle(
+      //       fontFamilyFallback: ThemeConstants.fallback,
+      //       fontSize: 16,
+      //       fontWeight: FontWeight.w400,
+      //       letterSpacing: 0.5),
+      //   bodyMedium: TextStyle(
+      //       fontFamilyFallback: ThemeConstants.fallback,
+      //       fontWeight: FontWeight.w400,
+      //       fontSize: 14,
+      //       letterSpacing: 0.25),
+      //   bodySmall: TextStyle(
+      //       fontFamilyFallback: ThemeConstants.fallback,
+      //       fontWeight: FontWeight.w400,
+      //       color: ThemeConstants.hideColor,
+      //       fontSize: 12,
+      //       letterSpacing: 0.4),
     );
   }
 

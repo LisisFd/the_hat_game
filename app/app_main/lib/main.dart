@@ -9,8 +9,6 @@ import 'package:core_localization/core_localization.dart';
 import 'package:core_ui/core_ui.dart';
 import 'package:core_utils/core_utils.dart';
 
-import 'localizations/generated/app_localizations.dart';
-
 Future runFullApp() async {
   var container = await initFullApp();
 

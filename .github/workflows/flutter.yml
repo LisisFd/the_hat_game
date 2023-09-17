@@ -36,7 +36,11 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - run: tools/build-localization.sh
+      - name: Build  localization
+        run: tools/build-localization.sh
+
+      - name: Build json
+        run: tools/build-json.sh
 
       - name: Verify formatting
         run: dart format --output=none .

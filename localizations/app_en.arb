@@ -1,3 +1,6 @@
 {
-  "appName": "The Hat"
+  "appName": "The Hat",
+  "screen_main_btn_play": "Play",
+  "screen_main_btn_settings": "Settings",
+  "screen_main_btn_rules": "Rules"
 }
