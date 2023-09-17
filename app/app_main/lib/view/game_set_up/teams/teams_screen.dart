@@ -1,8 +1,53 @@
+import 'dart:math';
+
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_ui/core_ui.dart';
+
+class _ModelTeamsScreen {
+  late final int _minTeamsCount;
+  final Random _randomService = Random();
+  final List<String> _currentTeams = [];
+  final List<String> _teams = [];
+
+  _ModelTeamsScreen({required List<String> teams, int minTeamsCount = 2}) {
+    _teams.addAll(teams);
+    _minTeamsCount = minTeamsCount;
+    for (var i = 0; i < _minTeamsCount; i++) {
+      addTeam();
+    }
+  }
+
+  List<String> get currentTeams => _currentTeams;
+
+  bool get isEmptyTeams => _teams.isEmpty;
+
+  bool addTeam() {
+    bool isAdd = false;
+    if (!isEmptyTeams) {
+      int randomValue = _random();
+      _currentTeams.add(_teams.removeAt(randomValue));
+      isAdd = true;
+    }
+    return isAdd;
+  }
+
+  void removeTeam(int index) {
+    _teams.add(_currentTeams.removeAt(index));
+  }
+
+  void renameTeam(int index, String name) {
+    _currentTeams.removeAt(index);
+    _currentTeams.insert(index, name);
+  }
+
+  int _random() {
+    final int currentValue = _randomService.nextInt(_teams.length);
+    return currentValue;
+  }
+}
 
 class TeamsScreenArguments {}
 
@@ -18,33 +63,41 @@ class TeamsScreen extends StatefulWidget {
   State<TeamsScreen> createState() => _TeamsScreenState();
 }
 
+/// TODO: add animation
 class _TeamsScreenState extends State<TeamsScreen> {
-  static const int _minTeamCount = 2;
   static const int _minPlayers = 4;
   static const int _maxPlayers = 10;
+
   final ITheHatAppService appService = getWidgetService<ITheHatAppService>();
   final _listTeamsKey = GlobalKey<AnimatedListState>();
 
-  late final List<String> _teams = appService.teams;
-  late final List<String> _currentTeams = _teams.sublist(0, _minTeamCount);
+  late final _ModelTeamsScreen _screenModel =
+      _ModelTeamsScreen(teams: appService.teams);
 
   int _totalPlayers = _minPlayers;
 
+  List<String> get _currentTeams => _screenModel.currentTeams;
+
   void _addItem() {
     int length = _currentTeams.length;
-    if (length < _teams.length) {
-      setState(() {
-        _currentTeams.add(_teams[length]);
+    setState(() {
+      if (_screenModel.addTeam()) {
         _listTeamsKey.currentState?.insertItem(length);
-      });
-    }
+      }
+    });
   }
 
   void _removeItem(int index) {
     setState(() {
       _listTeamsKey.currentState
           ?.removeItem(index, (context, animation) => const SizedBox());
-      _currentTeams.removeAt(index);
+      _screenModel.removeTeam(index);
+    });
+  }
+
+  void _renameItem(int index, String name) {
+    setState(() {
+      _screenModel.renameTeam(index, name);
     });
   }
 
@@ -54,17 +107,42 @@ class _TeamsScreenState extends State<TeamsScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              _currentTeams[index],
-              style: const TextStyle(fontSize: 30),
-            ),
-            if (_currentTeams.length > 2)
-              IconButton(
-                onPressed: () {
-                  _removeItem(index);
-                },
-                icon: const Icon(Icons.clear),
+            Expanded(
+              child: Text(
+                _currentTeams[index],
+                style: const TextStyle(fontSize: 30),
               ),
+            ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () async {
+                    String value = '';
+                    bool isRenamed = await YesNoDialog.showWidget(
+                      context: context,
+                      title: 'New name',
+                      descriptionWidget: TextFormField(
+                        initialValue: _currentTeams[index],
+                        onChanged: (val) {
+                          value = val;
+                        },
+                      ),
+                    );
+                    if (isRenamed && value.isNotEmpty) {
+                      _renameItem(index, value);
+                    }
+                  },
+                  icon: const Icon(Icons.edit),
+                ),
+                if (_currentTeams.length > 2)
+                  IconButton(
+                    onPressed: () {
+                      _removeItem(index);
+                    },
+                    icon: const Icon(Icons.clear),
+                  ),
+              ],
+            ),
           ],
         ),
         if (_currentTeams.length - index == 1)
