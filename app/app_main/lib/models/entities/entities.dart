@@ -1,3 +1,2 @@
-//GENERATED BARREL FILE
-export 'settings.dart';
-export 'teams.dart';
+export 'aggregates/aggregates.dart';
+export 'value_objects/value_objects.dart';

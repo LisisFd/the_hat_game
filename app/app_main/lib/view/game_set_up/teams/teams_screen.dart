@@ -6,49 +6,6 @@ import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_ui/core_ui.dart';
 
-class _ModelTeamsScreen {
-  late final int _minTeamsCount;
-  final Random _randomService = Random();
-  final List<String> _currentTeams = [];
-  final List<String> _teams = [];
-
-  _ModelTeamsScreen({required List<String> teams, int minTeamsCount = 2}) {
-    _teams.addAll(teams);
-    _minTeamsCount = minTeamsCount;
-    for (var i = 0; i < _minTeamsCount; i++) {
-      addTeam();
-    }
-  }
-
-  List<String> get currentTeams => _currentTeams;
-
-  bool get isEmptyTeams => _teams.isEmpty;
-
-  bool addTeam() {
-    bool isAdd = false;
-    if (!isEmptyTeams) {
-      int randomValue = _random();
-      _currentTeams.add(_teams.removeAt(randomValue));
-      isAdd = true;
-    }
-    return isAdd;
-  }
-
-  void removeTeam(int index) {
-    _teams.add(_currentTeams.removeAt(index));
-  }
-
-  void renameTeam(int index, String name) {
-    _currentTeams.removeAt(index);
-    _currentTeams.insert(index, name);
-  }
-
-  int _random() {
-    final int currentValue = _randomService.nextInt(_teams.length);
-    return currentValue;
-  }
-}
-
 class TeamsScreenArguments {}
 
 class TeamsScreen extends StatefulWidget {
@@ -67,12 +24,11 @@ class TeamsScreen extends StatefulWidget {
 class _TeamsScreenState extends State<TeamsScreen> {
   static const int _minPlayers = 4;
   static const int _maxPlayers = 10;
-
-  final ITheHatAppService appService = getWidgetService<ITheHatAppService>();
   final _listTeamsKey = GlobalKey<AnimatedListState>();
+  final IGameService _gameService = getWidgetService<IGameService>();
 
   late final _ModelTeamsScreen _screenModel =
-      _ModelTeamsScreen(teams: appService.teams);
+      _ModelTeamsScreen(teams: _gameService.teams);
 
   int _totalPlayers = _minPlayers;
 
@@ -99,6 +55,10 @@ class _TeamsScreenState extends State<TeamsScreen> {
     setState(() {
       _screenModel.renameTeam(index, name);
     });
+  }
+
+  void _createGame() {
+    _gameService.setUpGameTeams(_currentTeams, _totalPlayers);
   }
 
   Widget _getRow(int index) {
@@ -208,7 +168,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                 ],
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: _createGame,
                 child: const Text('Next'),
               ),
             ],
@@ -216,5 +176,48 @@ class _TeamsScreenState extends State<TeamsScreen> {
         ],
       ),
     ));
+  }
+}
+
+class _ModelTeamsScreen {
+  late final int _minTeamsCount;
+  final Random _randomService = Random();
+  final List<String> _currentTeams = [];
+  final List<String> _teams = [];
+
+  _ModelTeamsScreen({required List<String> teams, int minTeamsCount = 2}) {
+    _teams.addAll(teams);
+    _minTeamsCount = minTeamsCount;
+    for (var i = 0; i < _minTeamsCount; i++) {
+      addTeam();
+    }
+  }
+
+  List<String> get currentTeams => _currentTeams;
+
+  bool get isEmptyTeams => _teams.isEmpty;
+
+  bool addTeam() {
+    bool isAdd = false;
+    if (!isEmptyTeams) {
+      int randomValue = _random();
+      _currentTeams.add(_teams.removeAt(randomValue));
+      isAdd = true;
+    }
+    return isAdd;
+  }
+
+  void removeTeam(int index) {
+    _teams.add(_currentTeams.removeAt(index));
+  }
+
+  void renameTeam(int index, String name) {
+    _currentTeams.removeAt(index);
+    _currentTeams.insert(index, name);
+  }
+
+  int _random() {
+    final int currentValue = _randomService.nextInt(_teams.length);
+    return currentValue;
   }
 }

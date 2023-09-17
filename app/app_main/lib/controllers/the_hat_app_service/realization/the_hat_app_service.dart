@@ -1,5 +1,4 @@
 import 'package:app_main/controllers/controllers.dart';
-import 'package:app_main/domain/domain.dart';
 import 'package:app_main/models/models.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
@@ -7,30 +6,26 @@ import 'package:core_storage/core_storage.dart';
 import 'package:core_utils/core_utils.dart';
 
 class TheHatAppService extends ITheHatAppService {
-  static const String storageKeyGame = "current.game";
   static const String storageKeySettings = "current.settings";
 
   final IKeyValueStorage storage;
-  final ITeamsRepository teamsRepository;
 
   final Logger _logger = Logger("TheHatAppService");
 
-  late final List<String> _teams;
-  final BehaviorSubject<TheHatAppSettings> _appSettings =
-      BehaviorSubject<TheHatAppSettings>.updateNotNull(
+  final BehaviorSubjectNotNull<TheHatAppSettings> _appSettings =
+      BehaviorSubjectNotNull<TheHatAppSettings>.alwaysUpdate(
           const TheHatAppSettings());
 
   @override
-  IBehaviorSubjectReadonly<TheHatAppSettings> get appSettings => _appSettings;
+  IBehaviorSubjectReadonlyNotNull<TheHatAppSettings> get appSettings =>
+      _appSettings;
 
-  @override
-  List<String> get teams => _teams;
-
-  TheHatAppService({required this.storage, required this.teamsRepository});
+  TheHatAppService({
+    required this.storage,
+  });
 
   Future<void> init() async {
     await _initSettings();
-    await _initTeams();
     _logger.log(Level.INFO, 'TheHatAppService initialize');
   }
 
@@ -46,17 +41,12 @@ class TheHatAppService extends ITheHatAppService {
     settings ??= const TheHatAppSettings();
     _appSettings.setValue(settings);
   }
-
-  Future<void> _initTeams() async {
-    _teams = await teamsRepository.getTeamsByLocale('');
-  }
 }
 
 extension TheHatAppServiceFeatureExtension on ServiceScope {
   Future<ITheHatAppService> _serviceFactory() async {
     TheHatAppService service = TheHatAppService(
       storage: get<IKeyValueStorage>(),
-      teamsRepository: get<ITeamsRepository>(),
     );
     await service.init();
     return service;

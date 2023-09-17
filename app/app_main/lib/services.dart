@@ -22,5 +22,6 @@ class AppServices {
     container.addTeamsRepository();
     //---------CONTROLLERS----------------
     container.addTheHatAppServiceFeature();
+    container.addTheHatGameServiceFeature();
   }
 }
