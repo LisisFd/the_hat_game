@@ -1,1 +1,3 @@
-export 'the_hat_app_service/the_hat_app_service.dart';
+//GENERATED BARREL FILE
+export './interfaces/interfaces.dart';
+export './realization/realization.dart';

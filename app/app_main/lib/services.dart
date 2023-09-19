@@ -20,8 +20,10 @@ class AppServices {
     container.addAppRoutes();
     //----------DOMAIN--------------------
     container.addTeamsRepository();
+    container.addGameRepository();
     //---------CONTROLLERS----------------
-    container.addTheHatAppServiceFeature();
+    container.addTeamsServiceFeature();
+    container.addSettingsServiceFeature();
     container.addTheHatGameServiceFeature();
   }
 }

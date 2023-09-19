@@ -26,12 +26,13 @@ class _TeamsScreenState extends State<TeamsScreen> {
   static const int _maxPlayers = 10;
 
   final IGameService _gameService = getWidgetService<IGameService>();
+  final ITeamsService _teamsService = getWidgetService<ITeamsService>();
   final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
 
   final _listTeamsKey = GlobalKey<AnimatedListState>();
 
   late final _ModelTeamsScreen _screenModel =
-      _ModelTeamsScreen(teams: _gameService.teams);
+      _ModelTeamsScreen(teams: _teamsService.teams);
 
   int _totalPlayers = _minPlayers;
 

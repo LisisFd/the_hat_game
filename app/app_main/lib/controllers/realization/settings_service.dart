@@ -1,16 +1,14 @@
-import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/domain/domain.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_storage/core_storage.dart';
 import 'package:core_utils/core_utils.dart';
 
-class TheHatAppService extends ITheHatAppService {
-  static const String storageKeySettings = "current.settings";
-  final RootIsolateToken? rootIsolateToken;
-  final IKeyValueStorage storage;
+import '../interfaces/interfaces.dart';
 
-  final Logger _logger = Logger("TheHatAppService");
+class SettingsService extends ISettingService {
+  static const String storageKeySettings = "current.settings";
+  final IKeyValueStorage storage;
 
   final BehaviorSubjectNotNull<TheHatAppSettings> _appSettings =
       BehaviorSubjectNotNull<TheHatAppSettings>.alwaysUpdate(
@@ -20,14 +18,12 @@ class TheHatAppService extends ITheHatAppService {
   IBehaviorSubjectReadonlyNotNull<TheHatAppSettings> get appSettings =>
       _appSettings;
 
-  TheHatAppService({
+  SettingsService({
     required this.storage,
-    this.rootIsolateToken,
   });
 
   Future<void> init() async {
     await _initSettings();
-    _logger.log(Level.INFO, 'TheHatAppService initialize');
   }
 
   @override
@@ -44,16 +40,16 @@ class TheHatAppService extends ITheHatAppService {
   }
 }
 
-extension TheHatAppServiceFeatureExtension on ServiceScope {
+extension SettingsServiceFeatureExtension on ServiceScope {
   Future<ISettingService> _serviceFactory() async {
-    TheHatAppService service = TheHatAppService(
+    SettingsService service = SettingsService(
       storage: get<IKeyValueStorage>(),
     );
     await service.init();
     return service;
   }
 
-  void addTheHatAppServiceFeature() {
+  void addSettingsServiceFeature() {
     registerSingletonAsync<ISettingService>(
       () async => await _serviceFactory(),
       dependsOn: [
