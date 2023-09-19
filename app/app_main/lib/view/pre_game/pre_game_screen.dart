@@ -21,6 +21,8 @@ class PreGameScreen extends StatefulWidget {
 class _PreGameScreenState extends State<PreGameScreen> {
   final IGameService _gameService = getWidgetService<IGameService>();
 
+  //final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
+
   Rules _getCurrentRule() {
     Rules result = Rules.alias;
     Lap? lap = _gameService.currentLap;
@@ -47,7 +49,7 @@ class _PreGameScreenState extends State<PreGameScreen> {
       body: Column(
         children: [
           rules.widget,
-          const Text('OK'),
+          TextButton(onPressed: () {}, child: const Text('OK')),
         ],
       ),
     );
