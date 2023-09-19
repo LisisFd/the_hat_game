@@ -2,5 +2,17 @@
   "appName": "The Hat",
   "screen_main_btn_play": "Play",
   "screen_main_btn_settings": "Settings",
-  "screen_main_btn_rules": "Rules"
+  "screen_main_btn_rules": "Rules",
+  "rules_title": "Round {number}",
+  "@rules_title": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "1"
+      }
+    }
+  },
+  "rules_alias": "Explain words using synonyms, antonyms, descriptions and various hints without using cognate words.",
+  "rules_one_word": "Since at the first stage you learned all the words in the hat, now your explanation should contain only one word.",
+  "rules_crocodile": "Now let's move a little. Use only facial expressions, gestures or dances to show your comrades the word without making a sound"
 }
