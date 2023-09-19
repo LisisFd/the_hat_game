@@ -16,12 +16,30 @@ class _RulesTranslations {
 }
 
 enum Rules {
-  alias(RulesWidget(description: _RulesTranslations.alias)),
-  oneWord(RulesWidget(description: _RulesTranslations.oneWord)),
-  crocodile(RulesWidget(description: _RulesTranslations.crocodile));
+  alias(
+    RulesWidget(
+      key: ValueKey(_aliasKey),
+      description: _RulesTranslations.alias,
+    ),
+  ),
+  oneWord(
+    RulesWidget(
+      key: ValueKey(_oneWordKey),
+      description: _RulesTranslations.oneWord,
+    ),
+  ),
+  crocodile(
+    RulesWidget(
+      key: ValueKey(_crocodileKey),
+      description: _RulesTranslations.crocodile,
+    ),
+  );
 
   const Rules(this.widget);
 
+  static const _aliasKey = 'ALIAS';
+  static const _oneWordKey = 'ONE_WORD';
+  static const _crocodileKey = 'CROCODILE';
   final RulesWidget widget;
 }
 

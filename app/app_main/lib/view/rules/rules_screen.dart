@@ -54,7 +54,7 @@ class _RulesScreenState extends State<RulesScreen> {
         body: Column(
           children: [
             AnimatedSwitcher(
-              duration: const Duration(seconds: 1),
+              duration: const Duration(milliseconds: 100),
               child: _currentRule.widget,
             ),
             theme.custom.padding2,
