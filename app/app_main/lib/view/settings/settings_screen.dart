@@ -17,7 +17,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final ISettingService settingsService = getWidgetService<ITheHatAppService>();
+  final ISettingService settingsService = getWidgetService<ISettingService>();
 
   TheHatAppSettings? appSettings;
 

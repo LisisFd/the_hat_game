@@ -44,7 +44,7 @@ class AppRoutes extends IRouteNavigationBuilder {
   FullRouteInfo wordsScreen() {
     return [
       const RouteArgument(
-        _RouteUrl.teams,
+        _RouteUrl.words,
       )
     ];
   }

@@ -7,7 +7,7 @@ import 'package:core_utils/core_utils.dart';
 
 class TheHatAppService extends ITheHatAppService {
   static const String storageKeySettings = "current.settings";
-
+  final RootIsolateToken? rootIsolateToken;
   final IKeyValueStorage storage;
 
   final Logger _logger = Logger("TheHatAppService");
@@ -22,6 +22,7 @@ class TheHatAppService extends ITheHatAppService {
 
   TheHatAppService({
     required this.storage,
+    this.rootIsolateToken,
   });
 
   Future<void> init() async {
@@ -32,7 +33,8 @@ class TheHatAppService extends ITheHatAppService {
   @override
   void updateSettings(TheHatAppSettings newSettings) {
     _appSettings.setValue(newSettings);
-    storage.write<TheHatAppSettings>(storageKeySettings, newSettings);
+    storage.write<TheHatAppSettings>(storageKeySettings, _appSettings.value);
+    ;
   }
 
   Future<void> _initSettings() async {
@@ -44,7 +46,7 @@ class TheHatAppService extends ITheHatAppService {
 }
 
 extension TheHatAppServiceFeatureExtension on ServiceScope {
-  Future<ITheHatAppService> _serviceFactory() async {
+  Future<ISettingService> _serviceFactory() async {
     TheHatAppService service = TheHatAppService(
       storage: get<IKeyValueStorage>(),
     );
@@ -53,8 +55,8 @@ extension TheHatAppServiceFeatureExtension on ServiceScope {
   }
 
   void addTheHatAppServiceFeature() {
-    registerSingletonAsync(
-      _serviceFactory,
+    registerSingletonAsync<ISettingService>(
+      () async => await _serviceFactory(),
       dependsOn: [
         IKeyValueStorage,
       ],

@@ -1,4 +1,9 @@
+import 'package:app_core/app_core.dart';
+import 'package:app_main/controllers/controllers.dart';
 import 'package:core_flutter/core_flutter.dart';
+import 'package:core_get_it/core_get_it.dart';
+
+const _semanticOne = 1;
 
 class WordsScreen extends StatefulWidget {
   static Widget pageBuilder(
@@ -12,10 +17,101 @@ class WordsScreen extends StatefulWidget {
   State<WordsScreen> createState() => _WordsScreenState();
 }
 
+//TODO: add localization
 class _WordsScreenState extends State<WordsScreen> {
+  final IGameService _gameService = getWidgetService<IGameService>();
+  final _formKey = GlobalKey<FormState>();
+
+  int get _wordOnOnePlayer => _gameService.countWordsOnPlayer;
+
+  List<String> get _words => _gameService.words;
+
+  bool get _gameIsReady => _gameService.gameIsReady;
+
+  int _playerNumber = _semanticOne;
+  int _countWords = _semanticOne;
+  String _currentWord = '';
+
+  int get countWords => _countWords + _semanticOne;
+
+  int get playerNumber => _playerNumber + _semanticOne;
+
+  @override
+  void initState() {
+    _update();
+    super.initState();
+  }
+
+  void _update() {
+    _updateCurrentPlayer();
+    _updateCountWord();
+  }
+
+  void _updateCurrentPlayer() {
+    final int wordsCount = _words.length;
+    final int newPlayer = (wordsCount / _wordOnOnePlayer).floor();
+    if (_playerNumber != newPlayer) {}
+    _playerNumber = newPlayer;
+  }
+
+  void _updateCountWord() {
+    final int wordsCount = _words.length;
+    if (wordsCount < _wordOnOnePlayer) {
+      _countWords = wordsCount;
+    } else {
+      _countWords = (wordsCount % _wordOnOnePlayer).ceil();
+    }
+  }
+
+  bool _addWord() {
+    bool wordIsAdded = false;
+    final state = _formKey.currentState;
+    if (state != null) {
+      if (state.validate()) {
+        _gameService.addWord(_currentWord);
+        wordIsAdded = true;
+      }
+    }
+    return wordIsAdded;
+  }
+
+  final myController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return MyAppWrap(
+        body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('Player Number $playerNumber'),
+        Text('Count Words $countWords'),
+        Form(
+          key: _formKey,
+          child: TextFormField(
+            validator: (val) {
+              String? res = 'Please write a word';
+              if (val != null && val.isNotEmpty) {
+                res = null;
+              }
+              return res;
+            },
+            onChanged: (val) {
+              _currentWord = val;
+            },
+          ),
+        ),
+        TextButton(
+          key: ValueKey(_gameIsReady),
+          onPressed: () {
+            if (_addWord()) {
+              setState(() {
+                _update();
+              });
+            }
+          },
+          child: !_gameIsReady ? Text('In the hat') : Text('Next'),
+        )
+      ],
+    ));
   }
 }
