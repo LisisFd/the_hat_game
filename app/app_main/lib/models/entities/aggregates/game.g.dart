@@ -11,7 +11,7 @@ abstract class _$TheHatAppGameCWProxy {
 
   TheHatAppGame playersCount(int playersCount);
 
-  TheHatAppGame countWordsOnOnePlayer(int countWordsOnOnePlayer);
+  TheHatAppGame countWordsOnPlayer(int countWordsOnPlayer);
 
   TheHatAppGame words(List<String> words);
 
@@ -30,7 +30,7 @@ abstract class _$TheHatAppGameCWProxy {
   TheHatAppGame call({
     List<String>? teams,
     int? playersCount,
-    int? countWordsOnOnePlayer,
+    int? countWordsOnPlayer,
     List<String>? words,
     List<String>? skipWords,
     String? currentTeam,
@@ -52,8 +52,8 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
       this(playersCount: playersCount);
 
   @override
-  TheHatAppGame countWordsOnOnePlayer(int countWordsOnOnePlayer) =>
-      this(countWordsOnOnePlayer: countWordsOnOnePlayer);
+  TheHatAppGame countWordsOnPlayer(int countWordsOnPlayer) =>
+      this(countWordsOnPlayer: countWordsOnPlayer);
 
   @override
   TheHatAppGame words(List<String> words) => this(words: words);
@@ -79,7 +79,7 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
   TheHatAppGame call({
     Object? teams = const $CopyWithPlaceholder(),
     Object? playersCount = const $CopyWithPlaceholder(),
-    Object? countWordsOnOnePlayer = const $CopyWithPlaceholder(),
+    Object? countWordsOnPlayer = const $CopyWithPlaceholder(),
     Object? words = const $CopyWithPlaceholder(),
     Object? skipWords = const $CopyWithPlaceholder(),
     Object? currentTeam = const $CopyWithPlaceholder(),
@@ -95,12 +95,11 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
               ? _value.playersCount
               // ignore: cast_nullable_to_non_nullable
               : playersCount as int,
-      countWordsOnOnePlayer:
-          countWordsOnOnePlayer == const $CopyWithPlaceholder() ||
-                  countWordsOnOnePlayer == null
-              ? _value.countWordsOnOnePlayer
-              // ignore: cast_nullable_to_non_nullable
-              : countWordsOnOnePlayer as int,
+      countWordsOnPlayer: countWordsOnPlayer == const $CopyWithPlaceholder() ||
+              countWordsOnPlayer == null
+          ? _value.countWordsOnPlayer
+          // ignore: cast_nullable_to_non_nullable
+          : countWordsOnPlayer as int,
       words: words == const $CopyWithPlaceholder() || words == null
           ? _value.words
           // ignore: cast_nullable_to_non_nullable
@@ -136,7 +135,7 @@ TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
     TheHatAppGame(
       teams: (json['teams'] as List<dynamic>).map((e) => e as String).toList(),
       playersCount: json['playersCount'] as int,
-      countWordsOnOnePlayer: json['countWordsOnOnePlayer'] as int,
+      countWordsOnPlayer: json['countWordsOnPlayer'] as int,
       words:
           (json['words'] as List<dynamic>?)?.map((e) => e as String).toList() ??
               const [],
@@ -154,7 +153,7 @@ Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
       'teams': instance.teams,
       'playersCount': instance.playersCount,
       'words': instance.words,
-      'countWordsOnOnePlayer': instance.countWordsOnOnePlayer,
+      'countWordsOnPlayer': instance.countWordsOnPlayer,
       'skipWords': instance.skipWords,
       'currentTeam': instance.currentTeam,
       'currentLap': _$LapEnumMap[instance.currentLap]!,

@@ -6,7 +6,7 @@ import 'package:core_storage/core_storage.dart';
 
 ///TODO: remove storage settings, create repository
 class TheHatGameService extends IGameService {
-  static const String storageKeyGame = "current.game";
+  static const String _storageKeyGame = "current.game";
 
   late final ISettingService _settingService;
 
@@ -33,23 +33,56 @@ class TheHatGameService extends IGameService {
   }
 
   @override
-  void setUpGameTeams(List<String> teams, countOfPlayers) {
+  void setUpGameTeams(List<String> teams, int countOfPlayers) {
     _appGame = TheHatAppGame(
         teams: teams,
         playersCount: countOfPlayers,
-        countWordsOnOnePlayer:
+        countWordsOnPlayer:
             _settingService.appSettings.value.countWordsOnPlayer);
+
+    _writeGame();
   }
 
   @override
   List<String> get teams => _teams;
 
   Future<void> _initGame() async {
-    _appGame = await _storage.read(storageKeyGame, TheHatAppGame.fromJson);
+    _appGame = await _storage.read(_storageKeyGame, TheHatAppGame.fromJson);
   }
 
   Future<void> _initTeams() async {
     _teams = await _teamsRepository.getTeamsByLocale('');
+  }
+
+  @override
+  int get countOfPlayers => _appGame?.playersCount ?? 2;
+
+  @override
+  int get countWordsOnPlayer =>
+      _appGame?.countWordsOnPlayer ??
+      _settingService.appSettings.value.countWordsOnPlayer;
+
+  @override
+  List<String> get words => _appGame?.words ?? [];
+
+  @override
+  bool get gameIsReady =>
+      countOfPlayers * countWordsOnPlayer - words.length == 1;
+
+  // TODO add isolate
+  @override
+  void addWord(String word) {
+    List<String> currentWords = words.toList();
+    currentWords.add(word);
+    _appGame = _appGame?.copyWith(words: currentWords);
+    _writeGame();
+  }
+
+  void _writeGame() async {
+    final currentGame = _appGame;
+    if (currentGame != null) {
+      await _storage.write(_storageKeyGame, currentGame);
+    }
   }
 }
 
@@ -58,7 +91,7 @@ extension TheHatGameServiceFeatureExtension on ServiceScope {
     TheHatGameService service = TheHatGameService(
       storage: get<IKeyValueStorage>(),
       teamsRepository: get<ITeamsRepository>(),
-      settingService: get<ITheHatAppService>(),
+      settingService: get<ISettingService>(),
     );
     await service.init();
     return service;
@@ -69,8 +102,7 @@ extension TheHatGameServiceFeatureExtension on ServiceScope {
       _serviceFactory,
       dependsOn: [
         IKeyValueStorage,
-        ITeamsRepository,
-        ITheHatAppService,
+        ISettingService,
       ],
     );
   }

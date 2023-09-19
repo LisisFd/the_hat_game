@@ -5,8 +5,6 @@ import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_ui/core_ui.dart';
 
-class MainScreenArguments {}
-
 class MainScreen extends StatefulWidget {
   static Widget pageBuilder(
       BuildContext context, PageArgumentsGeneric arguments) {

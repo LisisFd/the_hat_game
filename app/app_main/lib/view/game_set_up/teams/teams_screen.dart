@@ -2,11 +2,10 @@ import 'dart:math';
 
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/navigation/app_routes.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_ui/core_ui.dart';
-
-class TeamsScreenArguments {}
 
 class TeamsScreen extends StatefulWidget {
   const TeamsScreen({super.key});
@@ -24,8 +23,11 @@ class TeamsScreen extends StatefulWidget {
 class _TeamsScreenState extends State<TeamsScreen> {
   static const int _minPlayers = 4;
   static const int _maxPlayers = 10;
-  final _listTeamsKey = GlobalKey<AnimatedListState>();
+
   final IGameService _gameService = getWidgetService<IGameService>();
+  final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
+
+  final _listTeamsKey = GlobalKey<AnimatedListState>();
 
   late final _ModelTeamsScreen _screenModel =
       _ModelTeamsScreen(teams: _gameService.teams);
@@ -57,8 +59,9 @@ class _TeamsScreenState extends State<TeamsScreen> {
     });
   }
 
-  void _createGame() {
+  void _createGame(BuildContext context) {
     _gameService.setUpGameTeams(_currentTeams, _totalPlayers);
+    RootAppNavigation.of(context).push(_appRoutes.wordsScreen());
   }
 
   Widget _getRow(int index) {
@@ -168,7 +171,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                 ],
               ),
               TextButton(
-                onPressed: _createGame,
+                onPressed: () => _createGame(context),
                 child: const Text('Next'),
               ),
             ],
