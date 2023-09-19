@@ -31,7 +31,9 @@ class _MainScreenState extends State<MainScreen> {
         child: Text(localize.screen_main_btn_play),
       ),
       MenuButton(
-        onPressed: () {},
+        onPressed: () => RootAppNavigation.of(context).push(
+            _routes.rulesScreen(),
+            transition: TransitionAnimations.disable()),
         child: Text(localize.screen_main_btn_rules),
       ),
       MenuButton(
