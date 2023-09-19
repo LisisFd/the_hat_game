@@ -115,6 +115,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rules'**
   String get screen_main_btn_rules;
+
+  /// No description provided for @rules_alias.
+  ///
+  /// In en, this message translates to:
+  /// **'Explain words using synonyms, antonyms, descriptions and various hints without using cognate words.'**
+  String get rules_alias;
+
+  /// No description provided for @rules_one_word.
+  ///
+  /// In en, this message translates to:
+  /// **'Since at the first stage you learned all the words in the hat, now your explanation should contain only one word.'**
+  String get rules_one_word;
+
+  /// No description provided for @rules_crocodile.
+  ///
+  /// In en, this message translates to:
+  /// **'Now let\'s move a little. Use only facial expressions, gestures or dances to show your comrades the word without making a sound'**
+  String get rules_crocodile;
 }
 
 class _AppLocalizationsDelegate
