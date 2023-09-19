@@ -2,6 +2,7 @@ import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
+import 'package:core_ui/core_ui.dart';
 
 const _semanticOne = 1;
 
@@ -50,8 +51,14 @@ class _WordsScreenState extends State<WordsScreen> {
   void _updateCurrentPlayer() {
     final int wordsCount = _words.length;
     final int newPlayer = (wordsCount / _wordOnOnePlayer).floor();
-    if (_playerNumber != newPlayer) {}
+    final int oldPlayer = _playerNumber;
     _playerNumber = newPlayer;
+    if (oldPlayer != newPlayer) {
+      DefaultAlertDialog.show(
+          context: context,
+          title: 'Great',
+          description: 'Please, pass device to the next player');
+    }
   }
 
   void _updateCountWord() {
@@ -105,11 +112,12 @@ class _WordsScreenState extends State<WordsScreen> {
           onPressed: () {
             if (_addWord()) {
               setState(() {
+                _formKey.currentState?.reset();
                 _update();
               });
             }
           },
-          child: !_gameIsReady ? Text('In the hat') : Text('Next'),
+          child: !_gameIsReady ? const Text('In the hat') : const Text('Next'),
         )
       ],
     ));

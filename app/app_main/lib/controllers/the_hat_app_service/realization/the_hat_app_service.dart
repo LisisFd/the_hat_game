@@ -34,7 +34,6 @@ class TheHatAppService extends ITheHatAppService {
   void updateSettings(TheHatAppSettings newSettings) {
     _appSettings.setValue(newSettings);
     storage.write<TheHatAppSettings>(storageKeySettings, _appSettings.value);
-    ;
   }
 
   Future<void> _initSettings() async {
