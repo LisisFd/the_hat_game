@@ -18,6 +18,9 @@ class TheHatGameService extends IGameService {
 
   TheHatAppGame? get appGame => _appGame;
 
+  @override
+  Lap? get currentLap => appGame?.currentLap;
+
   TheHatGameService(
       {required IKeyValueStorage storage,
       required ITeamsRepository teamsRepository,
