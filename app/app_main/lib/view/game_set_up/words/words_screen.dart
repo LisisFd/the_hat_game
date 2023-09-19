@@ -1,5 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/navigation/app_routes.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_ui/core_ui.dart';
@@ -21,6 +22,7 @@ class WordsScreen extends StatefulWidget {
 //TODO: add localization
 class _WordsScreenState extends State<WordsScreen> {
   final IGameService _gameService = getWidgetService<IGameService>();
+  final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
   final _formKey = GlobalKey<FormState>();
 
   int get _wordOnOnePlayer => _gameService.countWordsOnPlayer;
@@ -29,7 +31,7 @@ class _WordsScreenState extends State<WordsScreen> {
 
   bool get _gameIsReady => _gameService.gameIsReady;
 
-  int _playerNumber = _semanticOne;
+  int _playerNumber = 0;
   int _countWords = _semanticOne;
   String _currentWord = '';
 
@@ -46,6 +48,21 @@ class _WordsScreenState extends State<WordsScreen> {
   void _update() {
     _updateCurrentPlayer();
     _updateCountWord();
+  }
+
+  void _inTheHatPress() {
+    if (_addWord()) {
+      setState(() {
+        _formKey.currentState?.reset();
+        _update();
+      });
+    }
+  }
+
+  void _nextPress() {
+    if (_addWord()) {
+      RootAppNavigation.of(context).push(_appRoutes.preGameScreen());
+    }
   }
 
   void _updateCurrentPlayer() {
@@ -109,14 +126,7 @@ class _WordsScreenState extends State<WordsScreen> {
         ),
         TextButton(
           key: ValueKey(_gameIsReady),
-          onPressed: () {
-            if (_addWord()) {
-              setState(() {
-                _formKey.currentState?.reset();
-                _update();
-              });
-            }
-          },
+          onPressed: !_gameIsReady ? _inTheHatPress : _nextPress,
           child: !_gameIsReady ? const Text('In the hat') : const Text('Next'),
         )
       ],

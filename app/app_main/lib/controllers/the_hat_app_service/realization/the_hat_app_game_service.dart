@@ -66,7 +66,8 @@ class TheHatGameService extends IGameService {
   List<String> get words => _appGame?.words ?? [];
 
   @override
-  bool get gameIsReady => countOfPlayers * countWordsOnPlayer == words.length;
+  bool get gameIsReady =>
+      countOfPlayers * countWordsOnPlayer - words.length == 1;
 
   // TODO add isolate
   @override
