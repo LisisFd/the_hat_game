@@ -7,7 +7,7 @@ part of 'game.dart';
 // **************************************************************************
 
 abstract class _$TheHatAppGameCWProxy {
-  TheHatAppGame teams(List<String> teams);
+  TheHatAppGame teams(List<Team> teams);
 
   TheHatAppGame playersCount(int playersCount);
 
@@ -28,7 +28,7 @@ abstract class _$TheHatAppGameCWProxy {
   /// TheHatAppGame(...).copyWith(id: 12, name: "My name")
   /// ````
   TheHatAppGame call({
-    List<String>? teams,
+    List<Team>? teams,
     int? playersCount,
     int? countWordsOnPlayer,
     List<String>? words,
@@ -45,7 +45,7 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
   final TheHatAppGame _value;
 
   @override
-  TheHatAppGame teams(List<String> teams) => this(teams: teams);
+  TheHatAppGame teams(List<Team> teams) => this(teams: teams);
 
   @override
   TheHatAppGame playersCount(int playersCount) =>
@@ -89,7 +89,7 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
       teams: teams == const $CopyWithPlaceholder() || teams == null
           ? _value.teams
           // ignore: cast_nullable_to_non_nullable
-          : teams as List<String>,
+          : teams as List<Team>,
       playersCount:
           playersCount == const $CopyWithPlaceholder() || playersCount == null
               ? _value.playersCount
@@ -133,7 +133,9 @@ extension $TheHatAppGameCopyWith on TheHatAppGame {
 
 TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
     TheHatAppGame(
-      teams: (json['teams'] as List<dynamic>).map((e) => e as String).toList(),
+      teams: (json['teams'] as List<dynamic>)
+          .map((e) => Team.fromJson(e as Map<String, dynamic>))
+          .toList(),
       playersCount: json['playersCount'] as int,
       countWordsOnPlayer: json['countWordsOnPlayer'] as int,
       words:
@@ -150,7 +152,7 @@ TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
     <String, dynamic>{
-      'teams': instance.teams,
+      'teams': instance.teams.map((e) => e.toJson()).toList(),
       'playersCount': instance.playersCount,
       'words': instance.words,
       'countWordsOnPlayer': instance.countWordsOnPlayer,

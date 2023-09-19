@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/domain/domain.dart';
 import 'package:app_main/navigation/app_routes.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
@@ -34,7 +35,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
 
   int _totalPlayers = _minPlayers;
 
-  List<String> get _currentTeams => _screenModel.currentTeams;
+  List<Team> get _currentTeams => _screenModel.currentTeams;
 
   void _addItem() {
     int length = _currentTeams.length;
@@ -72,7 +73,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
           children: [
             Expanded(
               child: Text(
-                _currentTeams[index],
+                _currentTeams[index].name,
                 style: const TextStyle(fontSize: 30),
               ),
             ),
@@ -85,7 +86,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                       context: context,
                       title: 'New name',
                       descriptionWidget: TextFormField(
-                        initialValue: _currentTeams[index],
+                        initialValue: _currentTeams[index].name,
                         onChanged: (val) {
                           value = val;
                         },
@@ -185,10 +186,10 @@ class _TeamsScreenState extends State<TeamsScreen> {
 class _ModelTeamsScreen {
   late final int _minTeamsCount;
   final Random _randomService = Random();
-  final List<String> _currentTeams = [];
-  final List<String> _teams = [];
+  final List<Team> _currentTeams = [];
+  final List<Team> _teams = [];
 
-  _ModelTeamsScreen({required List<String> teams, int minTeamsCount = 2}) {
+  _ModelTeamsScreen({required List<Team> teams, int minTeamsCount = 2}) {
     _teams.addAll(teams);
     _minTeamsCount = minTeamsCount;
     for (var i = 0; i < _minTeamsCount; i++) {
@@ -196,7 +197,7 @@ class _ModelTeamsScreen {
     }
   }
 
-  List<String> get currentTeams => _currentTeams;
+  List<Team> get currentTeams => _currentTeams;
 
   bool get isEmptyTeams => _teams.isEmpty;
 
@@ -216,7 +217,7 @@ class _ModelTeamsScreen {
 
   void renameTeam(int index, String name) {
     _currentTeams.removeAt(index);
-    _currentTeams.insert(index, name);
+    _currentTeams.insert(index, Team(name: name));
   }
 
   int _random() {

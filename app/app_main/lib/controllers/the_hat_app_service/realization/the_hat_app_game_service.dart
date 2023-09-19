@@ -1,6 +1,5 @@
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/domain/domain.dart';
-import 'package:app_main/models/models.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_storage/core_storage.dart';
 
@@ -13,7 +12,7 @@ class TheHatGameService extends IGameService {
   late final ITeamsRepository _teamsRepository;
   late final IKeyValueStorage _storage;
 
-  late final List<String> _teams;
+  late final List<Team> _teams;
   TheHatAppGame? _appGame;
 
   TheHatAppGame? get appGame => _appGame;
@@ -36,7 +35,7 @@ class TheHatGameService extends IGameService {
   }
 
   @override
-  void setUpGameTeams(List<String> teams, int countOfPlayers) {
+  void setUpGameTeams(List<Team> teams, int countOfPlayers) {
     _appGame = TheHatAppGame(
         teams: teams,
         playersCount: countOfPlayers,
@@ -47,14 +46,15 @@ class TheHatGameService extends IGameService {
   }
 
   @override
-  List<String> get teams => _teams;
+  List<Team> get teams => _teams;
 
   Future<void> _initGame() async {
     _appGame = await _storage.read(_storageKeyGame, TheHatAppGame.fromJson);
   }
 
   Future<void> _initTeams() async {
-    _teams = await _teamsRepository.getTeamsByLocale('');
+    List<String> repoTeams = await _teamsRepository.getTeamsByLocale('');
+    _teams = repoTeams.map((t) => Team(name: t)).toList();
   }
 
   @override

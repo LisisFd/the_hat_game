@@ -1,12 +1,13 @@
-import 'package:app_main/models/entities/value_objects/lap.dart';
 import 'package:core_api/core_api.dart';
+
+import '../entities.dart';
 
 part 'game.g.dart';
 
 @CopyWith()
 @JsonSerializable(explicitToJson: true)
 class TheHatAppGame implements IJsonWrite<TheHatAppGame> {
-  final List<String> teams;
+  final List<Team> teams;
   final int playersCount;
   final List<String> words;
   final int countWordsOnPlayer;

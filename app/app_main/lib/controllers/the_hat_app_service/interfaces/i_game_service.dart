@@ -1,7 +1,7 @@
-import 'package:app_main/models/models.dart';
+import 'package:app_main/domain/domain.dart';
 
 abstract class IGameService {
-  List<String> get teams;
+  List<Team> get teams;
 
   int get countOfPlayers;
 
@@ -13,7 +13,7 @@ abstract class IGameService {
 
   Lap? get currentLap;
 
-  void setUpGameTeams(List<String> teams, int countOfPlayers);
+  void setUpGameTeams(List<Team> teams, int countOfPlayers);
 
   void addWord(String word);
 }

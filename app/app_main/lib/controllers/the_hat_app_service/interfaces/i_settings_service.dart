@@ -1,4 +1,4 @@
-import 'package:app_main/models/models.dart';
+import 'package:app_main/domain/domain.dart';
 import 'package:core_utils/core_utils.dart';
 
 abstract class ISettingService {

@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:app_main/domain/interfaces/i_teams_repository.dart';
-import 'package:app_main/models/entities/value_objects/teams.dart';
 import 'package:core_flutter/core_flutter.dart';
+
+import '../entities/entities.dart';
 
 class TeamsLocalRepository extends ITeamsRepository {
   static const String _jsonPath = "data/json/teams.json";
