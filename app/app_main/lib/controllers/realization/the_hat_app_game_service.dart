@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_main/domain/domain.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_storage/core_storage.dart';
@@ -8,6 +10,7 @@ import '../interfaces/interfaces.dart';
 class TheHatGameService extends IGameService {
   late final ISettingService _settingService;
   late final IGameRepository _gameRepository;
+  Timer? _gameTimer;
 
   TheHatAppGame? _appGame;
 
@@ -19,36 +22,9 @@ class TheHatGameService extends IGameService {
   @override
   Lap? get currentLap => appGame?.currentLap;
 
-  TheHatGameService(
-      {required IGameRepository gameRepository,
-      required ISettingService settingService}) {
-    _settingService = settingService;
-    _gameRepository = gameRepository;
-  }
-
-  Future<void> init() async {
-    await _initGame();
-  }
-
-  @override
-  void setUpGameTeams(List<Team> teams, int countOfPlayers) {
-    TheHatAppGame game = TheHatAppGame(
-      teams: teams,
-      playersCount: countOfPlayers,
-      countWordsOnPlayer: _settingService.appSettings.value.countWordsOnPlayer,
-      roundTime: _settingService.appSettings.value.timePlayerTurn,
-    );
-    _appGame = game;
-    _gameRepository.setGame(game);
-  }
-
   @override
   Team get currentTeam =>
       teams.isEmpty ? const Team(name: 'null') : teams.first;
-
-  Future<void> _initGame() async {
-    _appGame = await _gameRepository.getGame();
-  }
 
   @override
   int get countOfPlayers => _appGame?.playersCount ?? 2;
@@ -65,7 +41,33 @@ class TheHatGameService extends IGameService {
   bool get gameIsReady =>
       countOfPlayers * countWordsOnPlayer - words.length == 1;
 
-  // TODO add isolate
+  TheHatGameService(
+      {required IGameRepository gameRepository,
+      required ISettingService settingService}) {
+    _settingService = settingService;
+    _gameRepository = gameRepository;
+  }
+
+  Future<void> init() async {
+    await _initGame();
+  }
+
+  Future<void> _initGame() async {
+    _appGame = await _gameRepository.getGame();
+  }
+
+  @override
+  void setUpGameTeams(List<Team> teams, int countOfPlayers) {
+    TheHatAppGame game = TheHatAppGame(
+      teams: teams,
+      playersCount: countOfPlayers,
+      countWordsOnPlayer: _settingService.appSettings.value.countWordsOnPlayer,
+      roundTime: _settingService.appSettings.value.timePlayerTurn,
+    );
+    _appGame = game;
+    _gameRepository.setGame(game);
+  }
+
   @override
   void addWord(String word) {
     List<String> currentWords = words.toList();

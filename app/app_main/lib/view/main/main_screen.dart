@@ -1,6 +1,7 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/navigation.dart';
+import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_ui/core_ui.dart';
@@ -19,6 +20,9 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final _routes = getWidgetService<AppRoutes>();
+  final _k = GlobalKey<TimerWidgetState>();
+
+  bool get _isTicking => _k.currentState?.isTicking ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +46,22 @@ class _MainScreenState extends State<MainScreen> {
             transition: TransitionAnimations.disable()),
         child: Text(localize.screen_main_btn_settings),
       ),
+      TimerWidget(
+        key: _k,
+        currentDuration: Duration(seconds: 10),
+        onStop: (Duration t) {
+          setState(() {
+            print(t.toString());
+          });
+        },
+      ),
+      ElevatedButton(
+          onPressed: () {
+            setState(() {
+              _isTicking ? _k.currentState?.stop() : _k.currentState?.start();
+            });
+          },
+          child: _isTicking ? Icon(Icons.stop) : Icon(Icons.play_arrow)),
     ];
     return MyAppWrap(
       body: Center(
