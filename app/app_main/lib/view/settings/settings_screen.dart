@@ -110,16 +110,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Round timer'),
-                    Text("${currentSettings.timePlayerTurn.toInt()}")
+                    Text("${currentSettings.timePlayerTurn.inSeconds}")
                   ],
                 ),
                 Slider(
                     max: 120,
                     min: 10,
-                    value: currentSettings.timePlayerTurn,
+                    value: currentSettings.timePlayerTurn.inSeconds.toDouble(),
                     onChanged: (val) {
                       _updateSettings(
-                        currentSettings.copyWith(timePlayerTurn: val),
+                        currentSettings.copyWith(
+                          timePlayerTurn: Duration(
+                            seconds: val.toInt(),
+                          ),
+                        ),
                       );
                     }),
               ],

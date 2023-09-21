@@ -13,6 +13,8 @@ abstract class _$TheHatAppGameCWProxy {
 
   TheHatAppGame countWordsOnPlayer(int countWordsOnPlayer);
 
+  TheHatAppGame roundTime(Duration roundTime);
+
   TheHatAppGame words(List<String> words);
 
   TheHatAppGame skipWords(List<String> skipWords);
@@ -31,6 +33,7 @@ abstract class _$TheHatAppGameCWProxy {
     List<Team>? teams,
     int? playersCount,
     int? countWordsOnPlayer,
+    Duration? roundTime,
     List<String>? words,
     List<String>? skipWords,
     String? currentTeam,
@@ -54,6 +57,9 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
   @override
   TheHatAppGame countWordsOnPlayer(int countWordsOnPlayer) =>
       this(countWordsOnPlayer: countWordsOnPlayer);
+
+  @override
+  TheHatAppGame roundTime(Duration roundTime) => this(roundTime: roundTime);
 
   @override
   TheHatAppGame words(List<String> words) => this(words: words);
@@ -80,6 +86,7 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
     Object? teams = const $CopyWithPlaceholder(),
     Object? playersCount = const $CopyWithPlaceholder(),
     Object? countWordsOnPlayer = const $CopyWithPlaceholder(),
+    Object? roundTime = const $CopyWithPlaceholder(),
     Object? words = const $CopyWithPlaceholder(),
     Object? skipWords = const $CopyWithPlaceholder(),
     Object? currentTeam = const $CopyWithPlaceholder(),
@@ -100,6 +107,10 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
           ? _value.countWordsOnPlayer
           // ignore: cast_nullable_to_non_nullable
           : countWordsOnPlayer as int,
+      roundTime: roundTime == const $CopyWithPlaceholder() || roundTime == null
+          ? _value.roundTime
+          // ignore: cast_nullable_to_non_nullable
+          : roundTime as Duration,
       words: words == const $CopyWithPlaceholder() || words == null
           ? _value.words
           // ignore: cast_nullable_to_non_nullable
@@ -138,6 +149,7 @@ TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
           .toList(),
       playersCount: json['playersCount'] as int,
       countWordsOnPlayer: json['countWordsOnPlayer'] as int,
+      roundTime: Duration(microseconds: json['roundTime'] as int),
       words:
           (json['words'] as List<dynamic>?)?.map((e) => e as String).toList() ??
               const [],
@@ -156,6 +168,7 @@ Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
       'playersCount': instance.playersCount,
       'words': instance.words,
       'countWordsOnPlayer': instance.countWordsOnPlayer,
+      'roundTime': instance.roundTime.inMicroseconds,
       'skipWords': instance.skipWords,
       'currentTeam': instance.currentTeam,
       'currentLap': _$LapEnumMap[instance.currentLap]!,

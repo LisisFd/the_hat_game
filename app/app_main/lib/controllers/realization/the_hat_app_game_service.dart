@@ -33,10 +33,11 @@ class TheHatGameService extends IGameService {
   @override
   void setUpGameTeams(List<Team> teams, int countOfPlayers) {
     TheHatAppGame game = TheHatAppGame(
-        teams: teams,
-        playersCount: countOfPlayers,
-        countWordsOnPlayer:
-            _settingService.appSettings.value.countWordsOnPlayer);
+      teams: teams,
+      playersCount: countOfPlayers,
+      countWordsOnPlayer: _settingService.appSettings.value.countWordsOnPlayer,
+      roundTime: _settingService.appSettings.value.timePlayerTurn,
+    );
     _appGame = game;
     _gameRepository.setGame(game);
   }

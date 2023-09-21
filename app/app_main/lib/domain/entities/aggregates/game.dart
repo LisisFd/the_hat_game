@@ -11,6 +11,7 @@ class TheHatAppGame implements IJsonWrite<TheHatAppGame> {
   final int playersCount;
   final List<String> words;
   final int countWordsOnPlayer;
+  final Duration roundTime;
 
   final List<String> skipWords;
   String? currentTeam;
@@ -20,6 +21,7 @@ class TheHatAppGame implements IJsonWrite<TheHatAppGame> {
     required this.teams,
     required this.playersCount,
     required this.countWordsOnPlayer,
+    required this.roundTime,
     this.words = const [],
     this.skipWords = const [],
     this.currentTeam,

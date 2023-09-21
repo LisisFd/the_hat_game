@@ -7,7 +7,7 @@ part 'settings.g.dart';
 class TheHatAppSettings implements IJsonWrite<TheHatAppSettings> {
   final int countWordsOnPlayer;
   final bool animation;
-  final double timePlayerTurn;
+  final Duration timePlayerTurn;
   final bool lastWord;
 
   @override
@@ -19,7 +19,7 @@ class TheHatAppSettings implements IJsonWrite<TheHatAppSettings> {
   const TheHatAppSettings({
     this.countWordsOnPlayer = 3,
     this.animation = true,
-    this.timePlayerTurn = 60,
+    this.timePlayerTurn = const Duration(seconds: 60),
     this.lastWord = true,
   });
 }

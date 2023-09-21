@@ -11,7 +11,7 @@ abstract class _$TheHatAppSettingsCWProxy {
 
   TheHatAppSettings animation(bool animation);
 
-  TheHatAppSettings timePlayerTurn(double timePlayerTurn);
+  TheHatAppSettings timePlayerTurn(Duration timePlayerTurn);
 
   TheHatAppSettings lastWord(bool lastWord);
 
@@ -24,7 +24,7 @@ abstract class _$TheHatAppSettingsCWProxy {
   TheHatAppSettings call({
     int? countWordsOnPlayer,
     bool? animation,
-    double? timePlayerTurn,
+    Duration? timePlayerTurn,
     bool? lastWord,
   });
 }
@@ -43,7 +43,7 @@ class _$TheHatAppSettingsCWProxyImpl implements _$TheHatAppSettingsCWProxy {
   TheHatAppSettings animation(bool animation) => this(animation: animation);
 
   @override
-  TheHatAppSettings timePlayerTurn(double timePlayerTurn) =>
+  TheHatAppSettings timePlayerTurn(Duration timePlayerTurn) =>
       this(timePlayerTurn: timePlayerTurn);
 
   @override
@@ -77,7 +77,7 @@ class _$TheHatAppSettingsCWProxyImpl implements _$TheHatAppSettingsCWProxy {
               timePlayerTurn == null
           ? _value.timePlayerTurn
           // ignore: cast_nullable_to_non_nullable
-          : timePlayerTurn as double,
+          : timePlayerTurn as Duration,
       lastWord: lastWord == const $CopyWithPlaceholder() || lastWord == null
           ? _value.lastWord
           // ignore: cast_nullable_to_non_nullable
@@ -101,7 +101,9 @@ TheHatAppSettings _$TheHatAppSettingsFromJson(Map<String, dynamic> json) =>
     TheHatAppSettings(
       countWordsOnPlayer: json['countWordsOnPlayer'] as int? ?? 3,
       animation: json['animation'] as bool? ?? true,
-      timePlayerTurn: (json['timePlayerTurn'] as num?)?.toDouble() ?? 60,
+      timePlayerTurn: json['timePlayerTurn'] == null
+          ? const Duration(seconds: 60)
+          : Duration(microseconds: json['timePlayerTurn'] as int),
       lastWord: json['lastWord'] as bool? ?? true,
     );
 
@@ -109,6 +111,6 @@ Map<String, dynamic> _$TheHatAppSettingsToJson(TheHatAppSettings instance) =>
     <String, dynamic>{
       'countWordsOnPlayer': instance.countWordsOnPlayer,
       'animation': instance.animation,
-      'timePlayerTurn': instance.timePlayerTurn,
+      'timePlayerTurn': instance.timePlayerTurn.inMicroseconds,
       'lastWord': instance.lastWord,
     };
