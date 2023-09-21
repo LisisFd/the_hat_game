@@ -41,6 +41,10 @@ class TheHatGameService extends IGameService {
     _gameRepository.setGame(game);
   }
 
+  @override
+  Team get currentTeam =>
+      teams.isEmpty ? const Team(name: 'null') : teams.first;
+
   Future<void> _initGame() async {
     _appGame = await _gameRepository.getGame();
   }
