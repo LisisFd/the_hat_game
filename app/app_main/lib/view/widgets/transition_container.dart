@@ -1,48 +1,86 @@
 import 'package:core_flutter/core_flutter.dart';
 
+import 'transition_container_mixin.dart';
+
+const double _defaultScale = 1.0;
+
 class TransitionContainer extends StatefulWidget {
-  const TransitionContainer({super.key});
+  final Color color;
+  final Widget child;
+  final void Function(bool isRight)? onSkip;
+
+  const TransitionContainer(
+      {super.key, required this.color, required this.child, this.onSkip});
 
   @override
   State<TransitionContainer> createState() => TransitionContainerState();
 }
 
 class TransitionContainerState extends State<TransitionContainer>
-    with TickerProviderStateMixin {
-  late final AnimationController _alignmentController;
-  late Animation<Alignment> _alignmentAnimation;
-  late final AnimationController _scaleController;
-  late Animation<double> _scaleAnimation;
-  bool _visible = false;
+    with TickerProviderStateMixin, TransitionContainerMixin {
+  final GlobalKey _widgetKey = GlobalKey();
+  void Function(AnimationStatus status)? _listener;
+  bool _isSetUp = false;
+  Alignment _dragAlignment = Alignment.center;
+  Size? currentSize;
+  Size? absoluteSize;
 
-  Alignment _dragAlignment = const Alignment(0, 0);
   double _position = 0;
-  final _v = 100.0;
-  double height = 100;
-  double width = 100;
-  GlobalKey key = GlobalKey();
+  double _multi = _defaultScale;
   double _firstBreakPoint = 0.0;
   double _secondBreakPoint = 0.0;
 
   @override
   void initState() {
-    _alignmentController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    )..addListener(() {
-        setState(() {
-          _dragAlignment = _alignmentAnimation.value;
-        });
-      });
-    _scaleController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    )..addListener(() {
-        setState(() {
-          width = _scaleAnimation.value;
-        });
-      });
+    initControllers(this);
+    _addControllerListeners();
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant TransitionContainer oldWidget) {
+    Key? oldChildKey = oldWidget.child.key;
+    Key? newChildKey = widget.child.key;
+    if (oldChildKey != newChildKey) {
+      setState(() {
+        resetControllers();
+        _isSetUp = false;
+        _dragAlignment = Alignment.center;
+        _multi = _defaultScale;
+        _position = 0;
+        var listener = _listener;
+        if (listener != null) {
+          alignmentController.removeStatusListener(listener);
+        }
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  void _setUp() {
+    if (!_isSetUp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        setState(() {
+          _createBreakPoints();
+          _createAbsoluteSize();
+          _updatePosition();
+          _isSetUp = true;
+        });
+      });
+    }
+  }
+
+  void _addControllerListeners() {
+    alignmentController.addListener(() {
+      setState(() {
+        _dragAlignment = alignmentAnimation.value;
+      });
+    });
+    scaleController.addListener(() {
+      setState(() {
+        _multi = scaleAnimation.value;
+      });
+    });
   }
 
   void _createBreakPoints() {
@@ -52,37 +90,37 @@ class TransitionContainerState extends State<TransitionContainer>
     _secondBreakPoint = size.width - percent;
   }
 
+  void _createAbsoluteSize() {
+    final renderBox =
+        _widgetKey.currentContext?.findRenderObject() as RenderBox;
+    absoluteSize = renderBox.size;
+    currentSize = renderBox.size;
+  }
+
   void _updatePosition() {
-    final renderBox = key.currentContext?.findRenderObject() as RenderBox;
-    _position = renderBox.localToGlobal(Offset(width / 2, 0)).dx;
-  }
-
-  void start() {
-    _alignmentController.forward();
-  }
-
-  @override
-  void dispose() {
-    _alignmentController.dispose();
-    super.dispose();
+    final renderBox =
+        _widgetKey.currentContext?.findRenderObject() as RenderBox;
+    _position = renderBox
+        .localToGlobal(
+            Offset((currentSize?.width ?? 0) / 2, currentSize?.height ?? 0))
+        .dx;
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
-    final size = MediaQuery.of(context).size;
-    double center = size.width / 2;
+    final sizeScreen = MediaQuery.of(context).size;
+    double center = sizeScreen.width / 2;
     setState(() {
-      _dragAlignment += Alignment(details.delta.dx / (size.width / 2), 0);
+      _dragAlignment +=
+          Alignment(details.delta.dx / (sizeScreen.width / 2) / _multi, 0);
       _updatePosition();
-      double multi = 1.0;
       if (_position > center) {
-        multi = 1 - _dragAlignment.x;
+        _multi = 1 - _dragAlignment.x;
       } else if (_position < center) {
-        multi = 1 + _dragAlignment.x;
+        _multi = 1 + _dragAlignment.x;
       }
-      if (multi < 0.3) {
-        multi = 0.3;
+      if (_multi < 0.5) {
+        _multi = 0.5;
       }
-      width = _v * multi;
     });
   }
 
@@ -95,57 +133,88 @@ class TransitionContainerState extends State<TransitionContainer>
   }
 
   void _startAnimation([bool withBreakPoints = false]) {
-    final size = MediaQuery.of(context).size;
-    double center = size.width / 2;
+    double width = MediaQuery.of(context).size.width;
+    _dragAlignment.x > 0;
     Alignment end;
-    if (_position > center) {
-      end = Alignment(_dragAlignment.x + 1, _dragAlignment.y);
+    if (_dragAlignment.x > 0) {
+      end = Alignment(_position / (width / 2), _dragAlignment.y);
     } else {
-      end = Alignment(_dragAlignment.x - 1, _dragAlignment.y);
+      end = Alignment(-(width / 2) / _position, _dragAlignment.y);
     }
-    _alignmentAnimation = _alignmentController.drive(AlignmentTween(
+
+    alignmentAnimation = alignmentController.drive(AlignmentTween(
       begin: _dragAlignment,
       end: withBreakPoints ? end : Alignment.center,
     ));
     if (!withBreakPoints) {
-      _scaleAnimation = _alignmentController.drive(Tween<double>(
-        begin: width,
-        end: _v,
+      scaleAnimation = scaleController.drive(Tween<double>(
+        begin: _multi,
+        end: _defaultScale,
       ));
-      _scaleController.reset();
-      _scaleController.forward();
+      scaleController.reset();
+      scaleController.forward();
+    }
+    listener(status) {
+      _animationIsEnd(status, withBreakPoints, _dragAlignment.x > 0);
     }
 
-    _alignmentController.reset();
-    _alignmentController.forward();
+    _listener = listener;
+    alignmentController.addStatusListener(listener);
+
+    alignmentController.reset();
+    alignmentController.forward();
+  }
+
+  void _animationIsEnd(
+      AnimationStatus status, bool withBreakPoints, bool isPositive) {
+    if (status == AnimationStatus.completed && withBreakPoints) {
+      widget.onSkip?.call(isPositive);
+    }
+  }
+
+  @override
+  void dispose() {
+    disposeControllers();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _createBreakPoints();
-      setState(() {
-        _visible = true;
-      });
-    });
-
+    final Size screenSize = MediaQuery.of(context).size;
+    _setUp();
     return GestureDetector(
       onPanDown: (details) {
-        _alignmentController.stop();
+        alignmentController.stop();
       },
       onPanUpdate: _onPanUpdate,
       onPanEnd: _onPanEnd,
       child: Align(
         alignment: _dragAlignment,
-        child: AnimatedOpacity(
-          opacity: _visible ? 1.0 : 0.0,
-          curve: Curves.easeInOut,
-          duration: const Duration(milliseconds: 800),
-          child: Container(
-            key: key,
-            color: Colors.redAccent,
-            width: width,
-            height: width,
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: screenSize.width / 2,
+            maxHeight: screenSize.height / 4,
+          ),
+          height: absoluteSize?.height,
+          child: Transform.scale(
+            key: _widgetKey,
+            scale: _multi,
+            child: ScaleTransition(
+              scale: previewScaleAnimation,
+              child: AnimatedOpacity(
+                opacity: _isSetUp ? 1.0 : 0.0,
+                curve: Curves.easeInOut,
+                duration: const Duration(milliseconds: 300),
+                child: ColoredBox(
+                  color: widget.color,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 30, horizontal: 40),
+                    child: widget.child,
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

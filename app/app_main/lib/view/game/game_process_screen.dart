@@ -34,7 +34,9 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   Team get _currentTeam => _gameService.currentTeam;
 
-  String get word => _gameService.word;
+  String get word => w.toString(); //_gameService.word;
+
+  bool w = false;
 
   void _startGame() {
     setState(() {
@@ -55,7 +57,6 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   void _right() {
     setState(() {
-      _anim?.start();
       _gameService.updateGame(pointPlus: _semanticOne);
     });
   }
@@ -82,6 +83,13 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
             ),
             TransitionContainer(
               key: _animKey,
+              color: Colors.redAccent,
+              onSkip: (val) {
+                setState(() {
+                  w = !w;
+                });
+              },
+              child: Text(key: ValueKey(word), word),
             ),
             RawMaterialButton(
               child: SizedBox(
