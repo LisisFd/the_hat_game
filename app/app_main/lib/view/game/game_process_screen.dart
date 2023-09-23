@@ -80,11 +80,8 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
                 Text(_currentTeam.points.toString()),
               ],
             ),
-            Container(
-              decoration: BoxDecoration(color: Colors.blue),
-              child: TransitionContainer(
-                key: _animKey,
-              ),
+            TransitionContainer(
+              key: _animKey,
             ),
             RawMaterialButton(
               child: SizedBox(

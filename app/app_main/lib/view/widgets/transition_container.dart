@@ -9,11 +9,15 @@ class TransitionContainer extends StatefulWidget {
 
 class TransitionContainerState extends State<TransitionContainer>
     with TickerProviderStateMixin {
-  late final AnimationController _controller;
+  late final AnimationController _alignmentController;
   late Animation<Alignment> _alignmentAnimation;
+  late final AnimationController _scaleController;
+  late Animation<double> _scaleAnimation;
+  bool _visible = false;
+
   Alignment _dragAlignment = const Alignment(0, 0);
   double _position = 0;
-  final _v = 100;
+  final _v = 100.0;
   double height = 100;
   double width = 100;
   GlobalKey key = GlobalKey();
@@ -22,7 +26,7 @@ class TransitionContainerState extends State<TransitionContainer>
 
   @override
   void initState() {
-    _controller = AnimationController(
+    _alignmentController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
     )..addListener(() {
@@ -30,13 +34,20 @@ class TransitionContainerState extends State<TransitionContainer>
           _dragAlignment = _alignmentAnimation.value;
         });
       });
-
+    _scaleController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    )..addListener(() {
+        setState(() {
+          width = _scaleAnimation.value;
+        });
+      });
     super.initState();
   }
 
   void _createBreakPoints() {
     final Size size = MediaQuery.of(context).size;
-    double percent = size.width / 3;
+    double percent = size.width / 4;
     _firstBreakPoint = percent;
     _secondBreakPoint = size.width - percent;
   }
@@ -47,29 +58,13 @@ class TransitionContainerState extends State<TransitionContainer>
   }
 
   void start() {
-    _controller.forward();
+    _alignmentController.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _alignmentController.dispose();
     super.dispose();
-  }
-
-  void _startAlignmentAnimation([bool withBreakPoints = false]) {
-    final size = MediaQuery.of(context).size;
-    double center = size.width / 2;
-    Alignment end;
-    if (_position > center) {
-      end = Alignment(_dragAlignment.x + 1, _dragAlignment.y);
-    } else {
-      end = Alignment(0.0 - 0.1, _dragAlignment.y);
-    }
-    _alignmentAnimation = _controller.drive(AlignmentTween(
-      begin: _dragAlignment,
-      end: withBreakPoints ? end : Alignment.center,
-    ));
-    _controller.repeat();
   }
 
   void _onPanUpdate(DragUpdateDetails details) {
@@ -91,31 +86,67 @@ class TransitionContainerState extends State<TransitionContainer>
     });
   }
 
+  void _onPanEnd(DragEndDetails details) {
+    if (_position < _firstBreakPoint || _position > _secondBreakPoint) {
+      _startAnimation(true);
+    } else {
+      _startAnimation();
+    }
+  }
+
+  void _startAnimation([bool withBreakPoints = false]) {
+    final size = MediaQuery.of(context).size;
+    double center = size.width / 2;
+    Alignment end;
+    if (_position > center) {
+      end = Alignment(_dragAlignment.x + 1, _dragAlignment.y);
+    } else {
+      end = Alignment(_dragAlignment.x - 1, _dragAlignment.y);
+    }
+    _alignmentAnimation = _alignmentController.drive(AlignmentTween(
+      begin: _dragAlignment,
+      end: withBreakPoints ? end : Alignment.center,
+    ));
+    if (!withBreakPoints) {
+      _scaleAnimation = _alignmentController.drive(Tween<double>(
+        begin: width,
+        end: _v,
+      ));
+      _scaleController.reset();
+      _scaleController.forward();
+    }
+
+    _alignmentController.reset();
+    _alignmentController.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       _createBreakPoints();
+      setState(() {
+        _visible = true;
+      });
     });
 
     return GestureDetector(
       onPanDown: (details) {
-        _controller.stop();
+        _alignmentController.stop();
       },
       onPanUpdate: _onPanUpdate,
-      onPanEnd: (details) {
-        if (_position < _firstBreakPoint || _position > _secondBreakPoint) {
-          _startAlignmentAnimation(true);
-        } else {
-          _startAlignmentAnimation();
-        }
-      },
+      onPanEnd: _onPanEnd,
       child: Align(
         alignment: _dragAlignment,
-        child: Container(
-          key: key,
-          color: Colors.redAccent,
-          width: width,
-          height: width,
+        child: AnimatedOpacity(
+          opacity: _visible ? 1.0 : 0.0,
+          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 800),
+          child: Container(
+            key: key,
+            color: Colors.redAccent,
+            width: width,
+            height: width,
+          ),
         ),
       ),
     );
