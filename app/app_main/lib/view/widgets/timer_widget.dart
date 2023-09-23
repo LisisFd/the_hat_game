@@ -42,14 +42,21 @@ class TimerWidgetState extends State<TimerWidget>
 
   bool get isTicking => ticker.isTicking;
 
-  late final Ticker ticker = createTicker((elapsed) {
-    setState(() {
-      _elapsed = elapsed;
-      if (_totalElapsed.inMilliseconds == 0) {
-        stop(true);
-      }
+  late final Ticker ticker;
+
+  @override
+  void didChangeDependencies() {
+    ticker = createTicker((elapsed) {
+      setState(() {
+        _elapsed = elapsed;
+        if (_totalElapsed.inMilliseconds == 0) {
+          stop(true);
+        }
+      });
     });
-  });
+
+    super.didChangeDependencies();
+  }
 
   void start() {
     _previousElapsed -= _elapsed;

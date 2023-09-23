@@ -10,7 +10,6 @@ import '../interfaces/interfaces.dart';
 class TheHatGameService extends IGameService {
   late final ISettingService _settingService;
   late final IGameRepository _gameRepository;
-  Timer? _gameTimer;
 
   TheHatAppGame? _appGame;
 
@@ -18,6 +17,15 @@ class TheHatGameService extends IGameService {
 
   @override
   List<Team> get teams => appGame?.teams ?? [];
+
+  @override
+  Duration get roundTime {
+    Duration? savedTime = appGame?.roundTime;
+    if (savedTime == null || savedTime == Duration.zero) {
+      return _settingService.appSettings.value.timePlayerTurn;
+    }
+    return savedTime;
+  }
 
   @override
   Lap? get currentLap => appGame?.currentLap;
@@ -40,6 +48,9 @@ class TheHatGameService extends IGameService {
   @override
   bool get gameIsReady =>
       countOfPlayers * countWordsOnPlayer - words.length == 1;
+
+  @override
+  String get word => words.first;
 
   TheHatGameService(
       {required IGameRepository gameRepository,
@@ -64,19 +75,45 @@ class TheHatGameService extends IGameService {
       countWordsOnPlayer: _settingService.appSettings.value.countWordsOnPlayer,
       roundTime: _settingService.appSettings.value.timePlayerTurn,
     );
-    _appGame = game;
-    _gameRepository.setGame(game);
+    _saveGame(game);
   }
 
   @override
   void addWord(String word) {
     List<String> currentWords = words.toList();
     currentWords.add(word);
+    currentWords.shuffle();
     TheHatAppGame? game = _appGame?.copyWith(words: currentWords);
+    _saveGame(game);
+  }
+
+  @override
+  void updateGame({Duration? time, int? pointPlus}) {
+    int currentTeamIndex = teams.indexWhere((t) => t.name == currentTeam.name);
+    teams.insert(
+      currentTeamIndex,
+      currentTeam.copyWith(
+        points: currentTeam.points + (pointPlus ?? 0),
+      ),
+    );
+    _appGame = _appGame?.copyWith(roundTime: time);
+  }
+
+  @override
+  void saveGame() {
+    _saveGame(_appGame);
+  }
+
+  void _saveGame(TheHatAppGame? game) {
     if (game != null) {
       _gameRepository.setGame(game);
     }
     _appGame = game;
+  }
+
+  @override
+  void updateWord() {
+    _appGame?.words.shuffle();
   }
 }
 

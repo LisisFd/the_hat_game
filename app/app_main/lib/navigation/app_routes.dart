@@ -11,6 +11,7 @@ class _RouteUrl {
   static const String words = "/set-up/words";
   static const String preGame = "/pre-game";
   static const String teamsRate = "/teamsRate";
+  static const String gameProcess = "/game-process";
 }
 
 class AppRoutes extends IRouteNavigationBuilder {
@@ -76,6 +77,14 @@ class AppRoutes extends IRouteNavigationBuilder {
     ];
   }
 
+  FullRouteInfo gameProcess() {
+    return [
+      const RouteArgument(
+        _RouteUrl.gameProcess,
+      )
+    ];
+  }
+
   FullRouteInfo _getInitialRoute() {
     return mainScreen();
   }
@@ -100,6 +109,9 @@ class AppRoutes extends IRouteNavigationBuilder {
     );
     rootContainer.registerRoute(
       RouteEndpoint.page(_RouteUrl.teamsRate, TeamsRateScreen.pageBuilder),
+    );
+    rootContainer.registerRoute(
+      RouteEndpoint.page(_RouteUrl.gameProcess, GameProcessScreen.pageBuilder),
     );
     // rootContainer.registerRoute(
     //     RouteEndpoint.pageWithArgument<FamilyMembersArguments>(_RouteUrl.family,

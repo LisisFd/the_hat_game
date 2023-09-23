@@ -1,6 +1,7 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/domain/domain.dart';
+import 'package:app_main/navigation/navigation.dart';
 import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
@@ -18,9 +19,8 @@ class PreGameScreen extends StatefulWidget {
 }
 
 class _PreGameScreenState extends State<PreGameScreen> {
+  final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
   final IGameService _gameService = getWidgetService<IGameService>();
-
-  //final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
 
   Rules _getCurrentRule() {
     Rules result = Rules.alias;
@@ -48,7 +48,13 @@ class _PreGameScreenState extends State<PreGameScreen> {
       body: Column(
         children: [
           rules.widget,
-          TextButton(onPressed: () {}, child: const Text('OK')),
+          TextButton(
+              onPressed: () {
+                RootAppNavigation.of(context).push(
+                  _appRoutes.gameProcess(),
+                );
+              },
+              child: const Text('OK')),
         ],
       ),
     );

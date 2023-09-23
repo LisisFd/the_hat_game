@@ -9,13 +9,23 @@ abstract class IGameService {
 
   List<String> get words;
 
+  Duration get roundTime;
+
   bool get gameIsReady;
 
   Lap? get currentLap;
 
   Team get currentTeam;
 
+  String get word;
+
   void setUpGameTeams(List<Team> teams, int countOfPlayers);
 
   void addWord(String word);
+
+  void updateGame({Duration? time, int pointPlus});
+
+  void updateWord();
+
+  void saveGame();
 }
