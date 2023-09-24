@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_main/domain/interfaces/i_teams_repository.dart';
 import 'package:core_flutter/core_flutter.dart';
@@ -26,10 +27,16 @@ class TeamsLocalRepository extends ITeamsRepository {
 
   @override
   Future<Teams> getTeams() async {
+    Map<String, dynamic> json = {};
+
     if (!_isInit) {
-      final Map<String, dynamic> json = await _readJson(_jsonPath);
-      _teams = Teams.fromJson(json);
-      _isInit = true;
+      try {
+        json = await _readJson(_jsonPath);
+        _teams = Teams.fromJson(json);
+        _isInit = true;
+      } catch (e) {
+        log('Invalid reading teams operation');
+      }
     }
     return _teams;
   }

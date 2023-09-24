@@ -19,6 +19,10 @@ abstract class _$TheHatAppGameCWProxy {
 
   TheHatAppGame skipWords(List<String> skipWords);
 
+  TheHatAppGame rightWords(List<String> rightWords);
+
+  TheHatAppGame tempWords(List<String> tempWords);
+
   TheHatAppGame currentTeam(String? currentTeam);
 
   TheHatAppGame currentLap(Lap currentLap);
@@ -36,6 +40,8 @@ abstract class _$TheHatAppGameCWProxy {
     Duration? roundTime,
     List<String>? words,
     List<String>? skipWords,
+    List<String>? rightWords,
+    List<String>? tempWords,
     String? currentTeam,
     Lap? currentLap,
   });
@@ -68,6 +74,13 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
   TheHatAppGame skipWords(List<String> skipWords) => this(skipWords: skipWords);
 
   @override
+  TheHatAppGame rightWords(List<String> rightWords) =>
+      this(rightWords: rightWords);
+
+  @override
+  TheHatAppGame tempWords(List<String> tempWords) => this(tempWords: tempWords);
+
+  @override
   TheHatAppGame currentTeam(String? currentTeam) =>
       this(currentTeam: currentTeam);
 
@@ -89,6 +102,8 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
     Object? roundTime = const $CopyWithPlaceholder(),
     Object? words = const $CopyWithPlaceholder(),
     Object? skipWords = const $CopyWithPlaceholder(),
+    Object? rightWords = const $CopyWithPlaceholder(),
+    Object? tempWords = const $CopyWithPlaceholder(),
     Object? currentTeam = const $CopyWithPlaceholder(),
     Object? currentLap = const $CopyWithPlaceholder(),
   }) {
@@ -119,6 +134,15 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
           ? _value.skipWords
           // ignore: cast_nullable_to_non_nullable
           : skipWords as List<String>,
+      rightWords:
+          rightWords == const $CopyWithPlaceholder() || rightWords == null
+              ? _value.rightWords
+              // ignore: cast_nullable_to_non_nullable
+              : rightWords as List<String>,
+      tempWords: tempWords == const $CopyWithPlaceholder() || tempWords == null
+          ? _value.tempWords
+          // ignore: cast_nullable_to_non_nullable
+          : tempWords as List<String>,
       currentTeam: currentTeam == const $CopyWithPlaceholder()
           ? _value.currentTeam
           // ignore: cast_nullable_to_non_nullable
@@ -157,6 +181,14 @@ TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      rightWords: (json['rightWords'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      tempWords: (json['tempWords'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       currentTeam: json['currentTeam'] as String?,
       currentLap:
           $enumDecodeNullable(_$LapEnumMap, json['currentLap']) ?? Lap.first,
@@ -167,9 +199,11 @@ Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
       'teams': instance.teams.map((e) => e.toJson()).toList(),
       'playersCount': instance.playersCount,
       'words': instance.words,
+      'skipWords': instance.skipWords,
+      'rightWords': instance.rightWords,
+      'tempWords': instance.tempWords,
       'countWordsOnPlayer': instance.countWordsOnPlayer,
       'roundTime': instance.roundTime.inMicroseconds,
-      'skipWords': instance.skipWords,
       'currentTeam': instance.currentTeam,
       'currentLap': _$LapEnumMap[instance.currentLap]!,
     };

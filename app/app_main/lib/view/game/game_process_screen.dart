@@ -30,46 +30,107 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   TransitionContainerState? get _anim => _animKey.currentState;
 
-  bool get _isTicking => _timer?.isTicking ?? false;
+  bool _isTickingEnded = false;
 
   Team get _currentTeam => _gameService.currentTeam;
 
-  String get word => w.toString(); //_gameService.word;
+  String get word => _gameService.word;
+
+  bool get isLast => _gameService.words.length == 1;
+
+  bool isStart = false;
+  bool isPaused = false;
 
   bool w = false;
 
   void _startGame() {
     setState(() {
       _timer?.start();
+      isStart = true;
     });
   }
 
   void _stopGame() {
     setState(() {
+      isPaused = true;
       _timer?.stop();
       _gameService.saveGame();
     });
   }
 
+  void _playGame() {
+    setState(() {
+      isPaused = false;
+      _timer?.start();
+    });
+  }
+
   void _onStopTimer(Duration timerTime) {
-    _gameService.updateGame(time: timerTime);
-  }
-
-  void _right() {
     setState(() {
-      _gameService.updateGame(pointPlus: _semanticOne);
+      _gameService.updateGame(time: timerTime);
+      if (timerTime == Duration.zero) {
+        setState(() {
+          _isTickingEnded = true;
+        });
+      }
     });
   }
 
-  void _newWord() {
-    setState(() {
+  void _checkWord(bool right) {
+    if (right) {
       _gameService.updateGame(pointPlus: _semanticOne);
-    });
+    }
+    if (!isLast) {
+      setState(() {
+        _gameService.updateWord();
+      });
+    } else {
+      _gameService.updateWord();
+    }
   }
 
   ///TODO: add theme
   @override
   Widget build(BuildContext context) {
+    Widget wordWidget = TransitionContainer(
+      key: _animKey,
+      color: Colors.redAccent,
+      onSkip: _checkWord,
+      child: Text(key: ValueKey(word), word),
+    );
+
+    Widget buttonWidget = RawMaterialButton(
+      onPressed: !isStart
+          ? _startGame
+          : isPaused
+              ? _playGame
+              : null,
+      elevation: 2.0,
+      fillColor: isPaused ? Colors.grey : Colors.redAccent,
+      shape: const CircleBorder(),
+      child: const SizedBox(
+        width: 150,
+        height: 150,
+      ),
+    );
+
+    Widget centerWidget = isStart && !isPaused ? wordWidget : buttonWidget;
+    Widget stopWidget = isStart && !isPaused && !_isTickingEnded
+        ? RawMaterialButton(
+            onPressed: _stopGame,
+            elevation: 2.0,
+            fillColor: isPaused ? Colors.grey : Colors.redAccent,
+            shape: const CircleBorder(),
+            child: const Text('Stop'),
+          )
+        : const SizedBox();
+    Widget timerWidget = !_isTickingEnded
+        ? TimerWidget(
+            key: _timerKey,
+            onStop: _onStopTimer,
+            currentDuration: _gameService.roundTime,
+          )
+        : const Text('Last word');
     return MyAppWrap(
       body: Center(
         child: Column(
@@ -81,36 +142,10 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
                 Text(_currentTeam.points.toString()),
               ],
             ),
-            TransitionContainer(
-              key: _animKey,
-              color: Colors.redAccent,
-              onSkip: (val) {
-                setState(() {
-                  w = !w;
-                });
-              },
-              child: Text(key: ValueKey(word), word),
-            ),
-            RawMaterialButton(
-              child: SizedBox(
-                width: 150,
-                height: 150,
-              ),
-              onPressed: () {
-                _right();
-              },
-              elevation: 2.0,
-              fillColor: Colors.white,
-              shape: const CircleBorder(),
-            ),
+            centerWidget,
             Row(
-              children: [
-                TimerWidget(
-                  key: _timerKey,
-                  onStop: (Duration timer) {},
-                  currentDuration: _gameService.roundTime,
-                ),
-              ],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [const SizedBox(), timerWidget, stopWidget],
             )
           ],
         ),

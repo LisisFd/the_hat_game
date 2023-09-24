@@ -50,7 +50,7 @@ class TheHatGameService extends IGameService {
       countOfPlayers * countWordsOnPlayer - words.length == 1;
 
   @override
-  String get word => words.first;
+  String get word => words.isNotEmpty ? words.first : '';
 
   TheHatGameService(
       {required IGameRepository gameRepository,
@@ -113,7 +113,14 @@ class TheHatGameService extends IGameService {
 
   @override
   void updateWord() {
-    _appGame?.words.shuffle();
+    TheHatAppGame? game = _appGame;
+    if (game == null) {
+      return;
+    }
+    List<String> words = game.words.toList();
+    List<String> skipWords = game.skipWords.toList();
+    skipWords.add(words.removeAt(0));
+    _appGame = _appGame?.copyWith(words: words, skipWords: skipWords);
   }
 }
 

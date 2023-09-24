@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app_main/domain/interfaces/i_game_repository.dart';
 import 'package:core_storage/storage/storage.dart';
 
@@ -15,7 +17,13 @@ class GameLocalRepository extends IGameRepository {
 
   @override
   Future<TheHatAppGame?> getGame() async {
-    return await _storage.read(_storageKeyGame, TheHatAppGame.fromJson);
+    TheHatAppGame? game;
+    try {
+      game = await _storage.read(_storageKeyGame, TheHatAppGame.fromJson);
+    } catch (e) {
+      log('Invalid reading game operation');
+    }
+    return game;
   }
 
   @override
