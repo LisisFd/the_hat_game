@@ -27,7 +27,11 @@ class GameLocalRepository extends IGameRepository {
   }
 
   @override
-  void setGame(TheHatAppGame game) async {
-    await _storage.write(_storageKeyGame, game);
+  void setGame(TheHatAppGame? game) async {
+    if (game == null) {
+      await _storage.removeFromKey(_storageKeyGame);
+    } else {
+      await _storage.write(_storageKeyGame, game);
+    }
   }
 }

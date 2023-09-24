@@ -108,11 +108,21 @@ class TheHatGameService extends IGameService {
     _saveGame(_appGame);
   }
 
+  @override
+  void deleteGame() {
+    _deleteGame();
+  }
+
   void _saveGame(TheHatAppGame? game) {
     if (game != null) {
       _gameRepository.setGame(game);
     }
     _appGame = game;
+  }
+
+  void _deleteGame() {
+    _gameRepository.setGame(null);
+    _appGame = null;
   }
 
   @override

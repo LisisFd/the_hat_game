@@ -30,4 +30,6 @@ abstract class IGameService {
   void updateWord(bool isRight);
 
   void saveGame();
+
+  void deleteGame();
 }
