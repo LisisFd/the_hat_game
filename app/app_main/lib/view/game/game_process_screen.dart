@@ -1,5 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/navigation/app_routes.dart';
 import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
@@ -22,6 +23,7 @@ class GameProcessScreen extends StatefulWidget {
 
 class _GameProcessScreenState extends State<GameProcessScreen> {
   final IGameService _gameService = getWidgetService<IGameService>();
+  final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
   final GlobalKey<TimerWidgetState> _timerKey = GlobalKey<TimerWidgetState>();
   final GlobalKey<TransitionContainerState> _animKey =
       GlobalKey<TransitionContainerState>();
@@ -34,7 +36,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   Team get _currentTeam => _gameService.currentTeam;
 
-  String get word => _gameService.word;
+  Word get word => _gameService.word;
 
   bool get isLast => _gameService.words.length == 1;
 
@@ -80,12 +82,15 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
     if (right) {
       _gameService.updateGame(pointPlus: _semanticOne);
     }
-    if (!isLast) {
+
+    if (isLast || _isTickingEnded) {
+      _gameService.updateWord(right);
+
+      RootAppNavigation.of(context).pushReplacement(_appRoutes.teamResult());
+    } else {
       setState(() {
         _gameService.updateWord(right);
       });
-    } else {
-      _gameService.updateWord(right);
     }
   }
 
@@ -96,7 +101,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
       key: _animKey,
       color: Colors.redAccent,
       onSkip: _checkWord,
-      child: Text(key: ValueKey(word), word),
+      child: Text(key: ValueKey(word.id), word.word),
     );
 
     Widget buttonWidget = RawMaterialButton(

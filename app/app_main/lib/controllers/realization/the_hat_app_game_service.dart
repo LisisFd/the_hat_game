@@ -43,11 +43,8 @@ class TheHatGameService extends IGameService {
       _settingService.appSettings.value.countWordsOnPlayer;
 
   @override
-  List<String> get words =>
-      _appGame?.words
-          .where((w) => w.status == WordStatus.active)
-          .map((w) => w.word)
-          .toList() ??
+  List<Word> get words =>
+      _appGame?.words.where((w) => w.status == WordStatus.active).toList() ??
       [];
 
   @override
@@ -58,7 +55,7 @@ class TheHatGameService extends IGameService {
       countOfPlayers * countWordsOnPlayer - words.length == 1;
 
   @override
-  String get word => words.isNotEmpty ? words.first : '';
+  Word get word => words.isNotEmpty ? words.first : Word.create(word: '');
 
   TheHatGameService(
       {required IGameRepository gameRepository,
@@ -88,24 +85,22 @@ class TheHatGameService extends IGameService {
 
   @override
   void addWord(String word) {
-    List<String> currentWords = words.toList();
-    currentWords.add(word);
+    List<Word> currentWords = words.toList();
+    currentWords.add(
+      Word.create(word: word),
+    );
     currentWords.shuffle();
-    TheHatAppGame? game = _appGame?.copyWith(
-        words: currentWords.map((w) => Word.create(word: w)).toList());
+    TheHatAppGame? game = _appGame?.copyWith(words: currentWords);
     _saveGame(game);
   }
 
   @override
-  void updateGame({Duration? time, int? pointPlus}) {
+  void updateGame({Duration? time, int? pointPlus, List<Word>? words}) {
     int currentTeamIndex = teams.indexWhere((t) => t.name == currentTeam.name);
-    teams.insert(
-      currentTeamIndex,
-      currentTeam.copyWith(
-        points: currentTeam.points + (pointPlus ?? 0),
-      ),
+    teams[currentTeamIndex] = teams[currentTeamIndex].copyWith(
+      points: currentTeam.points + (pointPlus ?? 0),
     );
-    _appGame = _appGame?.copyWith(roundTime: time);
+    _appGame = _appGame?.copyWith(roundTime: time, teams: teams, words: words);
   }
 
   @override
@@ -127,10 +122,13 @@ class TheHatGameService extends IGameService {
       return;
     }
     List<Word> currentWords = game.words.toList();
+    int indexWord = currentWords.indexWhere((w) => w.id == word.id);
     if (isRight) {
-      currentWords[0] = currentWords[0].copyWith(status: WordStatus.right);
+      currentWords[indexWord] =
+          currentWords[indexWord].copyWith(status: WordStatus.right);
     } else {
-      currentWords[0] = currentWords[0].copyWith(status: WordStatus.skip);
+      currentWords[indexWord] =
+          currentWords[indexWord].copyWith(status: WordStatus.skip);
     }
 
     _appGame = _appGame?.copyWith(words: currentWords);

@@ -47,7 +47,9 @@ class _MainScreenState extends State<MainScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: menu,
+          children: [
+            ...menu,
+          ],
         ),
       ),
     );

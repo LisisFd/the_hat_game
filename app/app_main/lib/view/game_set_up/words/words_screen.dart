@@ -27,7 +27,7 @@ class _WordsScreenState extends State<WordsScreen> {
 
   int get _wordOnOnePlayer => _gameService.countWordsOnPlayer;
 
-  List<String> get _words => _gameService.words;
+  List<String> get _words => _gameService.words.map((w) => w.word).toList();
 
   bool get _gameIsReady => _gameService.gameIsReady;
 

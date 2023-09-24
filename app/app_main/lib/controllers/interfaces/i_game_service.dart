@@ -7,7 +7,7 @@ abstract class IGameService {
 
   List<Team> get teams;
 
-  List<String> get words;
+  List<Word> get words;
 
   List<Word> get wordsWithStatus;
 
@@ -19,13 +19,13 @@ abstract class IGameService {
 
   Team get currentTeam;
 
-  String get word;
+  Word get word;
 
   void setUpGameTeams(List<Team> teams, int countOfPlayers);
 
   void addWord(String word);
 
-  void updateGame({Duration? time, int pointPlus});
+  void updateGame({Duration? time, int? pointPlus, List<Word>? words});
 
   void updateWord(bool isRight);
 
