@@ -1,14 +1,12 @@
 import 'package:app_main/domain/domain.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
-import 'package:core_storage/core_storage.dart';
 import 'package:core_utils/core_utils.dart';
 
 import '../interfaces/interfaces.dart';
 
 class SettingsService extends ISettingService {
-  static const String storageKeySettings = "current.settings";
-  final IKeyValueStorage storage;
+  late final ISettingsRepository _settingsRepository;
 
   final BehaviorSubjectNotNull<TheHatAppSettings> _appSettings =
       BehaviorSubjectNotNull<TheHatAppSettings>.alwaysUpdate(
@@ -19,8 +17,10 @@ class SettingsService extends ISettingService {
       _appSettings;
 
   SettingsService({
-    required this.storage,
-  });
+    required ISettingsRepository settingsRepository,
+  }) {
+    _settingsRepository = settingsRepository;
+  }
 
   Future<void> init() async {
     await _initSettings();
@@ -29,12 +29,11 @@ class SettingsService extends ISettingService {
   @override
   void updateSettings(TheHatAppSettings newSettings) {
     _appSettings.setValue(newSettings);
-    storage.write<TheHatAppSettings>(storageKeySettings, _appSettings.value);
+    _settingsRepository.setSettings(newSettings);
   }
 
   Future<void> _initSettings() async {
-    var settings =
-        await storage.read(storageKeySettings, TheHatAppSettings.fromJson);
+    var settings = await _settingsRepository.getSettings();
     settings ??= const TheHatAppSettings();
     _appSettings.setValue(settings);
   }
@@ -43,7 +42,7 @@ class SettingsService extends ISettingService {
 extension SettingsServiceFeatureExtension on ServiceScope {
   Future<ISettingService> _serviceFactory() async {
     SettingsService service = SettingsService(
-      storage: get<IKeyValueStorage>(),
+      settingsRepository: get<ISettingsRepository>(),
     );
     await service.init();
     return service;
@@ -53,7 +52,7 @@ extension SettingsServiceFeatureExtension on ServiceScope {
     registerSingletonAsync<ISettingService>(
       () async => await _serviceFactory(),
       dependsOn: [
-        IKeyValueStorage,
+        ISettingsRepository,
       ],
     );
   }

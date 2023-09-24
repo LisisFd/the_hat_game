@@ -28,7 +28,6 @@ class TeamsLocalRepository extends ITeamsRepository {
   @override
   Future<Teams> getTeams() async {
     Map<String, dynamic> json = {};
-
     if (!_isInit) {
       try {
         json = await _readJson(_jsonPath);

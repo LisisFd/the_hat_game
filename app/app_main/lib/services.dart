@@ -21,6 +21,7 @@ class AppServices {
     //----------DOMAIN--------------------
     container.addTeamsRepository();
     container.addGameRepository();
+    container.addSettingsRepository();
     //---------CONTROLLERS----------------
     container.addTeamsServiceFeature();
     container.addSettingsServiceFeature();
