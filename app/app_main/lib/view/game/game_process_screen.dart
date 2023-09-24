@@ -28,7 +28,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   TimerWidgetState? get _timer => _timerKey.currentState;
 
-  TransitionContainerState? get _anim => _animKey.currentState;
+//  TransitionContainerState? get _anim => _animKey.currentState;
 
   bool _isTickingEnded = false;
 
@@ -82,10 +82,10 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
     }
     if (!isLast) {
       setState(() {
-        _gameService.updateWord();
+        _gameService.updateWord(right);
       });
     } else {
-      _gameService.updateWord();
+      _gameService.updateWord(right);
     }
   }
 

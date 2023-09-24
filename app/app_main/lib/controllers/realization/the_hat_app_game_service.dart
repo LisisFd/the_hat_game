@@ -43,7 +43,15 @@ class TheHatGameService extends IGameService {
       _settingService.appSettings.value.countWordsOnPlayer;
 
   @override
-  List<String> get words => _appGame?.words ?? [];
+  List<String> get words =>
+      _appGame?.words
+          .where((w) => w.status == WordStatus.active)
+          .map((w) => w.word)
+          .toList() ??
+      [];
+
+  @override
+  List<Word> get wordsWithStatus => _appGame?.words ?? [];
 
   @override
   bool get gameIsReady =>
@@ -83,7 +91,8 @@ class TheHatGameService extends IGameService {
     List<String> currentWords = words.toList();
     currentWords.add(word);
     currentWords.shuffle();
-    TheHatAppGame? game = _appGame?.copyWith(words: currentWords);
+    TheHatAppGame? game = _appGame?.copyWith(
+        words: currentWords.map((w) => Word.create(word: w)).toList());
     _saveGame(game);
   }
 
@@ -112,15 +121,19 @@ class TheHatGameService extends IGameService {
   }
 
   @override
-  void updateWord() {
+  void updateWord(isRight) {
     TheHatAppGame? game = _appGame;
     if (game == null) {
       return;
     }
-    List<String> words = game.words.toList();
-    List<String> skipWords = game.skipWords.toList();
-    skipWords.add(words.removeAt(0));
-    _appGame = _appGame?.copyWith(words: words, skipWords: skipWords);
+    List<Word> currentWords = game.words.toList();
+    if (isRight) {
+      currentWords[0] = currentWords[0].copyWith(status: WordStatus.right);
+    } else {
+      currentWords[0] = currentWords[0].copyWith(status: WordStatus.skip);
+    }
+
+    _appGame = _appGame?.copyWith(words: currentWords);
   }
 }
 

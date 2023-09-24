@@ -46,6 +46,8 @@ dependencies:
     path: "../../flutter_core/domain/core_get_it"
   core_api:
     path: "../../flutter_core/domain/core_api"
+  core_crypto:
+    path: "../../flutter_core/domain/core_crypto"
 
 
 dev_dependencies:

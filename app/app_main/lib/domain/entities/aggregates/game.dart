@@ -1,3 +1,4 @@
+import 'package:app_main/domain/entities/value_objects/word.dart';
 import 'package:core_api/core_api.dart';
 
 import '../entities.dart';
@@ -9,10 +10,7 @@ part 'game.g.dart';
 class TheHatAppGame implements IJsonWrite<TheHatAppGame> {
   final List<Team> teams;
   final int playersCount;
-  final List<String> words;
-  final List<String> skipWords;
-  final List<String> rightWords;
-  final List<String> tempWords;
+  final List<Word> words;
 
   final int countWordsOnPlayer;
   final Duration roundTime;
@@ -26,9 +24,6 @@ class TheHatAppGame implements IJsonWrite<TheHatAppGame> {
     required this.countWordsOnPlayer,
     required this.roundTime,
     this.words = const [],
-    this.skipWords = const [],
-    this.rightWords = const [],
-    this.tempWords = const [],
     this.currentTeam,
     this.currentLap = Lap.first,
   });

@@ -9,6 +9,8 @@ abstract class IGameService {
 
   List<String> get words;
 
+  List<Word> get wordsWithStatus;
+
   Duration get roundTime;
 
   bool get gameIsReady;
@@ -25,7 +27,7 @@ abstract class IGameService {
 
   void updateGame({Duration? time, int pointPlus});
 
-  void updateWord();
+  void updateWord(bool isRight);
 
   void saveGame();
 }

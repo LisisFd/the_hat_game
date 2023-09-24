@@ -15,13 +15,7 @@ abstract class _$TheHatAppGameCWProxy {
 
   TheHatAppGame roundTime(Duration roundTime);
 
-  TheHatAppGame words(List<String> words);
-
-  TheHatAppGame skipWords(List<String> skipWords);
-
-  TheHatAppGame rightWords(List<String> rightWords);
-
-  TheHatAppGame tempWords(List<String> tempWords);
+  TheHatAppGame words(List<Word> words);
 
   TheHatAppGame currentTeam(String? currentTeam);
 
@@ -38,10 +32,7 @@ abstract class _$TheHatAppGameCWProxy {
     int? playersCount,
     int? countWordsOnPlayer,
     Duration? roundTime,
-    List<String>? words,
-    List<String>? skipWords,
-    List<String>? rightWords,
-    List<String>? tempWords,
+    List<Word>? words,
     String? currentTeam,
     Lap? currentLap,
   });
@@ -68,17 +59,7 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
   TheHatAppGame roundTime(Duration roundTime) => this(roundTime: roundTime);
 
   @override
-  TheHatAppGame words(List<String> words) => this(words: words);
-
-  @override
-  TheHatAppGame skipWords(List<String> skipWords) => this(skipWords: skipWords);
-
-  @override
-  TheHatAppGame rightWords(List<String> rightWords) =>
-      this(rightWords: rightWords);
-
-  @override
-  TheHatAppGame tempWords(List<String> tempWords) => this(tempWords: tempWords);
+  TheHatAppGame words(List<Word> words) => this(words: words);
 
   @override
   TheHatAppGame currentTeam(String? currentTeam) =>
@@ -101,9 +82,6 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
     Object? countWordsOnPlayer = const $CopyWithPlaceholder(),
     Object? roundTime = const $CopyWithPlaceholder(),
     Object? words = const $CopyWithPlaceholder(),
-    Object? skipWords = const $CopyWithPlaceholder(),
-    Object? rightWords = const $CopyWithPlaceholder(),
-    Object? tempWords = const $CopyWithPlaceholder(),
     Object? currentTeam = const $CopyWithPlaceholder(),
     Object? currentLap = const $CopyWithPlaceholder(),
   }) {
@@ -129,20 +107,7 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
       words: words == const $CopyWithPlaceholder() || words == null
           ? _value.words
           // ignore: cast_nullable_to_non_nullable
-          : words as List<String>,
-      skipWords: skipWords == const $CopyWithPlaceholder() || skipWords == null
-          ? _value.skipWords
-          // ignore: cast_nullable_to_non_nullable
-          : skipWords as List<String>,
-      rightWords:
-          rightWords == const $CopyWithPlaceholder() || rightWords == null
-              ? _value.rightWords
-              // ignore: cast_nullable_to_non_nullable
-              : rightWords as List<String>,
-      tempWords: tempWords == const $CopyWithPlaceholder() || tempWords == null
-          ? _value.tempWords
-          // ignore: cast_nullable_to_non_nullable
-          : tempWords as List<String>,
+          : words as List<Word>,
       currentTeam: currentTeam == const $CopyWithPlaceholder()
           ? _value.currentTeam
           // ignore: cast_nullable_to_non_nullable
@@ -174,19 +139,8 @@ TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
       playersCount: json['playersCount'] as int,
       countWordsOnPlayer: json['countWordsOnPlayer'] as int,
       roundTime: Duration(microseconds: json['roundTime'] as int),
-      words:
-          (json['words'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-              const [],
-      skipWords: (json['skipWords'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
-      rightWords: (json['rightWords'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toList() ??
-          const [],
-      tempWords: (json['tempWords'] as List<dynamic>?)
-              ?.map((e) => e as String)
+      words: (json['words'] as List<dynamic>?)
+              ?.map((e) => Word.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
       currentTeam: json['currentTeam'] as String?,
@@ -198,10 +152,7 @@ Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
     <String, dynamic>{
       'teams': instance.teams.map((e) => e.toJson()).toList(),
       'playersCount': instance.playersCount,
-      'words': instance.words,
-      'skipWords': instance.skipWords,
-      'rightWords': instance.rightWords,
-      'tempWords': instance.tempWords,
+      'words': instance.words.map((e) => e.toJson()).toList(),
       'countWordsOnPlayer': instance.countWordsOnPlayer,
       'roundTime': instance.roundTime.inMicroseconds,
       'currentTeam': instance.currentTeam,
