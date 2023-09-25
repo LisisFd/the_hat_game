@@ -1,8 +1,8 @@
-import 'dart:async';
-
 import 'package:app_main/domain/domain.dart';
+import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_storage/core_storage.dart';
+import 'package:core_utils/core_utils.dart';
 
 import '../interfaces/interfaces.dart';
 
@@ -10,16 +10,18 @@ class TheHatGameService extends IGameService {
   late final ISettingService _settingService;
   late final IGameRepository _gameRepository;
 
-  TheHatAppGame? _appGame;
-
-  TheHatAppGame? get appGame => _appGame;
+  final BehaviorSubject<TheHatAppGame> _appGame =
+      BehaviorSubject.alwaysUpdate(null);
 
   @override
-  List<Team> get teams => appGame?.teams ?? [];
+  IBehaviorSubjectReadonly<TheHatAppGame> get appGame => _appGame;
+
+  @override
+  List<Team> get teams => appGame.value?.teams ?? [];
 
   @override
   Duration get roundTime {
-    Duration? savedTime = appGame?.roundTime;
+    Duration? savedTime = appGame.value?.roundTime;
     if (savedTime == null || savedTime == Duration.zero) {
       return _settingService.appSettings.value.timePlayerTurn;
     }
@@ -27,27 +29,29 @@ class TheHatGameService extends IGameService {
   }
 
   @override
-  Lap? get currentLap => appGame?.currentLap;
+  Lap? get currentLap => appGame.value?.currentLap;
 
   @override
   Team get currentTeam =>
       teams.isEmpty ? const Team(name: 'null') : teams.first;
 
   @override
-  int get countOfPlayers => _appGame?.playersCount ?? 2;
+  int get countOfPlayers => _appGame.value?.playersCount ?? 2;
 
   @override
   int get countWordsOnPlayer =>
-      _appGame?.countWordsOnPlayer ??
+      _appGame.value?.countWordsOnPlayer ??
       _settingService.appSettings.value.countWordsOnPlayer;
 
   @override
   List<Word> get words =>
-      _appGame?.words.where((w) => w.status == WordStatus.active).toList() ??
+      _appGame.value?.words
+          .where((w) => w.status == WordStatus.active)
+          .toList() ??
       [];
 
   @override
-  List<Word> get wordsWithStatus => _appGame?.words ?? [];
+  List<Word> get wordsWithStatus => _appGame.value?.words ?? [];
 
   @override
   bool get gameIsReady =>
@@ -57,7 +61,7 @@ class TheHatGameService extends IGameService {
   Word get word => words.isNotEmpty ? words.first : Word.create(word: '');
 
   @override
-  bool get gameIsNotEmpty => _appGame != null;
+  bool get gameIsNotEmpty => _appGame.value != null;
 
   TheHatGameService(
       {required IGameRepository gameRepository,
@@ -68,7 +72,7 @@ class TheHatGameService extends IGameService {
   }
 
   void _init() {
-    _appGame = _gameRepository.getGame();
+    _appGame.setValue(_gameRepository.getGame());
   }
 
   @override
@@ -89,7 +93,7 @@ class TheHatGameService extends IGameService {
       Word.create(word: word),
     );
     currentWords.shuffle();
-    TheHatAppGame? game = _appGame?.copyWith(words: currentWords);
+    TheHatAppGame? game = _appGame.value?.copyWith(words: currentWords);
     _saveGame(game);
   }
 
@@ -103,13 +107,15 @@ class TheHatGameService extends IGameService {
     teams[currentTeamIndex] = teams[currentTeamIndex].copyWith(
       points: currentTeam.points + (pointPlus ?? 0),
     );
-    _appGame = _appGame?.copyWith(
-        roundTime: time, teams: teams, words: words, currentScreen: newScreen);
+    _appGame.setValue(_appGame.value?.copyWith(
+        roundTime: time, teams: teams, words: words, currentScreen: newScreen));
   }
 
   @override
-  void saveGame([bool lapEnd = false]) {
-    _saveGame(_appGame, lapEnd);
+  void saveGame() {
+    _saveGame(
+      _appGame.value,
+    );
   }
 
   @override
@@ -117,30 +123,23 @@ class TheHatGameService extends IGameService {
     _deleteGame();
   }
 
-  void _saveGame(TheHatAppGame? game, [bool lapEnd = false]) {
+  void _saveGame(
+    TheHatAppGame? game,
+  ) {
     if (game != null) {
-      Lap lap = game.currentLap;
-      if (lap != Lap.values.last) {
-        int lapIndex = Lap.values.indexOf(lap);
-        lap = Lap.values[lapIndex + 1];
-      }
-
-      if (lapEnd) {
-        game = game.copyWith(currentLap: lap);
-      }
       _gameRepository.setGame(game);
     }
-    _appGame = game;
+    _appGame.setValue(game);
   }
 
   void _deleteGame() {
     _gameRepository.setGame(null);
-    _appGame = null;
+    _appGame.setValue(null);
   }
 
   @override
   void updateWord(isRight) {
-    TheHatAppGame? game = _appGame;
+    TheHatAppGame? game = _appGame.value;
     if (game == null) {
       return;
     }
@@ -154,12 +153,12 @@ class TheHatGameService extends IGameService {
           currentWords[indexWord].copyWith(status: WordStatus.skip);
     }
 
-    _appGame = _appGame?.copyWith(words: currentWords);
+    _appGame.setValue(_appGame.value?.copyWith(words: currentWords));
   }
 }
 
 extension TheHatGameServiceFeatureExtension on ServiceScope {
-  Future<IGameService> _serviceFactory() async {
+  IGameService _serviceFactory() {
     TheHatGameService service = TheHatGameService(
       gameRepository: get<IGameRepository>(),
       settingService: get<ISettingService>(),

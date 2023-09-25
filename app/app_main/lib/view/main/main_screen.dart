@@ -7,7 +7,7 @@ import 'package:core_get_it/core_get_it.dart';
 import 'package:core_ui/core_ui.dart';
 
 //TODO: add localization
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   static Widget pageBuilder(
       BuildContext context, PageArgumentsGeneric arguments) {
     return const MainScreen();
@@ -16,10 +16,22 @@ class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
   @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
+  final IGameService gameService = getWidgetService<IGameService>();
+  final AppRoutes appRoutes = getWidgetService<AppRoutes>();
+  final FlowFactory flowFactory = getWidgetService<FlowFactory>();
+
+  @override
+  void initState() {
+    super.initState();
+    listen(gameService.appGame);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final IGameService gameService = getWidgetService<IGameService>();
-    final AppRoutes appRoutes = getWidgetService<AppRoutes>();
-    final FlowFactory flowFactory = getWidgetService<FlowFactory>();
     final IGameRestoreFlow gameRestoreFlow = flowFactory.getFlow(context);
     AppLocalizations localize = context.localization();
     List<Widget> menu = [

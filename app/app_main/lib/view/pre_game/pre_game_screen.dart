@@ -37,7 +37,11 @@ class PreGameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppRoutes appRoutes = getWidgetService<AppRoutes>();
     final IGameService gameService = getWidgetService<IGameService>();
-    gameService.updateGame(newScreen: CurrentScreen.preGame);
+    if (gameService.appGame.value?.currentScreen != CurrentScreen.preGame) {
+      gameService.updateGame(newScreen: CurrentScreen.preGame);
+      gameService.saveGame();
+    }
+
     Rules rules = _getCurrentRule(gameService);
     return MyAppWrap(
       body: Column(

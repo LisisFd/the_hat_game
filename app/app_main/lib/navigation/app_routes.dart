@@ -56,43 +56,43 @@ class AppRoutes extends IRouteNavigationBuilder {
   }
 
   FullRouteInfo wordsScreen([bool withReplace = false]) {
-    FullRouteInfo replaceRoutes = withReplace ? [...mainScreen()] : [];
-    replaceRoutes.add(const RouteArgument(
-      _RouteUrl.words,
-    ));
-    return replaceRoutes;
+    return [
+      const RouteArgument(
+        _RouteUrl.words,
+      )
+    ];
   }
 
   FullRouteInfo preGameScreen() {
-    FullRouteInfo replaceRoutes = mainScreen();
-    replaceRoutes.add(const RouteArgument(
-      _RouteUrl.preGame,
-    ));
-    return replaceRoutes;
+    return [
+      const RouteArgument(
+        _RouteUrl.preGame,
+      )
+    ];
   }
 
   FullRouteInfo teamsRateScreen() {
-    FullRouteInfo replaceRoutes = mainScreen();
-    replaceRoutes.add(const RouteArgument(
-      _RouteUrl.teamsRate,
-    ));
-    return replaceRoutes;
+    return [
+      const RouteArgument(
+        _RouteUrl.teamsRate,
+      )
+    ];
   }
 
   FullRouteInfo gameProcess() {
-    FullRouteInfo replaceRoutes = mainScreen();
-    replaceRoutes.add(const RouteArgument(
-      _RouteUrl.gameProcess,
-    ));
-    return replaceRoutes;
+    return [
+      const RouteArgument(
+        _RouteUrl.gameProcess,
+      )
+    ];
   }
 
   FullRouteInfo teamResult() {
-    FullRouteInfo replaceRoutes = mainScreen();
-    replaceRoutes.add(const RouteArgument(
-      _RouteUrl.teamResult,
-    ));
-    return replaceRoutes;
+    return [
+      const RouteArgument(
+        _RouteUrl.teamResult,
+      )
+    ];
   }
 
   FullRouteInfo winner() {

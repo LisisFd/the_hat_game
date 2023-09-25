@@ -63,7 +63,8 @@ class _WordsScreenState extends State<WordsScreen> {
 
   void _nextPress() {
     if (_addWord()) {
-      RootAppNavigation.of(context).pushReplacement(_appRoutes.preGameScreen());
+      RootAppNavigation.of(context).pushReplacementMultiple(
+          [_appRoutes.mainScreen(), _appRoutes.preGameScreen()]);
     }
   }
 

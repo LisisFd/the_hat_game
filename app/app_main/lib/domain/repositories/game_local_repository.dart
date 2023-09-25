@@ -36,5 +36,6 @@ class GameLocalRepository extends IGameRepository {
     } else {
       await _storage.write(_storageKeyGame, game);
     }
+    _appGame = game;
   }
 }

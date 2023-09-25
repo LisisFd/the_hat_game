@@ -38,6 +38,12 @@ class _TeamsScreenState extends State<TeamsScreen> {
 
   List<Team> get _currentTeams => _screenModel.currentTeams;
 
+  @override
+  void initState() {
+    _gameService.deleteGame();
+    super.initState();
+  }
+
   void _addItem() {
     int length = _currentTeams.length;
     setState(() {
