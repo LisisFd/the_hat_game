@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
         themeMode: ThemeMode.light,
         onGenerateInitialRoutes: navigation.onGenerateInitialRoutes,
         onGenerateRoute: navigation.onGenerateRoute,
-        key: navigation.rootContainer.navigatorKey,
+        navigatorKey: navigation.rootContainer.navigatorKey,
         supportedLocales: localizationService.supportedLocales,
         localizationsDelegates: [
           AppLocalizations.delegate,

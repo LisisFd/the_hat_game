@@ -1,4 +1,4 @@
-import 'package:app_main/models/models.dart';
+import '../entities/entities.dart';
 
 abstract class ITeamsRepository {
   Future<Teams> getTeams();

@@ -1,6 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
-import 'package:app_main/models/entities/entities.dart';
+import 'package:app_main/domain/domain.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
@@ -110,16 +110,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Round timer'),
-                    Text("${currentSettings.timePlayerTurn.toInt()}")
+                    Text("${currentSettings.timePlayerTurn.inSeconds}")
                   ],
                 ),
                 Slider(
                     max: 120,
                     min: 10,
-                    value: currentSettings.timePlayerTurn,
+                    value: currentSettings.timePlayerTurn.inSeconds.toDouble(),
                     onChanged: (val) {
                       _updateSettings(
-                        currentSettings.copyWith(timePlayerTurn: val),
+                        currentSettings.copyWith(
+                          timePlayerTurn: Duration(
+                            seconds: val.toInt(),
+                          ),
+                        ),
                       );
                     }),
               ],
