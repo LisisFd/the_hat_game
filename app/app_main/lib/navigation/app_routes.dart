@@ -55,12 +55,12 @@ class AppRoutes extends IRouteNavigationBuilder {
     ];
   }
 
-  FullRouteInfo wordsScreen() {
-    return [
-      const RouteArgument(
-        _RouteUrl.words,
-      )
-    ];
+  FullRouteInfo wordsScreen([bool withReplace = false]) {
+    FullRouteInfo replaceRoutes = withReplace ? [...mainScreen()] : [];
+    replaceRoutes.add(const RouteArgument(
+      _RouteUrl.words,
+    ));
+    return replaceRoutes;
   }
 
   FullRouteInfo preGameScreen() {

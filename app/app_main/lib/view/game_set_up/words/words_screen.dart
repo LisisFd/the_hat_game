@@ -1,5 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/domain/domain.dart';
 import 'package:app_main/navigation/app_routes.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
@@ -41,6 +42,7 @@ class _WordsScreenState extends State<WordsScreen> {
 
   @override
   void initState() {
+    _gameService.updateGame(newScreen: CurrentScreen.setUp);
     _update();
     super.initState();
   }

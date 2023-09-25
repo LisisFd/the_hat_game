@@ -27,7 +27,11 @@ abstract class IGameService {
 
   void addWord(String word);
 
-  void updateGame({Duration? time, int? pointPlus, List<Word>? words});
+  void updateGame(
+      {CurrentScreen? newScreen,
+      Duration? time,
+      int? pointPlus,
+      List<Word>? words});
 
   void updateWord(bool isRight);
 

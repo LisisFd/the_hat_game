@@ -94,17 +94,22 @@ class TheHatGameService extends IGameService {
   }
 
   @override
-  void updateGame({Duration? time, int? pointPlus, List<Word>? words}) {
+  void updateGame(
+      {CurrentScreen? newScreen,
+      Duration? time,
+      int? pointPlus,
+      List<Word>? words}) {
     int currentTeamIndex = teams.indexWhere((t) => t.name == currentTeam.name);
     teams[currentTeamIndex] = teams[currentTeamIndex].copyWith(
       points: currentTeam.points + (pointPlus ?? 0),
     );
-    _appGame = _appGame?.copyWith(roundTime: time, teams: teams, words: words);
+    _appGame = _appGame?.copyWith(
+        roundTime: time, teams: teams, words: words, currentScreen: newScreen);
   }
 
   @override
-  void saveGame() {
-    _saveGame(_appGame);
+  void saveGame([bool lapEnd = false]) {
+    _saveGame(_appGame, lapEnd);
   }
 
   @override
@@ -112,8 +117,17 @@ class TheHatGameService extends IGameService {
     _deleteGame();
   }
 
-  void _saveGame(TheHatAppGame? game) {
+  void _saveGame(TheHatAppGame? game, [bool lapEnd = false]) {
     if (game != null) {
+      Lap lap = game.currentLap;
+      if (lap != Lap.values.last) {
+        int lapIndex = Lap.values.indexOf(lap);
+        lap = Lap.values[lapIndex + 1];
+      }
+
+      if (lapEnd) {
+        game = game.copyWith(currentLap: lap);
+      }
       _gameRepository.setGame(game);
     }
     _appGame = game;

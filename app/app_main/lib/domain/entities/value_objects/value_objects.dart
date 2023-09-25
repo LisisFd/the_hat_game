@@ -1,4 +1,5 @@
 //GENERATED BARREL FILE
+export 'current_screen.dart';
 export 'lap.dart';
 export 'settings.dart';
 export 'team.dart';

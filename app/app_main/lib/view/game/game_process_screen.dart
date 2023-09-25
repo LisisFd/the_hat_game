@@ -71,6 +71,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
     setState(() {
       _gameService.updateGame(time: timerTime);
       if (timerTime == Duration.zero) {
+        _gameService.updateGame();
         setState(() {
           _isTickingEnded = true;
         });
@@ -85,7 +86,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
     if (isLast || _isTickingEnded) {
       _gameService.updateWord(right);
-
+      _gameService.saveGame();
       RootAppNavigation.of(context).pushReplacement(_appRoutes.teamResult());
     } else {
       setState(() {

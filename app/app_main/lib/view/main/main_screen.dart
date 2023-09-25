@@ -6,7 +6,8 @@ import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_ui/core_ui.dart';
 
-class MainScreen extends StatefulWidget {
+//TODO: add localization
+class MainScreen extends StatelessWidget {
   static Widget pageBuilder(
       BuildContext context, PageArgumentsGeneric arguments) {
     return const MainScreen();
@@ -15,38 +16,33 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-//TODO: add localization
-class _MainScreenState extends State<MainScreen> {
-  final IGameService _gameService = getWidgetService<IGameService>();
-  final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
-
-  @override
   Widget build(BuildContext context) {
+    final IGameService gameService = getWidgetService<IGameService>();
+    final AppRoutes appRoutes = getWidgetService<AppRoutes>();
+    final FlowFactory flowFactory = getWidgetService<FlowFactory>();
+    final IGameRestoreFlow gameRestoreFlow = flowFactory.getFlow(context);
     AppLocalizations localize = context.localization();
     List<Widget> menu = [
-      if (_gameService.gameIsNotEmpty)
-        const MenuButton(
-          onPressed: null,
-          child: Text('Continue'),
+      if (gameService.gameIsNotEmpty)
+        MenuButton(
+          onPressed: gameRestoreFlow.restoreGame,
+          child: const Text('Continue'),
         ),
       MenuButton(
         onPressed: () => RootAppNavigation.of(context).push(
-            _appRoutes.teamsScreen(),
+            appRoutes.teamsScreen(),
             transition: TransitionAnimations.disable()),
         child: Text(localize.screen_main_btn_play),
       ),
       MenuButton(
         onPressed: () => RootAppNavigation.of(context).push(
-            _appRoutes.rulesScreen(),
+            appRoutes.rulesScreen(),
             transition: TransitionAnimations.disable()),
         child: Text(localize.screen_main_btn_rules),
       ),
       MenuButton(
         onPressed: () => RootAppNavigation.of(context).push(
-            _appRoutes.settingsScreen(),
+            appRoutes.settingsScreen(),
             transition: TransitionAnimations.disable()),
         child: Text(localize.screen_main_btn_settings),
       ),

@@ -17,9 +17,11 @@ abstract class _$TheHatAppGameCWProxy {
 
   TheHatAppGame words(List<Word> words);
 
-  TheHatAppGame currentTeam(String? currentTeam);
+  TheHatAppGame currentTeam(Team? currentTeam);
 
   TheHatAppGame currentLap(Lap currentLap);
+
+  TheHatAppGame currentScreen(CurrentScreen currentScreen);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TheHatAppGame(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -33,8 +35,9 @@ abstract class _$TheHatAppGameCWProxy {
     int? countWordsOnPlayer,
     Duration? roundTime,
     List<Word>? words,
-    String? currentTeam,
+    Team? currentTeam,
     Lap? currentLap,
+    CurrentScreen? currentScreen,
   });
 }
 
@@ -62,11 +65,15 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
   TheHatAppGame words(List<Word> words) => this(words: words);
 
   @override
-  TheHatAppGame currentTeam(String? currentTeam) =>
+  TheHatAppGame currentTeam(Team? currentTeam) =>
       this(currentTeam: currentTeam);
 
   @override
   TheHatAppGame currentLap(Lap currentLap) => this(currentLap: currentLap);
+
+  @override
+  TheHatAppGame currentScreen(CurrentScreen currentScreen) =>
+      this(currentScreen: currentScreen);
 
   @override
 
@@ -84,6 +91,7 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
     Object? words = const $CopyWithPlaceholder(),
     Object? currentTeam = const $CopyWithPlaceholder(),
     Object? currentLap = const $CopyWithPlaceholder(),
+    Object? currentScreen = const $CopyWithPlaceholder(),
   }) {
     return TheHatAppGame(
       teams: teams == const $CopyWithPlaceholder() || teams == null
@@ -111,12 +119,17 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
       currentTeam: currentTeam == const $CopyWithPlaceholder()
           ? _value.currentTeam
           // ignore: cast_nullable_to_non_nullable
-          : currentTeam as String?,
+          : currentTeam as Team?,
       currentLap:
           currentLap == const $CopyWithPlaceholder() || currentLap == null
               ? _value.currentLap
               // ignore: cast_nullable_to_non_nullable
               : currentLap as Lap,
+      currentScreen:
+          currentScreen == const $CopyWithPlaceholder() || currentScreen == null
+              ? _value.currentScreen
+              // ignore: cast_nullable_to_non_nullable
+              : currentScreen as CurrentScreen,
     );
   }
 }
@@ -143,9 +156,14 @@ TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
               ?.map((e) => Word.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      currentTeam: json['currentTeam'] as String?,
+      currentTeam: json['currentTeam'] == null
+          ? null
+          : Team.fromJson(json['currentTeam'] as Map<String, dynamic>),
       currentLap:
           $enumDecodeNullable(_$LapEnumMap, json['currentLap']) ?? Lap.first,
+      currentScreen:
+          $enumDecodeNullable(_$CurrentScreenEnumMap, json['currentScreen']) ??
+              CurrentScreen.setUp,
     );
 
 Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
@@ -155,12 +173,21 @@ Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
       'words': instance.words.map((e) => e.toJson()).toList(),
       'countWordsOnPlayer': instance.countWordsOnPlayer,
       'roundTime': instance.roundTime.inMicroseconds,
-      'currentTeam': instance.currentTeam,
+      'currentTeam': instance.currentTeam?.toJson(),
       'currentLap': _$LapEnumMap[instance.currentLap]!,
+      'currentScreen': _$CurrentScreenEnumMap[instance.currentScreen]!,
     };
 
 const _$LapEnumMap = {
   Lap.first: 'first',
   Lap.second: 'second',
   Lap.third: 'third',
+};
+
+const _$CurrentScreenEnumMap = {
+  CurrentScreen.setUp: 'setUp',
+  CurrentScreen.preGame: 'preGame',
+  CurrentScreen.rate: 'rate',
+  CurrentScreen.process: 'process',
+  CurrentScreen.result: 'result',
 };
