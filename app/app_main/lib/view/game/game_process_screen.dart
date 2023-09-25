@@ -45,6 +45,12 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   bool w = false;
 
+  @override
+  void initState() {
+    _gameService.updateGame(newScreen: CurrentScreen.process);
+    super.initState();
+  }
+
   void _startGame() {
     setState(() {
       _timer?.start();

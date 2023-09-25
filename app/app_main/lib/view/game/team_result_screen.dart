@@ -33,6 +33,12 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
       .where((w) => w.status == WordStatus.right || w.status == WordStatus.skip)
       .toList();
 
+  @override
+  void initState() {
+    _gameService.updateGame(newScreen: CurrentScreen.result);
+    super.initState();
+  }
+
   void _updateWordState(Word word) {
     setState(() {
       int wordIndex = _words.indexWhere((w) => w.id == word.id);

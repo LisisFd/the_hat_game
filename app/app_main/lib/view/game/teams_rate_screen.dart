@@ -8,19 +8,18 @@ import '../../domain/domain.dart';
 class TeamsRateScreen extends StatelessWidget {
   static Widget pageBuilder(
       BuildContext context, PageArgumentsGeneric arguments) {
-    return TeamsRateScreen();
+    return const TeamsRateScreen();
   }
 
-  final IGameService _gameService = getWidgetService<IGameService>();
-
-  List<Team> get _teams => _gameService.teams;
-
-  TeamsRateScreen({super.key});
+  const TeamsRateScreen({super.key});
 
   ///TODO: add localization
   @override
   Widget build(BuildContext context) {
-    List<Widget> teamsWidgets = _teams
+    final IGameService gameService = getWidgetService<IGameService>();
+    List<Team> teams = gameService.teams;
+    gameService.updateGame(newScreen: CurrentScreen.rate);
+    List<Widget> teamsWidgets = teams
         .map(
           (t) => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,7 +48,7 @@ class TeamsRateScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(_gameService.currentTeam.name),
+                  Text(gameService.currentTeam.name),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: ElevatedButton(
