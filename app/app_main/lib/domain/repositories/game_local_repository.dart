@@ -23,7 +23,7 @@ class GameLocalRepository extends IGameRepository {
     } catch (e) {
       log('Invalid reading game operation');
     }
-    _appGame == game;
+    _appGame = game;
   }
 
   @override

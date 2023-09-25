@@ -23,6 +23,8 @@ abstract class _$TheHatAppGameCWProxy {
 
   TheHatAppGame currentScreen(CurrentScreen currentScreen);
 
+  TheHatAppGame gameState(GameState gameState);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TheHatAppGame(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -38,6 +40,7 @@ abstract class _$TheHatAppGameCWProxy {
     Team? currentTeam,
     Lap? currentLap,
     CurrentScreen? currentScreen,
+    GameState? gameState,
   });
 }
 
@@ -76,6 +79,9 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
       this(currentScreen: currentScreen);
 
   @override
+  TheHatAppGame gameState(GameState gameState) => this(gameState: gameState);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TheHatAppGame(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -92,6 +98,7 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
     Object? currentTeam = const $CopyWithPlaceholder(),
     Object? currentLap = const $CopyWithPlaceholder(),
     Object? currentScreen = const $CopyWithPlaceholder(),
+    Object? gameState = const $CopyWithPlaceholder(),
   }) {
     return TheHatAppGame(
       teams: teams == const $CopyWithPlaceholder() || teams == null
@@ -130,6 +137,10 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
               ? _value.currentScreen
               // ignore: cast_nullable_to_non_nullable
               : currentScreen as CurrentScreen,
+      gameState: gameState == const $CopyWithPlaceholder() || gameState == null
+          ? _value.gameState
+          // ignore: cast_nullable_to_non_nullable
+          : gameState as GameState,
     );
   }
 }
@@ -164,6 +175,8 @@ TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
       currentScreen:
           $enumDecodeNullable(_$CurrentScreenEnumMap, json['currentScreen']) ??
               CurrentScreen.setUp,
+      gameState: $enumDecodeNullable(_$GameStateEnumMap, json['gameState']) ??
+          GameState.start,
     );
 
 Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
@@ -176,6 +189,7 @@ Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
       'currentTeam': instance.currentTeam?.toJson(),
       'currentLap': _$LapEnumMap[instance.currentLap]!,
       'currentScreen': _$CurrentScreenEnumMap[instance.currentScreen]!,
+      'gameState': _$GameStateEnumMap[instance.gameState]!,
     };
 
 const _$LapEnumMap = {
@@ -190,4 +204,10 @@ const _$CurrentScreenEnumMap = {
   CurrentScreen.rate: 'rate',
   CurrentScreen.process: 'process',
   CurrentScreen.result: 'result',
+};
+
+const _$GameStateEnumMap = {
+  GameState.start: 'start',
+  GameState.paused: 'paused',
+  GameState.lastWord: 'lastWord',
 };

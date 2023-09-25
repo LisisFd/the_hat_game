@@ -4,6 +4,7 @@ import '../entities.dart';
 
 part 'game.g.dart';
 
+///TODO: set generated directory
 @CopyWith()
 @JsonSerializable(explicitToJson: true)
 class TheHatAppGame implements IJsonWrite<TheHatAppGame> {
@@ -17,17 +18,18 @@ class TheHatAppGame implements IJsonWrite<TheHatAppGame> {
   Team? currentTeam;
   Lap currentLap;
   CurrentScreen currentScreen;
+  GameState gameState;
 
-  TheHatAppGame({
-    required this.teams,
-    required this.playersCount,
-    required this.countWordsOnPlayer,
-    required this.roundTime,
-    this.words = const [],
-    this.currentTeam,
-    this.currentLap = Lap.first,
-    this.currentScreen = CurrentScreen.setUp,
-  });
+  TheHatAppGame(
+      {required this.teams,
+      required this.playersCount,
+      required this.countWordsOnPlayer,
+      required this.roundTime,
+      this.words = const [],
+      this.currentTeam,
+      this.currentLap = Lap.first,
+      this.currentScreen = CurrentScreen.setUp,
+      this.gameState = GameState.start});
 
   @override
   Map<String, dynamic> toJson() => _$TheHatAppGameToJson(this);

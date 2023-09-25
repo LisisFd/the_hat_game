@@ -20,6 +20,9 @@ class TheHatGameService extends IGameService {
   List<Team> get teams => appGame.value?.teams ?? [];
 
   @override
+  GameState get gameState => appGame.value?.gameState ?? GameState.start;
+
+  @override
   Duration get roundTime {
     Duration? savedTime = appGame.value?.roundTime;
     if (savedTime == null || savedTime == Duration.zero) {
@@ -30,6 +33,10 @@ class TheHatGameService extends IGameService {
 
   @override
   Lap? get currentLap => appGame.value?.currentLap;
+
+  @override
+  CurrentScreen get currentScreen =>
+      _appGame.value?.currentScreen ?? CurrentScreen.setUp;
 
   @override
   Team get currentTeam =>
@@ -99,7 +106,8 @@ class TheHatGameService extends IGameService {
 
   @override
   void updateGame(
-      {CurrentScreen? newScreen,
+      {GameState? gameState,
+      CurrentScreen? newScreen,
       Duration? time,
       int? pointPlus,
       List<Word>? words}) {
@@ -108,7 +116,11 @@ class TheHatGameService extends IGameService {
       points: currentTeam.points + (pointPlus ?? 0),
     );
     _appGame.setValue(_appGame.value?.copyWith(
-        roundTime: time, teams: teams, words: words, currentScreen: newScreen));
+        gameState: gameState,
+        roundTime: time,
+        teams: teams,
+        words: words,
+        currentScreen: newScreen));
   }
 
   @override

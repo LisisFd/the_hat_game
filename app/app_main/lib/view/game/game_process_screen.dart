@@ -30,25 +30,40 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   TimerWidgetState? get _timer => _timerKey.currentState;
 
-//  TransitionContainerState? get _anim => _animKey.currentState;
-
   bool _isTickingEnded = false;
 
   Team get _currentTeam => _gameService.currentTeam;
 
-  Word get word => _gameService.word;
+  Word get _word => _gameService.word;
 
-  bool get isLast => _gameService.words.length == 1;
+  bool get _isLast => _gameService.words.length == 1;
 
   bool isStart = false;
   bool isPaused = false;
 
-  bool w = false;
-
   @override
   void initState() {
-    _gameService.updateGame(newScreen: CurrentScreen.process);
+    if (_gameService.currentScreen != CurrentScreen.process) {
+      _gameService.updateGame(newScreen: CurrentScreen.process);
+      _gameService.saveGame();
+    }
+    _initGame();
     super.initState();
+  }
+
+  void _initGame() {
+    if (_gameService.gameState == GameState.start) {
+      return;
+    }
+    setState(() {
+      if (_gameService.gameState == GameState.paused) {
+        isStart = true;
+        isPaused = true;
+      } else {
+        isStart = true;
+        _isTickingEnded = true;
+      }
+    });
   }
 
   void _startGame() {
@@ -62,6 +77,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
     setState(() {
       isPaused = true;
       _timer?.stop();
+      _gameService.updateGame(gameState: GameState.paused);
       _gameService.saveGame();
     });
   }
@@ -77,7 +93,8 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
     setState(() {
       _gameService.updateGame(time: timerTime);
       if (timerTime == Duration.zero) {
-        _gameService.updateGame();
+        _gameService.updateGame(gameState: GameState.lastWord);
+        _gameService.saveGame();
         setState(() {
           _isTickingEnded = true;
         });
@@ -90,7 +107,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
       _gameService.updateGame(pointPlus: _semanticOne);
     }
 
-    if (isLast || _isTickingEnded) {
+    if (_isLast || _isTickingEnded) {
       _gameService.updateWord(right);
       _gameService.saveGame();
       RootAppNavigation.of(context).pushReplacement(_appRoutes.teamResult());
@@ -101,6 +118,15 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
     }
   }
 
+  Future<bool> _onWillPop() async {
+    if (_gameService.gameState != GameState.lastWord) {
+      _gameService.updateGame(gameState: GameState.paused);
+      _timer?.stop();
+      _gameService.saveGame();
+    }
+    return true;
+  }
+
   ///TODO: add theme
   @override
   Widget build(BuildContext context) {
@@ -108,7 +134,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
       key: _animKey,
       color: Colors.redAccent,
       onSkip: _checkWord,
-      child: Text(key: ValueKey(word.id), word.word),
+      child: Text(key: ValueKey(_word.id), _word.word),
     );
 
     Widget buttonWidget = RawMaterialButton(
@@ -143,23 +169,26 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
             currentDuration: _gameService.roundTime,
           )
         : const Text('Last word');
-    return MyAppWrap(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Text(_currentTeam.name),
-                Text(_currentTeam.points.toString()),
-              ],
-            ),
-            centerWidget,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [const SizedBox(), timerWidget, stopWidget],
-            )
-          ],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: MyAppWrap(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Text(_currentTeam.name),
+                  Text(_currentTeam.points.toString()),
+                ],
+              ),
+              centerWidget,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [const SizedBox(), timerWidget, stopWidget],
+              )
+            ],
+          ),
         ),
       ),
     );

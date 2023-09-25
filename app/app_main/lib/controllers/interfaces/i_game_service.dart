@@ -26,15 +26,21 @@ abstract class IGameService {
 
   bool get gameIsNotEmpty;
 
+  GameState get gameState;
+
+  CurrentScreen get currentScreen;
+
   void setUpGameTeams(List<Team> teams, int countOfPlayers);
 
   void addWord(String word);
 
-  void updateGame(
-      {CurrentScreen? newScreen,
-      Duration? time,
-      int? pointPlus,
-      List<Word>? words});
+  void updateGame({
+    CurrentScreen? newScreen,
+    GameState? gameState,
+    Duration? time,
+    int? pointPlus,
+    List<Word>? words,
+  });
 
   void updateWord(bool isRight);
 

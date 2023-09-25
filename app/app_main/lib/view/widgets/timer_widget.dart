@@ -26,15 +26,11 @@ class TimerWidgetState extends State<TimerWidget>
 
   int get _seconds => _totalElapsed.inSeconds % 60;
 
-  int get _milliseconds => (_totalElapsed.inMilliseconds % 1000) ~/ 10;
-
   String get _viewMinutes =>
       _minutes < 10 ? _convertTime(_minutes) : _minutes.toString();
 
   String get _viewSecond =>
       _seconds < 10 ? _convertTime(_seconds) : _seconds.toString();
-
-  String get _viewMillisecond => _convertTime(_milliseconds);
 
   String _convertTime(int time) {
     return time.toString().padLeft(2, '0');
@@ -49,7 +45,7 @@ class TimerWidgetState extends State<TimerWidget>
     ticker = createTicker((elapsed) {
       setState(() {
         _elapsed = elapsed;
-        if (_totalElapsed.inMilliseconds == 0) {
+        if (_totalElapsed.inSeconds == 0) {
           stop(true);
         }
       });
@@ -82,13 +78,7 @@ class TimerWidgetState extends State<TimerWidget>
 
   @override
   Widget build(BuildContext context) {
-    String result = '';
-    if (_totalElapsed.inSeconds >= 10) {
-      result = '$_viewMinutes:$_viewSecond';
-    } else {
-      result = '$_viewSecond:$_viewMillisecond';
-    }
-
+    String result = '$_viewMinutes:$_viewSecond';
     return Text(result);
   }
 }
