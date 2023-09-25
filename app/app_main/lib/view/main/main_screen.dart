@@ -1,4 +1,5 @@
 import 'package:app_core/app_core.dart';
+import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/navigation.dart';
 import 'package:core_flutter/core_flutter.dart';
@@ -17,28 +18,35 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
+//TODO: add localization
 class _MainScreenState extends State<MainScreen> {
-  final _routes = getWidgetService<AppRoutes>();
+  final IGameService _gameService = getWidgetService<IGameService>();
+  final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
 
   @override
   Widget build(BuildContext context) {
     AppLocalizations localize = context.localization();
     List<Widget> menu = [
+      if (_gameService.gameIsNotEmpty)
+        const MenuButton(
+          onPressed: null,
+          child: Text('Continue'),
+        ),
       MenuButton(
         onPressed: () => RootAppNavigation.of(context).push(
-            _routes.teamsScreen(),
+            _appRoutes.teamsScreen(),
             transition: TransitionAnimations.disable()),
         child: Text(localize.screen_main_btn_play),
       ),
       MenuButton(
         onPressed: () => RootAppNavigation.of(context).push(
-            _routes.rulesScreen(),
+            _appRoutes.rulesScreen(),
             transition: TransitionAnimations.disable()),
         child: Text(localize.screen_main_btn_rules),
       ),
       MenuButton(
         onPressed: () => RootAppNavigation.of(context).push(
-            _routes.settingsScreen(),
+            _appRoutes.settingsScreen(),
             transition: TransitionAnimations.disable()),
         child: Text(localize.screen_main_btn_settings),
       ),

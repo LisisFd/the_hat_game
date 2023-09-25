@@ -6,7 +6,6 @@ import 'package:core_storage/core_storage.dart';
 
 import '../interfaces/interfaces.dart';
 
-///TODO: remove storage settings, create repository
 class TheHatGameService extends IGameService {
   late final ISettingService _settingService;
   late final IGameRepository _gameRepository;
@@ -57,19 +56,19 @@ class TheHatGameService extends IGameService {
   @override
   Word get word => words.isNotEmpty ? words.first : Word.create(word: '');
 
+  @override
+  bool get gameIsNotEmpty => _appGame != null;
+
   TheHatGameService(
       {required IGameRepository gameRepository,
       required ISettingService settingService}) {
     _settingService = settingService;
     _gameRepository = gameRepository;
+    _init();
   }
 
-  Future<void> init() async {
-    await _initGame();
-  }
-
-  Future<void> _initGame() async {
-    _appGame = await _gameRepository.getGame();
+  void _init() {
+    _appGame = _gameRepository.getGame();
   }
 
   @override
@@ -151,12 +150,11 @@ extension TheHatGameServiceFeatureExtension on ServiceScope {
       gameRepository: get<IGameRepository>(),
       settingService: get<ISettingService>(),
     );
-    await service.init();
     return service;
   }
 
   void addTheHatGameServiceFeature() {
-    registerSingletonAsync(
+    registerSingletonWithDependencies(
       _serviceFactory,
       dependsOn: [
         IKeyValueStorage,

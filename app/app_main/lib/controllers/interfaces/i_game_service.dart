@@ -21,6 +21,8 @@ abstract class IGameService {
 
   Word get word;
 
+  bool get gameIsNotEmpty;
+
   void setUpGameTeams(List<Team> teams, int countOfPlayers);
 
   void addWord(String word);

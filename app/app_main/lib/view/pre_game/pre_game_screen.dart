@@ -50,7 +50,7 @@ class _PreGameScreenState extends State<PreGameScreen> {
           rules.widget,
           TextButton(
               onPressed: () {
-                RootAppNavigation.of(context).push(
+                RootAppNavigation.of(context).pushReplacement(
                   _appRoutes.gameProcess(),
                 );
               },

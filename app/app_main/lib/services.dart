@@ -1,7 +1,5 @@
 import 'package:app_core/app_core.dart';
-import 'package:app_main/controllers/controllers.dart';
-import 'package:app_main/domain/domain.dart';
-import 'package:app_main/navigation/navigation.dart';
+import 'package:app_main/controllers/controllersn/navigation/navigation.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_storage/core_storage.dart';
@@ -26,5 +24,6 @@ class AppServices {
     container.addTeamsServiceFeature();
     container.addSettingsServiceFeature();
     container.addTheHatGameServiceFeature();
+    container.addGameRestoreServiceFeature();
   }
 }
