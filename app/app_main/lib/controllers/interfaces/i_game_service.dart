@@ -28,7 +28,7 @@ abstract class IGameService {
 
   GameState get gameState;
 
-  CurrentScreen get currentScreen;
+  void setNewScreen(CurrentScreen newScreen);
 
   void setUpGameTeams(List<Team> teams, int countOfPlayers);
 

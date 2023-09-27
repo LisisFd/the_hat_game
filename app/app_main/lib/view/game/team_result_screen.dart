@@ -35,7 +35,7 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
 
   @override
   void initState() {
-    _gameService.updateGame(newScreen: CurrentScreen.result);
+    _gameService.setNewScreen(CurrentScreen.preGame);
     super.initState();
   }
 

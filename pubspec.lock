@@ -110,6 +110,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  core_app_test:
+    dependency: transitive
+    description:
+      path: "flutter_core/testing/core_app_test"
+      relative: true
+    source: path
+    version: "0.0.1"
   core_crypto:
     dependency: transitive
     description:

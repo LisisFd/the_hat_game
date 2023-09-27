@@ -43,10 +43,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   @override
   void initState() {
-    if (_gameService.currentScreen != CurrentScreen.process) {
-      _gameService.updateGame(newScreen: CurrentScreen.process);
-      _gameService.saveGame();
-    }
+    _gameService.setNewScreen(CurrentScreen.process);
     _initGame();
     super.initState();
   }

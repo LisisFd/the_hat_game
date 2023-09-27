@@ -1,5 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/navigation/app_routes.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
@@ -13,13 +14,15 @@ class TeamsRateScreen extends StatelessWidget {
 
   const TeamsRateScreen({super.key});
 
-  ///TODO: add localization
-  @override
-  Widget build(BuildContext context) {
+  void _initScreen() {
+    final IGameService gameService = getWidgetService<IGameService>();
+    gameService.setNewScreen(CurrentScreen.result);
+  }
+
+  List<Widget> _getTeamsWidget() {
     final IGameService gameService = getWidgetService<IGameService>();
     List<Team> teams = gameService.teams;
-    gameService.updateGame(newScreen: CurrentScreen.rate);
-    List<Widget> teamsWidgets = teams
+    return teams
         .map(
           (t) => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -30,11 +33,28 @@ class TeamsRateScreen extends StatelessWidget {
           ),
         )
         .toList();
+  }
+
+  String get currentTeamName {
+    final IGameService gameService = getWidgetService<IGameService>();
+    return gameService.currentTeam.name;
+  }
+
+  void _navigate(BuildContext context) {
+    final AppRoutes appRoutes = getWidgetService<AppRoutes>();
+    RootAppNavigation.of(context).pushReplacement(appRoutes.gameProcess());
+  }
+
+  ///TODO: add localization
+  @override
+  Widget build(BuildContext context) {
+    _initScreen();
+    List<Widget> teamsWidgets = _getTeamsWidget();
 
     return MyAppWrap(
       body: Column(
         children: [
-          const Text('Comand Rate'),
+          const Text('Command Rate'),
           Expanded(
             flex: 1,
             child: SingleChildScrollView(
@@ -48,11 +68,11 @@ class TeamsRateScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(gameService.currentTeam.name),
+                  Text(currentTeamName),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () => _navigate(context),
                       child: const Text('Go'),
                     ),
                   )

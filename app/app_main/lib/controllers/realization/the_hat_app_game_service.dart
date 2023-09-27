@@ -35,10 +35,6 @@ class TheHatGameService extends IGameService {
   Lap? get currentLap => appGame.value?.currentLap;
 
   @override
-  CurrentScreen get currentScreen =>
-      _appGame.value?.currentScreen ?? CurrentScreen.setUp;
-
-  @override
   Team get currentTeam =>
       teams.isEmpty ? const Team(name: 'null') : teams.first;
 
@@ -166,6 +162,14 @@ class TheHatGameService extends IGameService {
     }
 
     _appGame.setValue(_appGame.value?.copyWith(words: currentWords));
+  }
+
+  @override
+  void setNewScreen(CurrentScreen newScreen) {
+    if (_appGame.value?.currentScreen != newScreen) {
+      updateGame(newScreen: newScreen);
+      saveGame();
+    }
   }
 }
 

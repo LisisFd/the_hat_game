@@ -42,7 +42,7 @@ class _WordsScreenState extends State<WordsScreen> {
 
   @override
   void initState() {
-    _gameService.updateGame(newScreen: CurrentScreen.setUp);
+    _gameService.setNewScreen(CurrentScreen.setUp);
     _update();
     super.initState();
   }

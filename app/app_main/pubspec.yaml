@@ -29,6 +29,9 @@ dependencies:
   app_core:
     path: "../app_core"
   #sub_modules imports
+  #---------------------TEST---------------------------
+  core_app_test:
+    path: "../../flutter_core/testing/core_app_test"
   #-----------------------VIEW-------------------------
   core_ui:
     path: "../../flutter_core/view/core_ui"

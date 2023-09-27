@@ -37,10 +37,7 @@ class PreGameScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final AppRoutes appRoutes = getWidgetService<AppRoutes>();
     final IGameService gameService = getWidgetService<IGameService>();
-    if (gameService.appGame.value?.currentScreen != CurrentScreen.preGame) {
-      gameService.updateGame(newScreen: CurrentScreen.preGame);
-      gameService.saveGame();
-    }
+    gameService.setNewScreen(CurrentScreen.preGame);
 
     Rules rules = _getCurrentRule(gameService);
     return MyAppWrap(
@@ -50,7 +47,7 @@ class PreGameScreen extends StatelessWidget {
           TextButton(
               onPressed: () {
                 RootAppNavigation.of(context).pushReplacement(
-                  appRoutes.gameProcess(),
+                  appRoutes.teamsRateScreen(),
                 );
               },
               child: const Text('OK')),
