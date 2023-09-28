@@ -19,7 +19,7 @@ class MenuButton extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all(
                 MyAppTheme.getColorScheme().onSurface),
             elevation: MaterialStateProperty.all(2),
-            minimumSize: MaterialStateProperty.all<Size>(Size(200, 50)),
+            minimumSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
             textStyle: MaterialStateProperty.all(
                 theme.material.textTheme.headlineLarge),
           ),

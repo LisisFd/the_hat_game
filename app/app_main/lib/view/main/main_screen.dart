@@ -34,7 +34,7 @@ class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
     final IGameRestoreFlow gameRestoreFlow = flowFactory.getFlow(context);
     AppLocalizations localize = context.localization();
     List<Widget> menu = [
-      RotatedBox(
+      const RotatedBox(
         quarterTurns: 2,
         child: Image(
           image: AppConfig.fillHatIcon,

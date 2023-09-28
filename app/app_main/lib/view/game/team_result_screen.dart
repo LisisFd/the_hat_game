@@ -20,7 +20,6 @@ class TeamResultScreen extends StatefulWidget {
 
 class _TeamResultScreenState extends State<TeamResultScreen> {
   final IGameService _gameService = getWidgetService<IGameService>();
-  final ISettingService _settingService = getWidgetService<ISettingService>();
   final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
 
   Team get _currentTeam => _gameService.currentTeam;

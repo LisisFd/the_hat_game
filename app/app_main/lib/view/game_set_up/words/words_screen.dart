@@ -111,7 +111,7 @@ class _WordsScreenState extends State<WordsScreen> {
       children: [
         Column(
           children: [
-            Text(
+            const Text(
               'Words',
               style: TextStyle(fontSize: 40),
             ),
@@ -122,14 +122,14 @@ class _WordsScreenState extends State<WordsScreen> {
                     color: Colors.black.withOpacity(0.2),
                     spreadRadius: 2,
                     blurRadius: 2,
-                    offset: Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ],
-                color: Color(0xFFFFE7D0),
+                color: const Color(0xFFFFE7D0),
               ),
-              margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              padding: EdgeInsets.all(20),
-              child: Text(
+              margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              padding: const EdgeInsets.all(20),
+              child: const Text(
                 'Введите слова потомушо ну типо надо как бі все мі люди и ну єто ті понял корч',
                 style: TextStyle(fontSize: 20),
                 textAlign: TextAlign.center,
@@ -146,12 +146,12 @@ class _WordsScreenState extends State<WordsScreen> {
                 Column(
                   children: [
                     Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 40),
                       child: Form(
                         key: _formKey,
                         child: TextFormField(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               fillColor: Colors.white70,
                               filled: true,
                               border: OutlineInputBorder()),
@@ -169,19 +169,19 @@ class _WordsScreenState extends State<WordsScreen> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
+                      padding: const EdgeInsets.all(20),
+                      decoration: const BoxDecoration(
                           borderRadius:
                               BorderRadius.all(Radius.elliptical(30, 30))),
                       child: Column(
                         children: [
                           Text(
                             'Player: $playerNumber',
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                           ),
                           Text(
                             'Word number: $countWords',
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                           ),
                         ],
                       ),

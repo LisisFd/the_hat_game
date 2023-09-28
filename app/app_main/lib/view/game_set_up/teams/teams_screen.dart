@@ -81,7 +81,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
         children: [
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(left: 10),
+              padding: const EdgeInsets.only(left: 10),
               child: Text(
                 _currentTeams[index].name,
                 style: const TextStyle(fontSize: 25),
@@ -131,7 +131,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
         body: Column(
       children: [
         Container(
-          margin: EdgeInsets.symmetric(vertical: 10),
+          margin: const EdgeInsets.symmetric(vertical: 10),
           child: const Text(
             'Teams',
             style: TextStyle(fontSize: 25),
@@ -151,13 +151,13 @@ class _TeamsScreenState extends State<TeamsScreen> {
                   if (index != _currentTeams.length - 1)
                     ColoredBox(
                       color: theme.primaryColor.withOpacity(0),
-                      child: SizedBox(
+                      child: const SizedBox(
                         width: double.infinity,
                         height: 7,
                       ),
                     )
                   else
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                 ],
@@ -170,7 +170,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: IntrinsicHeight(
                   child: Stack(
                     children: [
@@ -198,7 +198,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                                 ),
                                 Text(
                                   _totalPlayers.toString(),
-                                  style: TextStyle(fontSize: 25),
+                                  style: const TextStyle(fontSize: 25),
                                 ),
                                 IconButton(
                                   onPressed: () {
@@ -223,7 +223,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                           fillColor: Colors.white,
                           onPressed: _addItem,
                           child: Container(
-                              margin: EdgeInsets.all(10),
+                              margin: const EdgeInsets.all(10),
                               child: const Icon(Icons.add)),
                         ),
                       ),
