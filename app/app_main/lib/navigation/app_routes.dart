@@ -55,7 +55,7 @@ class AppRoutes extends IRouteNavigationBuilder {
     ];
   }
 
-  FullRouteInfo wordsScreen() {
+  FullRouteInfo wordsScreen([bool withReplace = false]) {
     return [
       const RouteArgument(
         _RouteUrl.words,

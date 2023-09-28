@@ -21,58 +21,78 @@ class GameProcessScreen extends StatefulWidget {
   State<GameProcessScreen> createState() => _GameProcessScreenState();
 }
 
-class _GameProcessScreenState extends State<GameProcessScreen> {
+class _GameProcessScreenState extends State<GameProcessScreen>
+    with SubjectWidgetContext {
   final IGameService _gameService = getWidgetService<IGameService>();
+  final ISettingService _settingService = getWidgetService<ISettingService>();
   final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
+  final AppLifeStyleRepository _appLifeStyleRepository =
+      getWidgetService<AppLifeStyleRepository>();
   final GlobalKey<TimerWidgetState> _timerKey = GlobalKey<TimerWidgetState>();
   final GlobalKey<TransitionContainerState> _animKey =
       GlobalKey<TransitionContainerState>();
 
   TimerWidgetState? get _timer => _timerKey.currentState;
 
-//  TransitionContainerState? get _anim => _animKey.currentState;
-
-  bool _isTickingEnded = false;
-
   Team get _currentTeam => _gameService.currentTeam;
 
-  Word get word => _gameService.word;
+  Word get _word => _gameService.word;
 
-  bool get isLast => _gameService.words.length == 1;
+  bool get _isLast => _gameService.words.length == 1;
 
-  bool isStart = false;
-  bool isPaused = false;
+  GameState get _gameState => _gameService.gameState;
 
-  bool w = false;
+  @override
+  void initState() {
+    _gameService.setNewScreen(CurrentScreen.process);
+    _initGame();
+
+    super.initState();
+  }
+
+  void _initGame() {
+    listenWith(_appLifeStyleRepository.appState, () {
+      setState(() {
+        if (_gameState == GameState.play) {
+          _timer?.stop();
+          _gameService.updateGame(gameState: GameState.paused);
+        }
+        _gameService.saveGame();
+      });
+    });
+  }
 
   void _startGame() {
     setState(() {
+      _gameService.updateGame(gameState: GameState.play);
       _timer?.start();
-      isStart = true;
     });
   }
 
   void _stopGame() {
     setState(() {
-      isPaused = true;
       _timer?.stop();
+      _gameService.updateGame(gameState: GameState.paused);
       _gameService.saveGame();
     });
   }
 
   void _playGame() {
     setState(() {
-      isPaused = false;
+      _gameService.updateGame(gameState: GameState.play);
+
       _timer?.start();
     });
   }
 
   void _onStopTimer(Duration timerTime) {
+    if (_gameService.gameState == GameState.init) return;
     setState(() {
       _gameService.updateGame(time: timerTime);
       if (timerTime == Duration.zero) {
         setState(() {
-          _isTickingEnded = true;
+          _gameService.updateGame(gameState: GameState.lastWord);
+          _gameService.saveGame();
         });
       }
     });
@@ -83,15 +103,55 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
       _gameService.updateGame(pointPlus: _semanticOne);
     }
 
-    if (isLast || _isTickingEnded) {
+    if (_isLast || _gameState == GameState.lastWord) {
+      _gameService.updateGame(
+          time: _settingService.appSettings.value.timePlayerTurn,
+          gameState: GameState.init);
       _gameService.updateWord(right);
-
-      RootAppNavigation.of(context).pushReplacement(_appRoutes.teamResult());
+      _gameService.saveGame();
+      _timer?.stop();
+      RootAppNavigation.of(context)
+          .pushReplacementWithoutAnimation(_appRoutes.teamResult());
     } else {
       setState(() {
         _gameService.updateWord(right);
       });
     }
+  }
+
+  Future<bool> _onWillPop() async {
+    if (_gameService.gameState == GameState.play) {
+      _gameService.updateGame(gameState: GameState.paused);
+    }
+    _timer?.stop();
+    _gameService.saveGame();
+    return true;
+  }
+
+  Widget _getButtonWidget() {
+    void Function()? fn;
+    Color color = Colors.grey;
+    switch (_gameState) {
+      case GameState.init:
+        fn = _startGame;
+        color = Colors.redAccent;
+      case GameState.play:
+        break;
+      case GameState.paused:
+        fn = _playGame;
+      case GameState.lastWord:
+        break;
+    }
+    return RawMaterialButton(
+      onPressed: fn,
+      elevation: 2.0,
+      fillColor: color,
+      shape: const CircleBorder(),
+      child: const SizedBox(
+        width: 150,
+        height: 150,
+      ),
+    );
   }
 
   ///TODO: add theme
@@ -101,58 +161,54 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
       key: _animKey,
       color: Colors.redAccent,
       onSkip: _checkWord,
-      child: Text(key: ValueKey(word.id), word.word),
+      child: Text(key: ValueKey(_word.id), _word.word),
     );
 
-    Widget buttonWidget = RawMaterialButton(
-      onPressed: !isStart
-          ? _startGame
-          : isPaused
-              ? _playGame
-              : null,
-      elevation: 2.0,
-      fillColor: isPaused ? Colors.grey : Colors.redAccent,
-      shape: const CircleBorder(),
-      child: const SizedBox(
-        width: 150,
-        height: 150,
-      ),
-    );
+    Widget buttonWidget = _getButtonWidget();
 
-    Widget centerWidget = isStart && !isPaused ? wordWidget : buttonWidget;
-    Widget stopWidget = isStart && !isPaused && !_isTickingEnded
-        ? RawMaterialButton(
-            onPressed: _stopGame,
-            elevation: 2.0,
-            fillColor: isPaused ? Colors.grey : Colors.redAccent,
-            shape: const CircleBorder(),
-            child: const Text('Stop'),
-          )
-        : const SizedBox();
-    Widget timerWidget = !_isTickingEnded
+    Widget centerWidget =
+        _gameState == GameState.play || _gameState == GameState.lastWord
+            ? wordWidget
+            : buttonWidget;
+    Widget stopWidget =
+        _gameState == GameState.play && _gameState != GameState.lastWord
+            ? RawMaterialButton(
+                onPressed: _stopGame,
+                elevation: 2.0,
+                fillColor: _gameState == GameState.paused
+                    ? Colors.grey
+                    : Colors.redAccent,
+                shape: const CircleBorder(),
+                child: const Text('Stop'),
+              )
+            : const SizedBox();
+    Widget timerWidget = _gameState != GameState.lastWord
         ? TimerWidget(
             key: _timerKey,
             onStop: _onStopTimer,
             currentDuration: _gameService.roundTime,
           )
         : const Text('Last word');
-    return MyAppWrap(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Text(_currentTeam.name),
-                Text(_currentTeam.points.toString()),
-              ],
-            ),
-            centerWidget,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [const SizedBox(), timerWidget, stopWidget],
-            )
-          ],
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: MyAppWrap(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Text(_currentTeam.name),
+                  Text(_currentTeam.points.toString()),
+                ],
+              ),
+              centerWidget,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [const SizedBox(), timerWidget, stopWidget],
+              )
+            ],
+          ),
         ),
       ),
     );

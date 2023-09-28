@@ -8,6 +8,7 @@ import '../entities/entities.dart';
 class GameLocalRepository extends IGameRepository {
   static const String _storageKeyGame = "current.game";
   late final IKeyValueStorage _storage;
+  TheHatAppGame? _appGame;
 
   GameLocalRepository({
     required IKeyValueStorage storage,
@@ -15,16 +16,18 @@ class GameLocalRepository extends IGameRepository {
     _storage = storage;
   }
 
-  @override
-  Future<TheHatAppGame?> getGame() async {
+  Future<void> init() async {
     TheHatAppGame? game;
     try {
       game = await _storage.read(_storageKeyGame, TheHatAppGame.fromJson);
     } catch (e) {
       log('Invalid reading game operation');
     }
-    return game;
+    _appGame = game;
   }
+
+  @override
+  TheHatAppGame? getGame() => _appGame;
 
   @override
   void setGame(TheHatAppGame? game) async {
@@ -33,5 +36,6 @@ class GameLocalRepository extends IGameRepository {
     } else {
       await _storage.write(_storageKeyGame, game);
     }
+    _appGame = game;
   }
 }

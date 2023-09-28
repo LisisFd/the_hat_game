@@ -1,5 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/domain/domain.dart';
 import 'package:app_main/navigation/app_routes.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
@@ -41,6 +42,7 @@ class _WordsScreenState extends State<WordsScreen> {
 
   @override
   void initState() {
+    _gameService.setNewScreen(CurrentScreen.setUp);
     _update();
     super.initState();
   }
@@ -61,7 +63,8 @@ class _WordsScreenState extends State<WordsScreen> {
 
   void _nextPress() {
     if (_addWord()) {
-      RootAppNavigation.of(context).push(_appRoutes.preGameScreen());
+      RootAppNavigation.of(context).pushReplacementMultipleWithoutAnimation(
+          [_appRoutes.mainScreen(), _appRoutes.preGameScreen()]);
     }
   }
 
@@ -105,30 +108,97 @@ class _WordsScreenState extends State<WordsScreen> {
   Widget build(BuildContext context) {
     return MyAppWrap(
         body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Player Number $playerNumber'),
-        Text('Count Words $countWords'),
-        Form(
-          key: _formKey,
-          child: TextFormField(
-            validator: (val) {
-              String? res = 'Please write a word';
-              if (val != null && val.isNotEmpty) {
-                res = null;
-              }
-              return res;
-            },
-            onChanged: (val) {
-              _currentWord = val;
-            },
+        Column(
+          children: [
+            const Text(
+              'Words',
+              style: TextStyle(fontSize: 40),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: const Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+                color: const Color(0xFFFFE7D0),
+              ),
+              margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              padding: const EdgeInsets.all(20),
+              child: const Text(
+                'Введите слова потомушо ну типо надо как бі все мі люди и ну єто ті понял корч',
+                style: TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: ColoredBox(
+            color: Colors.white60,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 40),
+                      child: Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                              fillColor: Colors.white70,
+                              filled: true,
+                              border: OutlineInputBorder()),
+                          validator: (val) {
+                            String? res = 'Please write a word';
+                            if (val != null && val.isNotEmpty) {
+                              res = null;
+                            }
+                            return res;
+                          },
+                          onChanged: (val) {
+                            _currentWord = val;
+                          },
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: const BoxDecoration(
+                          borderRadius:
+                              BorderRadius.all(Radius.elliptical(30, 30))),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Player: $playerNumber',
+                            style: const TextStyle(fontSize: 15),
+                          ),
+                          Text(
+                            'Word number: $countWords',
+                            style: const TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                MenuButton(
+                  key: ValueKey(_gameIsReady),
+                  onPressed: !_gameIsReady ? _inTheHatPress : _nextPress,
+                  child: !_gameIsReady
+                      ? const Text('In the hat')
+                      : const Text('Next'),
+                ),
+              ],
+            ),
           ),
         ),
-        TextButton(
-          key: ValueKey(_gameIsReady),
-          onPressed: !_gameIsReady ? _inTheHatPress : _nextPress,
-          child: !_gameIsReady ? const Text('In the hat') : const Text('Next'),
-        )
       ],
     ));
   }

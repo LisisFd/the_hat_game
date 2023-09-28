@@ -6,7 +6,7 @@ import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
-class PreGameScreen extends StatefulWidget {
+class PreGameScreen extends StatelessWidget {
   const PreGameScreen({super.key});
 
   static Widget pageBuilder(
@@ -14,17 +14,9 @@ class PreGameScreen extends StatefulWidget {
     return const PreGameScreen();
   }
 
-  @override
-  State<PreGameScreen> createState() => _PreGameScreenState();
-}
-
-class _PreGameScreenState extends State<PreGameScreen> {
-  final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
-  final IGameService _gameService = getWidgetService<IGameService>();
-
-  Rules _getCurrentRule() {
+  Rules _getCurrentRule(IGameService gameService) {
     Rules result = Rules.alias;
-    Lap? lap = _gameService.currentLap;
+    Lap? lap = gameService.currentLap;
     if (lap != null) {
       switch (lap) {
         case Lap.first:
@@ -43,15 +35,19 @@ class _PreGameScreenState extends State<PreGameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Rules rules = _getCurrentRule();
+    final AppRoutes appRoutes = getWidgetService<AppRoutes>();
+    final IGameService gameService = getWidgetService<IGameService>();
+    gameService.setNewScreen(CurrentScreen.preGame);
+
+    Rules rules = _getCurrentRule(gameService);
     return MyAppWrap(
       body: Column(
         children: [
           rules.widget,
           TextButton(
               onPressed: () {
-                RootAppNavigation.of(context).push(
-                  _appRoutes.gameProcess(),
+                RootAppNavigation.of(context).pushReplacementWithoutAnimation(
+                  appRoutes.teamsRateScreen(),
                 );
               },
               child: const Text('OK')),

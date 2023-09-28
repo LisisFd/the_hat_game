@@ -17,13 +17,32 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  final ISettingService settingsService = getWidgetService<ISettingService>();
+  final ISettingService _settingsService = getWidgetService<ISettingService>();
 
-  TheHatAppSettings? appSettings;
+  late TheHatAppSettings appSettings;
 
   @override
   void initState() {
-    appSettings = settingsService.appSettings.value;
+    appSettings = _settingsService.appSettings.value;
+    DurationSeconds defDuration = _settingsService.defaultDuration;
+    double timePlayerTurn = appSettings.timePlayerTurn.inSeconds.toDouble();
+    if (timePlayerTurn < defDuration.min) {
+      _updateSettings(
+        appSettings.copyWith(
+          timePlayerTurn: Duration(
+            seconds: defDuration.min.toInt(),
+          ),
+        ),
+      );
+    } else if (timePlayerTurn > defDuration.max) {
+      _updateSettings(
+        appSettings.copyWith(
+          timePlayerTurn: Duration(
+            seconds: defDuration.max.toInt(),
+          ),
+        ),
+      );
+    }
     super.initState();
   }
 
@@ -34,18 +53,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   bool _onPop(TheHatAppSettings newSettings) {
-    settingsService.updateSettings(newSettings);
+    _settingsService.updateSettings(newSettings);
     return true;
   }
 
 //TODO: add localizaton
   @override
   Widget build(BuildContext context) {
-    final TheHatAppSettings? currentSettings = appSettings;
+    final TheHatAppSettings currentSettings = appSettings;
 
-    if (currentSettings == null) {
-      return const SizedBox();
-    }
     //  AppLocalizations localize = context.localization();
     return WillPopScope(
       onWillPop: () async {
@@ -114,8 +130,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
                 Slider(
-                    max: 120,
-                    min: 10,
+                    max: _settingsService.defaultDuration.max,
+                    min: _settingsService.defaultDuration.min,
                     value: currentSettings.timePlayerTurn.inSeconds.toDouble(),
                     onChanged: (val) {
                       _updateSettings(

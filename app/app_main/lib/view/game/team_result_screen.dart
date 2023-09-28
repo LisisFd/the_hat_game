@@ -33,6 +33,12 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
       .where((w) => w.status == WordStatus.right || w.status == WordStatus.skip)
       .toList();
 
+  @override
+  void initState() {
+    _gameService.setNewScreen(CurrentScreen.result);
+    super.initState();
+  }
+
   void _updateWordState(Word word) {
     setState(() {
       int wordIndex = _words.indexWhere((w) => w.id == word.id);
@@ -45,29 +51,38 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
   }
 
   void _continue() {
-    bool lapIsOver = !_words.any((w) => w.status == WordStatus.active);
+    bool lapIsOver =
+        !_gameService.wordsWithStatus.any((w) => w.status == WordStatus.active);
+
     if (lapIsOver) {
-      _setAllWordsActive();
-      RootAppNavigation.of(context).pushReplacement(_appRoutes.preGameScreen());
-    } else {
-      _setSkipRightWordsDisable();
+      _resetGameWithUpdateLap();
       RootAppNavigation.of(context)
-          .pushReplacement(_appRoutes.teamsRateScreen());
+          .pushReplacementWithoutAnimation(_appRoutes.preGameScreen());
+    } else {
+      _resetWordsAndTeam();
+      RootAppNavigation.of(context)
+          .pushReplacementWithoutAnimation(_appRoutes.teamsRateScreen());
     }
   }
 
-  void _end() {}
+  void _end() {
+    RootAppNavigation.of(context)
+        .pushReplacementWithoutAnimation(_appRoutes.winner());
+  }
 
-  void _setAllWordsActive() {
-    List<Word> updateWords =
-        _words.map((w) => w.copyWith(status: WordStatus.active)).toList();
+  void _resetGameWithUpdateLap() {
+    List<Word> updateWords = _gameService.wordsWithStatus
+        .map((w) => w.copyWith(status: WordStatus.active))
+        .toList();
     _gameService.updateGame(words: updateWords);
+    _gameService.setNewLap();
+    _gameService.changeCurrentTeam();
     _gameService.saveGame();
   }
 
-  void _setSkipRightWordsDisable() {
+  void _resetWordsAndTeam() {
     List<Word> updateWords = [];
-    for (var word in _words) {
+    for (var word in _gameService.wordsWithStatus) {
       Word newWord = word;
       if (word.status == WordStatus.right || word.status == WordStatus.skip) {
         newWord = word.copyWith(status: WordStatus.disable);
@@ -75,7 +90,13 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
       updateWords.add(newWord);
     }
     _gameService.updateGame(words: updateWords);
+    _gameService.changeCurrentTeam();
     _gameService.saveGame();
+  }
+
+  Future<bool> _onWillPop() async {
+    _gameService.saveGame();
+    return true;
   }
 
   ///TODO addLocalization
@@ -111,24 +132,27 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
             onPressed: _continue,
             child: const Text('Continue'),
           );
-    return MyAppWrap(
-      body: Column(
-        children: [
-          const Text('Points'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(_currentTeam.name),
-              Text(key: ValueKey(_plusPoints), '+$_plusPoints')
-            ],
-          ),
-          SingleChildScrollView(
-            child: Column(
-              children: wordsWidgets,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: MyAppWrap(
+        body: Column(
+          children: [
+            const Text('Points'),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(_currentTeam.name),
+                Text(key: ValueKey(_plusPoints), '+$_plusPoints')
+              ],
             ),
-          ),
-          buttonWidget,
-        ],
+            SingleChildScrollView(
+              child: Column(
+                children: wordsWidgets,
+              ),
+            ),
+            buttonWidget,
+          ],
+        ),
       ),
     );
   }

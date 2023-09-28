@@ -11,10 +11,20 @@ extension TeamsRepositoryFeature on ServiceScope {
 }
 
 extension GameRepositoryFeature on ServiceScope {
+  Future<IGameRepository> _serviceFactory() async {
+    GameLocalRepository service =
+        GameLocalRepository(storage: get<IKeyValueStorage>());
+    await service.init();
+    return service;
+  }
+
   void addGameRepository() {
-    registerSingletonWithDependencies<IGameRepository>(
-        () => GameLocalRepository(storage: get<IKeyValueStorage>()),
-        dependsOn: [IKeyValueStorage]);
+    registerSingletonAsync(
+      _serviceFactory,
+      dependsOn: [
+        IKeyValueStorage,
+      ],
+    );
   }
 }
 

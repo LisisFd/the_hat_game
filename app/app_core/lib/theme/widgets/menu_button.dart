@@ -7,15 +7,23 @@ class MenuButton extends StatelessWidget {
 
   const MenuButton({super.key, required this.child, this.onPressed});
 
+  ///TODO: add to theme button style
   @override
   Widget build(BuildContext context) {
     var theme = MyAppTheme.of(context);
-    return TextButton(
-        onPressed: onPressed,
-        style: ButtonStyle(
-          textStyle:
-              MaterialStateProperty.all(theme.material.textTheme.headlineLarge),
-        ),
-        child: child);
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: ElevatedButton(
+          onPressed: onPressed,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+                MyAppTheme.getColorScheme().onSurface),
+            elevation: MaterialStateProperty.all(2),
+            minimumSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+            textStyle: MaterialStateProperty.all(
+                theme.material.textTheme.headlineLarge),
+          ),
+          child: child),
+    );
   }
 }

@@ -38,6 +38,12 @@ class _TeamsScreenState extends State<TeamsScreen> {
 
   List<Team> get _currentTeams => _screenModel.currentTeams;
 
+  @override
+  void initState() {
+    _gameService.deleteGame();
+    super.initState();
+  }
+
   void _addItem() {
     int length = _currentTeams.length;
     setState(() {
@@ -63,123 +69,179 @@ class _TeamsScreenState extends State<TeamsScreen> {
 
   void _createGame(BuildContext context) {
     _gameService.setUpGameTeams(_currentTeams, _totalPlayers);
-    RootAppNavigation.of(context).push(_appRoutes.wordsScreen());
+    RootAppNavigation.of(context)
+        .pushWithoutAnimation(_appRoutes.wordsScreen());
   }
 
   Widget _getRow(int index) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
+    return ColoredBox(
+      color: Colors.white,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
               child: Text(
                 _currentTeams[index].name,
-                style: const TextStyle(fontSize: 30),
+                style: const TextStyle(fontSize: 25),
               ),
             ),
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () async {
-                    String value = '';
-                    bool isRenamed = await YesNoDialog.showWidget(
-                      context: context,
-                      title: 'New name',
-                      descriptionWidget: TextFormField(
-                        initialValue: _currentTeams[index].name,
-                        onChanged: (val) {
-                          value = val;
-                        },
-                      ),
-                    );
-                    if (isRenamed && value.isNotEmpty) {
-                      _renameItem(index, value);
-                    }
-                  },
-                  icon: const Icon(Icons.edit),
-                ),
-                if (_currentTeams.length > 2)
-                  IconButton(
-                    onPressed: () {
-                      _removeItem(index);
-                    },
-                    icon: const Icon(Icons.clear),
-                  ),
-              ],
-            ),
-          ],
-        ),
-        if (_currentTeams.length - index == 1)
-          ElevatedButton(
-            onPressed: _addItem,
-            child: const Icon(Icons.add),
           ),
-      ],
+          Row(
+            children: [
+              IconButton(
+                onPressed: () async {
+                  String value = '';
+                  bool isRenamed = await YesNoDialog.showWidget(
+                    context: context,
+                    title: 'New name',
+                    descriptionWidget: TextFormField(
+                      initialValue: _currentTeams[index].name,
+                      onChanged: (val) {
+                        value = val;
+                      },
+                    ),
+                  );
+                  if (isRenamed && value.isNotEmpty) {
+                    _renameItem(index, value);
+                  }
+                },
+                icon: const Icon(Icons.edit),
+              ),
+              if (_currentTeams.length > 2)
+                IconButton(
+                  onPressed: () {
+                    _removeItem(index);
+                  },
+                  icon: const Icon(Icons.clear),
+                ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
 //TODO: add localization
   @override
   Widget build(BuildContext context) {
+    var theme = MyAppTheme.of(context).custom;
     return MyAppWrap(
-        body: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: Column(
-        children: [
-          const Text(
+        body: Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          child: const Text(
             'Teams',
+            style: TextStyle(fontSize: 25),
             textAlign: TextAlign.center,
           ),
-          Expanded(
-            child: AnimatedList(
-              key: _listTeamsKey,
-              initialItemCount: _currentTeams.length,
-              physics: CoreScrollPhysics.positionRetained,
-              itemBuilder: (BuildContext context, int index,
-                  Animation<double> animation) {
-                return _getRow(index);
-              },
-            ),
-          ),
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text('Count players'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+        ),
+        Expanded(
+          child: AnimatedList(
+            key: _listTeamsKey,
+            initialItemCount: _currentTeams.length,
+            physics: CoreScrollPhysics.positionRetained,
+            itemBuilder:
+                (BuildContext context, int index, Animation<double> animation) {
+              return Column(
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      if (_totalPlayers > _minPlayers) {
-                        setState(() {
-                          _totalPlayers--;
-                        });
-                      }
-                    },
-                    icon: const Icon(Icons.remove),
-                  ),
-                  Text(_totalPlayers.toString()),
-                  IconButton(
-                    onPressed: () {
-                      if (_totalPlayers < _maxPlayers) {
-                        setState(() {
-                          _totalPlayers++;
-                        });
-                      }
-                    },
-                    icon: const Icon(Icons.add),
-                  ),
+                  Material(elevation: 3, child: _getRow(index)),
+                  if (index != _currentTeams.length - 1)
+                    ColoredBox(
+                      color: theme.primaryColor.withOpacity(0),
+                      child: const SizedBox(
+                        width: double.infinity,
+                        height: 7,
+                      ),
+                    )
+                  else
+                    const SizedBox(
+                      height: 20,
+                    ),
                 ],
+              );
+            },
+          ),
+        ),
+        ColoredBox(
+          color: MyAppTheme.getColorScheme().surface,
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: IntrinsicHeight(
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'Count players',
+                              style: TextStyle(fontSize: 15),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    if (_totalPlayers > _minPlayers) {
+                                      setState(() {
+                                        _totalPlayers--;
+                                      });
+                                    }
+                                  },
+                                  icon: const Icon(Icons.remove),
+                                ),
+                                Text(
+                                  _totalPlayers.toString(),
+                                  style: const TextStyle(fontSize: 25),
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    if (_totalPlayers < _maxPlayers) {
+                                      setState(() {
+                                        _totalPlayers++;
+                                      });
+                                    }
+                                  },
+                                  icon: const Icon(Icons.add),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: RawMaterialButton(
+                          elevation: 2.0,
+                          shape: const CircleBorder(),
+                          fillColor: Colors.white,
+                          onPressed: _addItem,
+                          child: Container(
+                              margin: const EdgeInsets.all(10),
+                              child: const Icon(Icons.add)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              TextButton(
+              MenuButton(
                 onPressed: () => _createGame(context),
-                child: const Text('Next'),
+                child: Text(
+                  'Next',
+                  style: TextStyle(color: MyAppTheme.getColorScheme().surface),
+                ),
               ),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     ));
   }
 }

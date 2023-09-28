@@ -1,5 +1,16 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:flutter/scheduler.dart';
+
+// Duration? position = await player.getCurrentPosition();
+// const alarmAudioPath = 'sounds/pip.mp3';
+// if (_totalElapsed.inSeconds <= 3 && _totalElapsed.inSeconds >= 0) {
+//   if (position == Duration.zero ||
+//       position == const Duration(seconds: 1)) {
+//     player.play(AssetSource(alarmAudioPath));
+//   }
+// }
+// const asd = 'sounds/raund_end.mp3';
 
 class TimerWidget extends StatefulWidget {
   final void Function(Duration totalElapsed) onStop;
@@ -26,15 +37,11 @@ class TimerWidgetState extends State<TimerWidget>
 
   int get _seconds => _totalElapsed.inSeconds % 60;
 
-  int get _milliseconds => (_totalElapsed.inMilliseconds % 1000) ~/ 10;
-
   String get _viewMinutes =>
       _minutes < 10 ? _convertTime(_minutes) : _minutes.toString();
 
   String get _viewSecond =>
       _seconds < 10 ? _convertTime(_seconds) : _seconds.toString();
-
-  String get _viewMillisecond => _convertTime(_milliseconds);
 
   String _convertTime(int time) {
     return time.toString().padLeft(2, '0');
@@ -43,13 +50,21 @@ class TimerWidgetState extends State<TimerWidget>
   bool get isTicking => ticker.isTicking;
 
   late final Ticker ticker;
+  AudioPlayer player = AudioPlayer();
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   void didChangeDependencies() {
-    ticker = createTicker((elapsed) {
+    ticker = createTicker((elapsed) async {
       setState(() {
         _elapsed = elapsed;
-        if (_totalElapsed.inMilliseconds == 0) {
+        if (_totalElapsed.inSeconds == 0) {
           stop(true);
         }
       });
@@ -82,13 +97,7 @@ class TimerWidgetState extends State<TimerWidget>
 
   @override
   Widget build(BuildContext context) {
-    String result = '';
-    if (_totalElapsed.inSeconds >= 10) {
-      result = '$_viewMinutes:$_viewSecond';
-    } else {
-      result = '$_viewSecond:$_viewMillisecond';
-    }
-
+    String result = '$_viewMinutes:$_viewSecond';
     return Text(result);
   }
 }

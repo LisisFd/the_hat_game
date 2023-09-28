@@ -16,6 +16,10 @@ class SettingsService extends ISettingService {
   IBehaviorSubjectReadonlyNotNull<TheHatAppSettings> get appSettings =>
       _appSettings;
 
+  @override
+  DurationSeconds get defaultDuration =>
+      const DurationSeconds(min: 10, max: 120);
+
   SettingsService({
     required ISettingsRepository settingsRepository,
   }) {

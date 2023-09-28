@@ -14,11 +14,15 @@ class WinnerScreen extends StatelessWidget {
     return const WinnerScreen();
   }
 
-  void _navigateToMenu(BuildContext context) {
+  void _removeGame() {
     final IGameService gameService = getWidgetService<IGameService>();
     gameService.deleteGame();
+  }
+
+  void _navigateToMenu(BuildContext context) {
     final AppRoutes appRoutes = getWidgetService<AppRoutes>();
-    RootAppNavigation.of(context).pushReplacement(appRoutes.mainScreen());
+    RootAppNavigation.of(context)
+        .pushReplacementWithoutAnimation(appRoutes.mainScreen());
   }
 
   ///TODO addLocalization
@@ -26,9 +30,8 @@ class WinnerScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final IGameService gameService = getWidgetService<IGameService>();
     List<Team> teams = gameService.teams.toList();
-    teams.sort((t, t2) => t.points.compareTo(t2.points));
+    teams.sort((t, t2) => t2.points.compareTo(t.points));
     final Team winnerTeam = teams.removeAt(0);
-
     List<Widget> teamsWidgets = teams.map((t) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -38,6 +41,7 @@ class WinnerScreen extends StatelessWidget {
         ],
       );
     }).toList();
+    _removeGame();
 
     return MyAppWrap(
       body: Column(
