@@ -4,11 +4,15 @@ import 'package:core_get_it/core_get_it.dart';
 import 'package:core_storage/core_storage.dart';
 import 'package:core_utils/core_utils.dart';
 
+import '../../domain/repositories/app_life_style_repository.dart';
 import '../interfaces/interfaces.dart';
 
 class TheHatGameService extends IGameService {
   late final ISettingService _settingService;
   late final IGameRepository _gameRepository;
+  late final AppLifeStyleRepository _appLifeStyleRepository;
+
+  final ManualSubjectContext _context = ManualSubjectContext();
 
   final BehaviorSubject<TheHatAppGame> _appGame =
       BehaviorSubject.alwaysUpdate(null);
@@ -67,15 +71,22 @@ class TheHatGameService extends IGameService {
   bool get gameIsNotEmpty => _appGame.value != null;
 
   TheHatGameService(
-      {required IGameRepository gameRepository,
+      {required AppLifeStyleRepository appLifeStyleRepository,
+      required IGameRepository gameRepository,
       required ISettingService settingService}) {
     _settingService = settingService;
     _gameRepository = gameRepository;
+    _appLifeStyleRepository = appLifeStyleRepository;
     _init();
   }
 
   void _init() {
     _appGame.setValue(_gameRepository.getGame());
+    _appLifeStyleRepository.appState.subscribe(_context, (value) {
+      if (_appGame.value?.currentScreen != CurrentScreen.process) {
+        saveGame();
+      }
+    });
   }
 
   @override
@@ -196,6 +207,7 @@ class TheHatGameService extends IGameService {
 extension TheHatGameServiceFeatureExtension on ServiceScope {
   IGameService _serviceFactory() {
     TheHatGameService service = TheHatGameService(
+      appLifeStyleRepository: get<AppLifeStyleRepository>(),
       gameRepository: get<IGameRepository>(),
       settingService: get<ISettingService>(),
     );

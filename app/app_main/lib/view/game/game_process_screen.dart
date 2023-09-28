@@ -21,17 +21,18 @@ class GameProcessScreen extends StatefulWidget {
   State<GameProcessScreen> createState() => _GameProcessScreenState();
 }
 
-class _GameProcessScreenState extends State<GameProcessScreen> {
+class _GameProcessScreenState extends State<GameProcessScreen>
+    with SubjectWidgetContext {
   final IGameService _gameService = getWidgetService<IGameService>();
   final ISettingService _settingService = getWidgetService<ISettingService>();
   final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
+  final AppLifeStyleRepository _appLifeStyleRepository =
+      getWidgetService<AppLifeStyleRepository>();
   final GlobalKey<TimerWidgetState> _timerKey = GlobalKey<TimerWidgetState>();
   final GlobalKey<TransitionContainerState> _animKey =
       GlobalKey<TransitionContainerState>();
 
   TimerWidgetState? get _timer => _timerKey.currentState;
-
-  bool _isTickingEnded = false;
 
   Team get _currentTeam => _gameService.currentTeam;
 
@@ -45,18 +46,19 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
   void initState() {
     _gameService.setNewScreen(CurrentScreen.process);
     _initGame();
+
     super.initState();
   }
 
   void _initGame() {
-    if (_gameService.gameState == GameState.init) {
-      return;
-    }
-    setState(() {
-      if (_gameService.gameState == GameState.paused) {
-      } else {
-        _isTickingEnded = true;
-      }
+    listenWith(_appLifeStyleRepository.appState, () {
+      setState(() {
+        if (_gameState == GameState.play) {
+          _timer?.stop();
+          _gameService.updateGame(gameState: GameState.paused);
+        }
+        _gameService.saveGame();
+      });
     });
   }
 
@@ -88,10 +90,9 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
     setState(() {
       _gameService.updateGame(time: timerTime);
       if (timerTime == Duration.zero) {
-        _gameService.updateGame(gameState: GameState.lastWord);
-        _gameService.saveGame();
         setState(() {
-          _isTickingEnded = true;
+          _gameService.updateGame(gameState: GameState.lastWord);
+          _gameService.saveGame();
         });
       }
     });
@@ -102,7 +103,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
       _gameService.updateGame(pointPlus: _semanticOne);
     }
 
-    if (_isLast || _isTickingEnded) {
+    if (_isLast || _gameState == GameState.lastWord) {
       _gameService.updateGame(
           time: _settingService.appSettings.value.timePlayerTurn,
           gameState: GameState.init);
@@ -169,17 +170,19 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
         _gameState == GameState.play || _gameState == GameState.lastWord
             ? wordWidget
             : buttonWidget;
-    Widget stopWidget = _gameState == GameState.play && !_isTickingEnded
-        ? RawMaterialButton(
-            onPressed: _stopGame,
-            elevation: 2.0,
-            fillColor:
-                _gameState == GameState.paused ? Colors.grey : Colors.redAccent,
-            shape: const CircleBorder(),
-            child: const Text('Stop'),
-          )
-        : const SizedBox();
-    Widget timerWidget = !_isTickingEnded
+    Widget stopWidget =
+        _gameState == GameState.play && _gameState != GameState.lastWord
+            ? RawMaterialButton(
+                onPressed: _stopGame,
+                elevation: 2.0,
+                fillColor: _gameState == GameState.paused
+                    ? Colors.grey
+                    : Colors.redAccent,
+                shape: const CircleBorder(),
+                child: const Text('Stop'),
+              )
+            : const SizedBox();
+    Widget timerWidget = _gameState != GameState.lastWord
         ? TimerWidget(
             key: _timerKey,
             onStop: _onStopTimer,
