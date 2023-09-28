@@ -42,6 +42,10 @@ abstract class IGameService {
     List<Word>? words,
   });
 
+  void setNewLap();
+
+  void changeCurrentTeam();
+
   void updateWord(bool isRight);
 
   void saveGame();

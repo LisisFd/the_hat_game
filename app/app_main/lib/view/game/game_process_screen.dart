@@ -23,6 +23,7 @@ class GameProcessScreen extends StatefulWidget {
 
 class _GameProcessScreenState extends State<GameProcessScreen> {
   final IGameService _gameService = getWidgetService<IGameService>();
+  final ISettingService _settingService = getWidgetService<ISettingService>();
   final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
   final GlobalKey<TimerWidgetState> _timerKey = GlobalKey<TimerWidgetState>();
   final GlobalKey<TransitionContainerState> _animKey =
@@ -38,8 +39,7 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   bool get _isLast => _gameService.words.length == 1;
 
-  bool isStart = false;
-  bool isPaused = false;
+  GameState get _gameState => _gameService.gameState;
 
   @override
   void initState() {
@@ -49,15 +49,12 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
   }
 
   void _initGame() {
-    if (_gameService.gameState == GameState.start) {
+    if (_gameService.gameState == GameState.init) {
       return;
     }
     setState(() {
       if (_gameService.gameState == GameState.paused) {
-        isStart = true;
-        isPaused = true;
       } else {
-        isStart = true;
         _isTickingEnded = true;
       }
     });
@@ -65,14 +62,13 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   void _startGame() {
     setState(() {
+      _gameService.updateGame(gameState: GameState.play);
       _timer?.start();
-      isStart = true;
     });
   }
 
   void _stopGame() {
     setState(() {
-      isPaused = true;
       _timer?.stop();
       _gameService.updateGame(gameState: GameState.paused);
       _gameService.saveGame();
@@ -81,12 +77,14 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
 
   void _playGame() {
     setState(() {
-      isPaused = false;
+      _gameService.updateGame(gameState: GameState.play);
+
       _timer?.start();
     });
   }
 
   void _onStopTimer(Duration timerTime) {
+    if (_gameService.gameState == GameState.init) return;
     setState(() {
       _gameService.updateGame(time: timerTime);
       if (timerTime == Duration.zero) {
@@ -105,9 +103,14 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
     }
 
     if (_isLast || _isTickingEnded) {
+      _gameService.updateGame(
+          time: _settingService.appSettings.value.timePlayerTurn,
+          gameState: GameState.init);
       _gameService.updateWord(right);
       _gameService.saveGame();
-      RootAppNavigation.of(context).pushReplacement(_appRoutes.teamResult());
+      _timer?.stop();
+      RootAppNavigation.of(context)
+          .pushReplacementWithoutAnimation(_appRoutes.teamResult());
     } else {
       setState(() {
         _gameService.updateWord(right);
@@ -116,12 +119,38 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
   }
 
   Future<bool> _onWillPop() async {
-    if (_gameService.gameState != GameState.lastWord) {
+    if (_gameService.gameState == GameState.play) {
       _gameService.updateGame(gameState: GameState.paused);
-      _timer?.stop();
-      _gameService.saveGame();
     }
+    _timer?.stop();
+    _gameService.saveGame();
     return true;
+  }
+
+  Widget _getButtonWidget() {
+    void Function()? fn;
+    Color color = Colors.grey;
+    switch (_gameState) {
+      case GameState.init:
+        fn = _startGame;
+        color = Colors.redAccent;
+      case GameState.play:
+        break;
+      case GameState.paused:
+        fn = _playGame;
+      case GameState.lastWord:
+        break;
+    }
+    return RawMaterialButton(
+      onPressed: fn,
+      elevation: 2.0,
+      fillColor: color,
+      shape: const CircleBorder(),
+      child: const SizedBox(
+        width: 150,
+        height: 150,
+      ),
+    );
   }
 
   ///TODO: add theme
@@ -134,27 +163,18 @@ class _GameProcessScreenState extends State<GameProcessScreen> {
       child: Text(key: ValueKey(_word.id), _word.word),
     );
 
-    Widget buttonWidget = RawMaterialButton(
-      onPressed: !isStart
-          ? _startGame
-          : isPaused
-              ? _playGame
-              : null,
-      elevation: 2.0,
-      fillColor: isPaused ? Colors.grey : Colors.redAccent,
-      shape: const CircleBorder(),
-      child: const SizedBox(
-        width: 150,
-        height: 150,
-      ),
-    );
+    Widget buttonWidget = _getButtonWidget();
 
-    Widget centerWidget = isStart && !isPaused ? wordWidget : buttonWidget;
-    Widget stopWidget = isStart && !isPaused && !_isTickingEnded
+    Widget centerWidget =
+        _gameState == GameState.play || _gameState == GameState.lastWord
+            ? wordWidget
+            : buttonWidget;
+    Widget stopWidget = _gameState == GameState.play && !_isTickingEnded
         ? RawMaterialButton(
             onPressed: _stopGame,
             elevation: 2.0,
-            fillColor: isPaused ? Colors.grey : Colors.redAccent,
+            fillColor:
+                _gameState == GameState.paused ? Colors.grey : Colors.redAccent,
             shape: const CircleBorder(),
             child: const Text('Stop'),
           )

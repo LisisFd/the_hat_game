@@ -46,7 +46,7 @@ class PreGameScreen extends StatelessWidget {
           rules.widget,
           TextButton(
               onPressed: () {
-                RootAppNavigation.of(context).pushReplacement(
+                RootAppNavigation.of(context).pushReplacementWithoutAnimation(
                   appRoutes.teamsRateScreen(),
                 );
               },

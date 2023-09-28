@@ -15,7 +15,6 @@ class TheHatAppGame implements IJsonWrite<TheHatAppGame> {
   final int countWordsOnPlayer;
   final Duration roundTime;
 
-  Team? currentTeam;
   Lap currentLap;
   CurrentScreen currentScreen;
   GameState gameState;
@@ -26,10 +25,9 @@ class TheHatAppGame implements IJsonWrite<TheHatAppGame> {
       required this.countWordsOnPlayer,
       required this.roundTime,
       this.words = const [],
-      this.currentTeam,
       this.currentLap = Lap.first,
       this.currentScreen = CurrentScreen.setUp,
-      this.gameState = GameState.start});
+      this.gameState = GameState.init});
 
   @override
   Map<String, dynamic> toJson() => _$TheHatAppGameToJson(this);

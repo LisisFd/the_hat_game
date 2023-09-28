@@ -16,7 +16,7 @@ class TeamsRateScreen extends StatelessWidget {
 
   void _initScreen() {
     final IGameService gameService = getWidgetService<IGameService>();
-    gameService.setNewScreen(CurrentScreen.result);
+    gameService.setNewScreen(CurrentScreen.rate);
   }
 
   List<Widget> _getTeamsWidget() {
@@ -42,7 +42,8 @@ class TeamsRateScreen extends StatelessWidget {
 
   void _navigate(BuildContext context) {
     final AppRoutes appRoutes = getWidgetService<AppRoutes>();
-    RootAppNavigation.of(context).pushReplacement(appRoutes.gameProcess());
+    RootAppNavigation.of(context)
+        .pushReplacementWithoutAnimation(appRoutes.gameProcess());
   }
 
   ///TODO: add localization

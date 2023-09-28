@@ -17,8 +17,6 @@ abstract class _$TheHatAppGameCWProxy {
 
   TheHatAppGame words(List<Word> words);
 
-  TheHatAppGame currentTeam(Team? currentTeam);
-
   TheHatAppGame currentLap(Lap currentLap);
 
   TheHatAppGame currentScreen(CurrentScreen currentScreen);
@@ -37,7 +35,6 @@ abstract class _$TheHatAppGameCWProxy {
     int? countWordsOnPlayer,
     Duration? roundTime,
     List<Word>? words,
-    Team? currentTeam,
     Lap? currentLap,
     CurrentScreen? currentScreen,
     GameState? gameState,
@@ -68,10 +65,6 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
   TheHatAppGame words(List<Word> words) => this(words: words);
 
   @override
-  TheHatAppGame currentTeam(Team? currentTeam) =>
-      this(currentTeam: currentTeam);
-
-  @override
   TheHatAppGame currentLap(Lap currentLap) => this(currentLap: currentLap);
 
   @override
@@ -95,7 +88,6 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
     Object? countWordsOnPlayer = const $CopyWithPlaceholder(),
     Object? roundTime = const $CopyWithPlaceholder(),
     Object? words = const $CopyWithPlaceholder(),
-    Object? currentTeam = const $CopyWithPlaceholder(),
     Object? currentLap = const $CopyWithPlaceholder(),
     Object? currentScreen = const $CopyWithPlaceholder(),
     Object? gameState = const $CopyWithPlaceholder(),
@@ -123,10 +115,6 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
           ? _value.words
           // ignore: cast_nullable_to_non_nullable
           : words as List<Word>,
-      currentTeam: currentTeam == const $CopyWithPlaceholder()
-          ? _value.currentTeam
-          // ignore: cast_nullable_to_non_nullable
-          : currentTeam as Team?,
       currentLap:
           currentLap == const $CopyWithPlaceholder() || currentLap == null
               ? _value.currentLap
@@ -167,16 +155,13 @@ TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
               ?.map((e) => Word.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
-      currentTeam: json['currentTeam'] == null
-          ? null
-          : Team.fromJson(json['currentTeam'] as Map<String, dynamic>),
       currentLap:
           $enumDecodeNullable(_$LapEnumMap, json['currentLap']) ?? Lap.first,
       currentScreen:
           $enumDecodeNullable(_$CurrentScreenEnumMap, json['currentScreen']) ??
               CurrentScreen.setUp,
       gameState: $enumDecodeNullable(_$GameStateEnumMap, json['gameState']) ??
-          GameState.start,
+          GameState.init,
     );
 
 Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
@@ -186,7 +171,6 @@ Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
       'words': instance.words.map((e) => e.toJson()).toList(),
       'countWordsOnPlayer': instance.countWordsOnPlayer,
       'roundTime': instance.roundTime.inMicroseconds,
-      'currentTeam': instance.currentTeam?.toJson(),
       'currentLap': _$LapEnumMap[instance.currentLap]!,
       'currentScreen': _$CurrentScreenEnumMap[instance.currentScreen]!,
       'gameState': _$GameStateEnumMap[instance.gameState]!,
@@ -207,7 +191,8 @@ const _$CurrentScreenEnumMap = {
 };
 
 const _$GameStateEnumMap = {
-  GameState.start: 'start',
+  GameState.init: 'init',
+  GameState.play: 'play',
   GameState.paused: 'paused',
   GameState.lastWord: 'lastWord',
 };

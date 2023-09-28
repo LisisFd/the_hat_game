@@ -4,7 +4,6 @@ import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/navigation.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
-import 'package:core_ui/core_ui.dart';
 
 //TODO: add localization
 class MainScreen extends StatefulWidget {
@@ -35,27 +34,33 @@ class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
     final IGameRestoreFlow gameRestoreFlow = flowFactory.getFlow(context);
     AppLocalizations localize = context.localization();
     List<Widget> menu = [
+      RotatedBox(
+        quarterTurns: 2,
+        child: Image(
+          image: AppConfig.fillHatIcon,
+        ),
+      ),
       if (gameService.gameIsNotEmpty)
         MenuButton(
           onPressed: gameRestoreFlow.restoreGame,
           child: const Text('Continue'),
         ),
       MenuButton(
-        onPressed: () => RootAppNavigation.of(context).push(
-            appRoutes.teamsScreen(),
-            transition: TransitionAnimations.disable()),
+        onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
+          appRoutes.teamsScreen(),
+        ),
         child: Text(localize.screen_main_btn_play),
       ),
       MenuButton(
-        onPressed: () => RootAppNavigation.of(context).push(
-            appRoutes.rulesScreen(),
-            transition: TransitionAnimations.disable()),
+        onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
+          appRoutes.rulesScreen(),
+        ),
         child: Text(localize.screen_main_btn_rules),
       ),
       MenuButton(
-        onPressed: () => RootAppNavigation.of(context).push(
-            appRoutes.settingsScreen(),
-            transition: TransitionAnimations.disable()),
+        onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
+          appRoutes.settingsScreen(),
+        ),
         child: Text(localize.screen_main_btn_settings),
       ),
     ];

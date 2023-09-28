@@ -22,7 +22,7 @@ class GameRestoreFlow extends IGameRestoreFlow {
   void restoreGame() {
     FullRouteInfo result = [];
     result = _restoreGame(result);
-    RootAppNavigation.of(context).push(result);
+    RootAppNavigation.of(context).pushWithoutAnimation(result);
   }
 
   FullRouteInfo _restoreGame(FullRouteInfo result) {

@@ -63,7 +63,7 @@ class _WordsScreenState extends State<WordsScreen> {
 
   void _nextPress() {
     if (_addWord()) {
-      RootAppNavigation.of(context).pushReplacementMultiple(
+      RootAppNavigation.of(context).pushReplacementMultipleWithoutAnimation(
           [_appRoutes.mainScreen(), _appRoutes.preGameScreen()]);
     }
   }
@@ -108,30 +108,97 @@ class _WordsScreenState extends State<WordsScreen> {
   Widget build(BuildContext context) {
     return MyAppWrap(
         body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Player Number $playerNumber'),
-        Text('Count Words $countWords'),
-        Form(
-          key: _formKey,
-          child: TextFormField(
-            validator: (val) {
-              String? res = 'Please write a word';
-              if (val != null && val.isNotEmpty) {
-                res = null;
-              }
-              return res;
-            },
-            onChanged: (val) {
-              _currentWord = val;
-            },
+        Column(
+          children: [
+            Text(
+              'Words',
+              style: TextStyle(fontSize: 40),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+                color: Color(0xFFFFE7D0),
+              ),
+              margin: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+              padding: EdgeInsets.all(20),
+              child: Text(
+                'Введите слова потомушо ну типо надо как бі все мі люди и ну єто ті понял корч',
+                style: TextStyle(fontSize: 20),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+        Expanded(
+          child: ColoredBox(
+            color: Colors.white60,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      margin:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+                      child: Form(
+                        key: _formKey,
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              fillColor: Colors.white70,
+                              filled: true,
+                              border: OutlineInputBorder()),
+                          validator: (val) {
+                            String? res = 'Please write a word';
+                            if (val != null && val.isNotEmpty) {
+                              res = null;
+                            }
+                            return res;
+                          },
+                          onChanged: (val) {
+                            _currentWord = val;
+                          },
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.all(Radius.elliptical(30, 30))),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Player: $playerNumber',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          Text(
+                            'Word number: $countWords',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                MenuButton(
+                  key: ValueKey(_gameIsReady),
+                  onPressed: !_gameIsReady ? _inTheHatPress : _nextPress,
+                  child: !_gameIsReady
+                      ? const Text('In the hat')
+                      : const Text('Next'),
+                ),
+              ],
+            ),
           ),
         ),
-        TextButton(
-          key: ValueKey(_gameIsReady),
-          onPressed: !_gameIsReady ? _inTheHatPress : _nextPress,
-          child: !_gameIsReady ? const Text('In the hat') : const Text('Next'),
-        )
       ],
     ));
   }

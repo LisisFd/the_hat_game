@@ -1,5 +1,16 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:flutter/scheduler.dart';
+
+// Duration? position = await player.getCurrentPosition();
+// const alarmAudioPath = 'sounds/pip.mp3';
+// if (_totalElapsed.inSeconds <= 3 && _totalElapsed.inSeconds >= 0) {
+//   if (position == Duration.zero ||
+//       position == const Duration(seconds: 1)) {
+//     player.play(AssetSource(alarmAudioPath));
+//   }
+// }
+// const asd = 'sounds/raund_end.mp3';
 
 class TimerWidget extends StatefulWidget {
   final void Function(Duration totalElapsed) onStop;
@@ -39,10 +50,18 @@ class TimerWidgetState extends State<TimerWidget>
   bool get isTicking => ticker.isTicking;
 
   late final Ticker ticker;
+  AudioPlayer player = AudioPlayer();
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
 
   @override
   void didChangeDependencies() {
-    ticker = createTicker((elapsed) {
+    ticker = createTicker((elapsed) async {
       setState(() {
         _elapsed = elapsed;
         if (_totalElapsed.inSeconds == 0) {
