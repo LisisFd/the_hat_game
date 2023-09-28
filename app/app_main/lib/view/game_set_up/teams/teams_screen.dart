@@ -165,81 +165,77 @@ class _TeamsScreenState extends State<TeamsScreen> {
             },
           ),
         ),
-        ColoredBox(
-          color: MyAppTheme.getColorScheme().surface,
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: IntrinsicHeight(
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text(
-                              'Count players',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    if (_totalPlayers > _minPlayers) {
-                                      setState(() {
-                                        _totalPlayers--;
-                                      });
-                                    }
-                                  },
-                                  icon: const Icon(Icons.remove),
-                                ),
-                                Text(
-                                  _totalPlayers.toString(),
-                                  style: const TextStyle(fontSize: 25),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    if (_totalPlayers < _maxPlayers) {
-                                      setState(() {
-                                        _totalPlayers++;
-                                      });
-                                    }
-                                  },
-                                  icon: const Icon(Icons.add),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+        Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              child: IntrinsicHeight(
+                child: Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'Count players',
+                            style: TextStyle(fontSize: 15),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  if (_totalPlayers > _minPlayers) {
+                                    setState(() {
+                                      _totalPlayers--;
+                                    });
+                                  }
+                                },
+                                icon: const Icon(Icons.remove),
+                              ),
+                              Text(
+                                _totalPlayers.toString(),
+                                style: const TextStyle(fontSize: 25),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  if (_totalPlayers < _maxPlayers) {
+                                    setState(() {
+                                      _totalPlayers++;
+                                    });
+                                  }
+                                },
+                                icon: const Icon(Icons.add),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: RawMaterialButton(
-                          elevation: 2.0,
-                          shape: const CircleBorder(),
-                          fillColor: Colors.white,
-                          onPressed: _addItem,
-                          child: Container(
-                              margin: const EdgeInsets.all(10),
-                              child: const Icon(Icons.add)),
-                        ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: RawMaterialButton(
+                        elevation: 2.0,
+                        shape: const CircleBorder(),
+                        fillColor: Colors.white,
+                        onPressed: _addItem,
+                        child: Container(
+                            margin: const EdgeInsets.all(10),
+                            child: const Icon(Icons.add)),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              MenuButton(
-                onPressed: () => _createGame(context),
-                child: Text(
-                  'Next',
-                  style: TextStyle(color: MyAppTheme.getColorScheme().surface),
-                ),
+            ),
+            MenuButton(
+              onPressed: () => _createGame(context),
+              child: Text(
+                'Next',
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     ));

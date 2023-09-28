@@ -32,14 +32,11 @@ class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
   @override
   Widget build(BuildContext context) {
     final IGameRestoreFlow gameRestoreFlow = flowFactory.getFlow(context);
-    AppLocalizations localize = context.localization();
+    final AppLocalizations localize = context.localization();
+    final Size device = MediaQuery.of(context).size;
+    double hatWidth =
+        (device.width > device.height ? device.height : device.width) / 2;
     List<Widget> menu = [
-      const RotatedBox(
-        quarterTurns: 2,
-        child: Image(
-          image: AppConfig.fillHatIcon,
-        ),
-      ),
       if (gameService.gameIsNotEmpty)
         MenuButton(
           onPressed: gameRestoreFlow.restoreGame,
@@ -66,11 +63,23 @@ class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
     ];
     return MyAppWrap(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ...menu,
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 110),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              RotatedBox(
+                quarterTurns: 2,
+                child: Image(
+                  image: AppConfig.fillHatIcon,
+                  width: hatWidth,
+                ),
+              ),
+              Column(
+                children: menu,
+              ),
+            ],
+          ),
         ),
       ),
     );

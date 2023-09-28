@@ -3,29 +3,13 @@ import 'package:core_ui/core_ui.dart';
 
 class ThemeConstants {
   static const textColor = Color(0xFF332E30);
-  static const appColor = Color(0xFFFEAE62);
-  static const heightBigButton = 64.0;
-  static const minWidthBigButton = 320.0;
-  static const maxWidthForm = 400.0;
-  static const ChipThemeData chipThemeDefault = ChipThemeData(
-    disabledColor: Colors.white,
-    labelStyle: TextStyle(color: Colors.black),
-    shape: StadiumBorder(side: BorderSide(color: Colors.black12)),
-    selectedColor: primaryColor,
-  );
-
-  static const BorderRadius defaultCardRadius =
-      BorderRadius.all(Radius.circular(20));
-  static const ShapeBorder appBarDialogBorder = RoundedRectangleBorder(
-    borderRadius: BorderRadius.only(
-      topLeft: Radius.circular(20.0),
-      topRight: Radius.circular(20.0),
-    ),
-  );
+  static const _appColor = Color(0xFFFEAE62);
+  static const lightBackground = Color(0xFFFFE7D0);
+  static const onLightBackground = Color(0xFF00182F);
 
   static const EdgeInsetsGeometry defaultCardPadding =
       EdgeInsetsDirectional.all(ThemeConstants.paddingPoint * 2);
-  static const Color primaryColor = ThemeConstants.appColor;
+  static const Color primaryColor = ThemeConstants._appColor;
   static const Color textOnPrimaryColor = Color(0xFFFFFFFF);
   static const Color hideColor = Color(0xFFA7A5AF);
 
@@ -78,7 +62,6 @@ class MyAppTheme extends CustomAppThemeData {
       ),
       appBarTextButtonStyle: const TextStyle(
           decoration: TextDecoration.none,
-          color: ThemeConstants.textOnPrimaryColor,
           fontSize: ThemeConstants.appBarButtonSize,
           fontWeight: FontWeight.normal),
     );
@@ -92,21 +75,12 @@ class MyAppTheme extends CustomAppThemeData {
     return AppThemeData<MyAppTheme>(material: material, custom: _createTheme());
   }
 
-  static ColorScheme getColorScheme() {
-    return ColorScheme.fromSeed(seedColor: ThemeConstants.appColor);
-  }
-
   static ThemeData createMaterial() {
     final ThemeData theme = ThemeData(
       useMaterial3: true,
-      appBarTheme: AppBarTheme(
-        backgroundColor: getColorScheme().secondary,
-        titleTextStyle: _textTheme().titleLarge?.copyWith(
-              color: getColorScheme().onSecondary,
-            ),
-        iconTheme: IconThemeData(color: getColorScheme().onSecondary),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: ThemeConstants.primaryColor,
       ),
-      colorScheme: getColorScheme(),
       iconTheme: const IconThemeData(size: 30),
       fontFamily: ThemeConstants.fontFamily,
       textTheme: _textTheme(),
@@ -133,23 +107,6 @@ class MyAppTheme extends CustomAppThemeData {
   final EdgeInsetsGeometry sideInsetPadding1 = _insetPadding(1, true);
   final EdgeInsetsGeometry sideInsetPadding2 = _insetPadding(2, true);
   final EdgeInsetsGeometry sideInsetPadding5 = _insetPadding(5, true);
-
-  final EdgeInsetsGeometry defaultCardWithTitleMargin =
-      const EdgeInsets.all(16);
-  final EdgeInsetsGeometry defaultSplitCardMargin = const EdgeInsets.only(
-    left: 16,
-    right: 16,
-    bottom: 16,
-  );
-
-  final double insertBannerHeight = _insertHeight(250);
-  final double insertIndicatorHeight = _insertHeight(30);
-  final double defaultAvatarSize = 54;
-  final double cardWrapSpace = 20;
-
-  final BorderRadius dropdownBorderRadius = ThemeConstants.defaultCardRadius;
-
-  final ChipThemeData chipDefault = ThemeConstants.chipThemeDefault;
 
   static TextTheme _textTheme() {
     return const TextTheme(
@@ -245,14 +202,6 @@ class MyAppTheme extends CustomAppThemeData {
       return EdgeInsetsDirectional.fromSTEB(padding, 0, padding, 0);
     }
     return EdgeInsetsDirectional.all(padding);
-  }
-
-  static double _insertHeight(
-    double multiplier,
-  ) {
-    double height = ThemeConstants.sizePoint * multiplier;
-
-    return height;
   }
 
   SizedBox padding(double multiplier) {
