@@ -36,7 +36,7 @@ class TheHatGameService extends IGameService {
   }
 
   @override
-  Lap? get currentLap => appGame.value?.currentLap;
+  Lap get currentLap => appGame.value?.currentLap ?? Lap.first;
 
   @override
   Team get currentTeam =>
@@ -185,7 +185,7 @@ class TheHatGameService extends IGameService {
 
   @override
   void setNewLap() {
-    int currentLapIndex = Lap.values.indexOf(currentLap ?? Lap.first);
+    int currentLapIndex = Lap.values.indexOf(currentLap);
     if (currentLapIndex >= Lap.values.length - 1) return;
     TheHatAppGame? game =
         _appGame.value?.copyWith(currentLap: Lap.values[currentLapIndex + 1]);

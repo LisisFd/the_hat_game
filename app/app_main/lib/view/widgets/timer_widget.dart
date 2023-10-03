@@ -1,4 +1,4 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:app_core/app_core.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -13,6 +13,7 @@ import 'package:flutter/scheduler.dart';
 // const asd = 'sounds/raund_end.mp3';
 
 class TimerWidget extends StatefulWidget {
+  final Duration? baseDuration;
   final void Function(Duration totalElapsed) onStop;
   final Duration currentDuration;
 
@@ -20,6 +21,7 @@ class TimerWidget extends StatefulWidget {
     Key? key,
     required this.onStop,
     required this.currentDuration,
+    this.baseDuration,
   }) : super(key: key);
 
   @override
@@ -28,6 +30,7 @@ class TimerWidget extends StatefulWidget {
 
 class TimerWidgetState extends State<TimerWidget>
     with SingleTickerProviderStateMixin {
+  Duration _baseDuration = const Duration(seconds: 60);
   Duration _elapsed = Duration.zero;
   late Duration _previousElapsed;
 
@@ -47,10 +50,9 @@ class TimerWidgetState extends State<TimerWidget>
     return time.toString().padLeft(2, '0');
   }
 
-  bool get isTicking => ticker.isTicking;
+  bool get isTicking => ticker?.isTicking ?? false;
 
-  late final Ticker ticker;
-  AudioPlayer player = AudioPlayer();
+  Ticker? ticker;
 
   @override
   void setState(fn) {
@@ -59,8 +61,23 @@ class TimerWidgetState extends State<TimerWidget>
     }
   }
 
+  void start() {
+    _previousElapsed -= _elapsed;
+    ticker?.start();
+  }
+
+  void stop([bool isEnd = false]) {
+    ticker?.stop();
+    widget.onStop(!isEnd ? _totalElapsed : Duration.zero);
+  }
+
   @override
-  void didChangeDependencies() {
+  void initState() {
+    _previousElapsed = widget.currentDuration;
+    Duration? baseDuration = widget.baseDuration;
+    if (baseDuration != null) {
+      _baseDuration = baseDuration;
+    }
     ticker = createTicker((elapsed) async {
       setState(() {
         _elapsed = elapsed;
@@ -69,35 +86,44 @@ class TimerWidgetState extends State<TimerWidget>
         }
       });
     });
-
-    super.didChangeDependencies();
-  }
-
-  void start() {
-    _previousElapsed -= _elapsed;
-    ticker.start();
-  }
-
-  void stop([bool isEnd = false]) {
-    ticker.stop();
-    widget.onStop(!isEnd ? _totalElapsed : Duration.zero);
-  }
-
-  @override
-  void initState() {
-    _previousElapsed = widget.currentDuration;
     super.initState();
   }
 
   @override
   void dispose() {
-    ticker.dispose();
+    ticker?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = MyAppTheme.of(context);
     String result = '$_viewMinutes:$_viewSecond';
-    return Text(result);
+    double size = 70;
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Stack(
+        children: [
+          Positioned(
+            top: size / 4,
+            left: size / 4,
+            child: CircularProgressIndicator(
+                strokeWidth: 32,
+                value: (_seconds == 0.0 ? _baseDuration.inSeconds : _seconds) /
+                    _baseDuration.inSeconds),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+                padding: theme.custom.defaultAppPadding / 4,
+                decoration: BoxDecoration(
+                    color: ThemeConstants.lightBackground,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Text(result)),
+          ),
+        ],
+      ),
+    );
   }
 }

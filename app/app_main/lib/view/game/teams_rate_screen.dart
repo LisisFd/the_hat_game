@@ -1,6 +1,7 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/navigation/app_routes.dart';
+import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
@@ -19,16 +20,28 @@ class TeamsRateScreen extends StatelessWidget {
     gameService.setNewScreen(CurrentScreen.rate);
   }
 
-  List<Widget> _getTeamsWidget() {
+  List<Widget> _getTeamsWidget(BuildContext context) {
+    final theme = MyAppTheme.of(context).material;
     final IGameService gameService = getWidgetService<IGameService>();
     List<Team> teams = gameService.teams;
+
     return teams
         .map(
           (t) => Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(t.name),
-              Text(t.points.toString()),
+              Expanded(
+                child: Text(
+                  t.name,
+                  style: theme.textTheme.titleLarge
+                      ?.copyWith(color: ThemeConstants.lightBackground),
+                ),
+              ),
+              Text(
+                t.points.toString(),
+                style: theme.textTheme.titleLarge
+                    ?.copyWith(color: ThemeConstants.lightBackground),
+              ),
             ],
           ),
         )
@@ -50,35 +63,64 @@ class TeamsRateScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _initScreen();
-    List<Widget> teamsWidgets = _getTeamsWidget();
+    final theme = MyAppTheme.of(context);
+    final screen = MediaQuery.of(context).size;
+    List<Widget> teamsWidgets = _getTeamsWidget(context);
 
     return MyAppWrap(
+      appBar: AppBar(
+        title: const Text(
+          'Command Rate',
+          style: TextStyle(color: ThemeConstants.lightBackground),
+        ),
+        iconTheme: const IconThemeData(color: ThemeConstants.lightBackground),
+        backgroundColor: ColorPallet.colorBlue,
+        centerTitle: true,
+      ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Command Rate'),
-          Expanded(
-            flex: 1,
-            child: SingleChildScrollView(
-              child: Column(
-                children: teamsWidgets,
+          Container(
+            decoration: const BoxDecoration(
+                color: ColorPallet.colorBlue,
+                //TODO: add to theme
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                )),
+            constraints: BoxConstraints(maxHeight: screen.height / 8),
+            padding: EdgeInsets.symmetric(
+                horizontal: theme.custom.defaultAppPadding.horizontal),
+            child: Scrollbar(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: teamsWidgets,
+                ),
               ),
             ),
           ),
-          Expanded(
-              flex: 2,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(currentTeamName),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: ElevatedButton(
-                      onPressed: () => _navigate(context),
-                      child: const Text('Go'),
-                    ),
-                  )
-                ],
-              )),
+          DefaultContainer(
+            padding: theme.custom.defaultAppPadding,
+            margin: theme.custom.defaultAppMargin,
+            child: Column(
+              children: [
+                Text(
+                  'Ready to game',
+                  style: theme.material.textTheme.titleSmall
+                      ?.copyWith(color: Colors.grey),
+                ),
+                Text(currentTeamName,
+                    textAlign: TextAlign.center,
+                    style: theme.material.textTheme.titleMedium
+                        ?.copyWith(color: ColorPallet.colorBlue)),
+              ],
+            ),
+          ),
+          ElevatedMenuButton(
+            lightStyle: false,
+            onPressed: () => _navigate(context),
+            child: const Text('Go'),
+          ),
         ],
       ),
     );

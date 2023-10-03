@@ -15,6 +15,8 @@ abstract class _$TheHatAppSettingsCWProxy {
 
   TheHatAppSettings lastWord(bool lastWord);
 
+  TheHatAppSettings isFirstLaunch(bool isFirstLaunch);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TheHatAppSettings(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -26,6 +28,7 @@ abstract class _$TheHatAppSettingsCWProxy {
     bool? animation,
     Duration? timePlayerTurn,
     bool? lastWord,
+    bool? isFirstLaunch,
   });
 }
 
@@ -50,6 +53,10 @@ class _$TheHatAppSettingsCWProxyImpl implements _$TheHatAppSettingsCWProxy {
   TheHatAppSettings lastWord(bool lastWord) => this(lastWord: lastWord);
 
   @override
+  TheHatAppSettings isFirstLaunch(bool isFirstLaunch) =>
+      this(isFirstLaunch: isFirstLaunch);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TheHatAppSettings(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -62,6 +69,7 @@ class _$TheHatAppSettingsCWProxyImpl implements _$TheHatAppSettingsCWProxy {
     Object? animation = const $CopyWithPlaceholder(),
     Object? timePlayerTurn = const $CopyWithPlaceholder(),
     Object? lastWord = const $CopyWithPlaceholder(),
+    Object? isFirstLaunch = const $CopyWithPlaceholder(),
   }) {
     return TheHatAppSettings(
       countWordsOnPlayer: countWordsOnPlayer == const $CopyWithPlaceholder() ||
@@ -82,6 +90,11 @@ class _$TheHatAppSettingsCWProxyImpl implements _$TheHatAppSettingsCWProxy {
           ? _value.lastWord
           // ignore: cast_nullable_to_non_nullable
           : lastWord as bool,
+      isFirstLaunch:
+          isFirstLaunch == const $CopyWithPlaceholder() || isFirstLaunch == null
+              ? _value.isFirstLaunch
+              // ignore: cast_nullable_to_non_nullable
+              : isFirstLaunch as bool,
     );
   }
 }
@@ -105,6 +118,7 @@ TheHatAppSettings _$TheHatAppSettingsFromJson(Map<String, dynamic> json) =>
           ? const Duration(seconds: 60)
           : Duration(microseconds: json['timePlayerTurn'] as int),
       lastWord: json['lastWord'] as bool? ?? true,
+      isFirstLaunch: json['isFirstLaunch'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$TheHatAppSettingsToJson(TheHatAppSettings instance) =>
@@ -113,4 +127,5 @@ Map<String, dynamic> _$TheHatAppSettingsToJson(TheHatAppSettings instance) =>
       'animation': instance.animation,
       'timePlayerTurn': instance.timePlayerTurn.inMicroseconds,
       'lastWord': instance.lastWord,
+      'isFirstLaunch': instance.isFirstLaunch,
     };

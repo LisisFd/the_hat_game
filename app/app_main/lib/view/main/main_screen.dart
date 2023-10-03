@@ -38,23 +38,23 @@ class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
         (device.width > device.height ? device.height : device.width) / 2;
     List<Widget> menu = [
       if (gameService.gameIsNotEmpty)
-        MenuButton(
+        ElevatedMenuButton(
           onPressed: gameRestoreFlow.restoreGame,
           child: const Text('Continue'),
         ),
-      MenuButton(
+      ElevatedMenuButton(
         onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
           appRoutes.teamsScreen(),
         ),
         child: Text(localize.screen_main_btn_play),
       ),
-      MenuButton(
+      ElevatedMenuButton(
         onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
           appRoutes.rulesScreen(),
         ),
         child: Text(localize.screen_main_btn_rules),
       ),
-      MenuButton(
+      ElevatedMenuButton(
         onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
           appRoutes.settingsScreen(),
         ),
@@ -63,23 +63,17 @@ class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
     ];
     return MyAppWrap(
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 110),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              RotatedBox(
-                quarterTurns: 2,
-                child: Image(
-                  image: AppConfig.fillHatIcon,
-                  width: hatWidth,
-                ),
-              ),
-              Column(
-                children: menu,
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Image(
+              image: AppConfig.fillHatIcon,
+              width: hatWidth,
+            ),
+            Column(
+              children: menu,
+            ),
+          ],
         ),
       ),
     );

@@ -7,7 +7,13 @@ class AppConfig {
   static const double phoneAppSize = 390;
   static const double tabletAppSize = 829;
   static const AssetImage fillHatIcon = AssetImage('images/fill.png');
+  static const AssetImage bottomHat = AssetImage('images/hat_bottom.png');
   static const AssetImage strokeHatIcon = AssetImage('images/stroke.png');
+  static const String animationSwipeRight =
+      'assets/animations/swipe_right.json';
+  static const String animationSwipeLeft = 'assets/animations/swipe_left.json';
+  static const String animationHatBounce = 'assets/animations/hat_bounce.json';
+  static const String animationHatRotate = 'assets/animations/hat_rotate.json';
 
   /// If you want to use ByteBrew analytics
   ///

@@ -24,7 +24,7 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
 
   Team get _currentTeam => _gameService.currentTeam;
 
-  Lap get _currentLap => _gameService.currentLap ?? Lap.first;
+  Lap get _currentLap => _gameService.currentLap;
 
   int get _plusPoints =>
       _words.where((w) => w.status == WordStatus.right).length;

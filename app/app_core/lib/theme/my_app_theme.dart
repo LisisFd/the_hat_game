@@ -86,6 +86,30 @@ class MyAppTheme extends CustomAppThemeData {
       textTheme: _textTheme(),
       primaryTextTheme: _textTheme(),
       brightness: Brightness.light,
+      colorScheme: const ColorScheme.light(
+        primary: ColorPallet.colorBlue,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.all(2),
+          minimumSize: MaterialStateProperty.all<Size>(const Size(200, 50)),
+          textStyle: MaterialStateProperty.all(_textTheme().headlineLarge),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all<Size>(const Size(100, 40)),
+          textStyle: MaterialStateProperty.all(_textTheme().bodyLarge),
+          foregroundColor:
+              MaterialStateColor.resolveWith((Set<MaterialState> states) {
+            if (states.contains(MaterialState.disabled)) {
+              return Colors.grey;
+            } else {
+              return _textTheme().bodyLarge?.color ?? Colors.black;
+            }
+          }),
+        ),
+      ),
     );
     return theme;
   }
@@ -100,9 +124,8 @@ class MyAppTheme extends CustomAppThemeData {
   final SizedBox padding5 = _padding(5);
   final SizedBox padding6 = _padding(6);
 
-  final EdgeInsetsGeometry insetPadding1 = _insetPadding(1);
-  final EdgeInsetsGeometry insetPadding2 = _insetPadding(2);
-  final EdgeInsetsGeometry insetPadding3 = _insetPadding(3.5);
+  final EdgeInsetsGeometry defaultAppPadding = const EdgeInsets.all(20);
+  final EdgeInsetsGeometry defaultAppMargin = const EdgeInsets.all(20);
 
   final EdgeInsetsGeometry sideInsetPadding1 = _insetPadding(1, true);
   final EdgeInsetsGeometry sideInsetPadding2 = _insetPadding(2, true);
@@ -110,83 +133,83 @@ class MyAppTheme extends CustomAppThemeData {
 
   static TextTheme _textTheme() {
     return const TextTheme(
-      // displayLarge: TextStyle(
-      //   fontFamilyFallback: ThemeConstants.fallback,
-      //   fontWeight: FontWeight.w400,
-      //   fontSize: 57,
-      // ),
-      // displayMedium: TextStyle(
-      //   fontFamilyFallback: ThemeConstants.fallback,
-      //   fontWeight: FontWeight.w400,
-      //   fontSize: 45,
-      // ),
-      // displaySmall: TextStyle(
-      //   fontFamilyFallback: ThemeConstants.fallback,
-      //   fontWeight: FontWeight.w400,
-      //   fontSize: 36,
-      // ),
-      headlineLarge: TextStyle(
-        fontFamilyFallback: ThemeConstants.fallback,
-        fontWeight: FontWeight.w400,
-        fontSize: 32,
-      ),
-      //   headlineMedium: TextStyle(
-      //     fontFamilyFallback: ThemeConstants.fallback,
-      //     fontWeight: FontWeight.w400,
-      //     fontSize: 28,
-      //   ),
-      //   headlineSmall: TextStyle(
-      //     fontFamilyFallback: ThemeConstants.fallback,
-      //     fontWeight: FontWeight.w400,
-      //     fontSize: 24,
-      //   ),
-      titleLarge: TextStyle(
-        fontFamilyFallback: ThemeConstants.fallback,
-        fontWeight: FontWeight.w400,
-        fontSize: 22,
-      ),
-      //   titleMedium: TextStyle(
-      //       fontFamilyFallback: ThemeConstants.fallback,
-      //       fontWeight: FontWeight.w500,
-      //       fontSize: 16,
-      //       letterSpacing: 0.15),
-      //   titleSmall: TextStyle(
-      //       fontFamilyFallback: ThemeConstants.fallback,
-      //       fontWeight: FontWeight.w500,
-      //       fontSize: 14,
-      //       letterSpacing: 0.1),
-      //   labelLarge: TextStyle(
-      //       fontFamilyFallback: ThemeConstants.fallback,
-      //       fontWeight: FontWeight.w500,
-      //       fontSize: 14,
-      //       letterSpacing: 0.1),
-      //   labelMedium: TextStyle(
-      //       fontFamilyFallback: ThemeConstants.fallback,
-      //       fontWeight: FontWeight.w500,
-      //       fontSize: 12,
-      //       letterSpacing: 0.5),
-      //   labelSmall: TextStyle(
-      //       fontFamilyFallback: ThemeConstants.fallback,
-      //       fontWeight: FontWeight.w500,
-      //       fontSize: 11,
-      //       letterSpacing: 0.5),
-      //   bodyLarge: TextStyle(
-      //       fontFamilyFallback: ThemeConstants.fallback,
-      //       fontSize: 16,
-      //       fontWeight: FontWeight.w400,
-      //       letterSpacing: 0.5),
-      //   bodyMedium: TextStyle(
-      //       fontFamilyFallback: ThemeConstants.fallback,
-      //       fontWeight: FontWeight.w400,
-      //       fontSize: 14,
-      //       letterSpacing: 0.25),
-      //   bodySmall: TextStyle(
-      //       fontFamilyFallback: ThemeConstants.fallback,
-      //       fontWeight: FontWeight.w400,
-      //       color: ThemeConstants.hideColor,
-      //       fontSize: 12,
-      //       letterSpacing: 0.4),
-    );
+        // displayLarge: TextStyle(
+        //   fontFamilyFallback: ThemeConstants.fallback,
+        //   fontWeight: FontWeight.w400,
+        //   fontSize: 57,
+        // ),
+        // displayMedium: TextStyle(
+        //   fontFamilyFallback: ThemeConstants.fallback,
+        //   fontWeight: FontWeight.w400,
+        //   fontSize: 45,
+        // ),
+        // displaySmall: TextStyle(
+        //   fontFamilyFallback: ThemeConstants.fallback,
+        //   fontWeight: FontWeight.w400,
+        //   fontSize: 36,
+        // ),
+        headlineLarge: TextStyle(
+          fontFamilyFallback: ThemeConstants.fallback,
+          fontWeight: FontWeight.w400,
+          fontSize: 30,
+        ),
+        headlineMedium: TextStyle(
+          fontFamilyFallback: ThemeConstants.fallback,
+          fontWeight: FontWeight.w400,
+          fontSize: 28,
+        ),
+        headlineSmall: TextStyle(
+          fontFamilyFallback: ThemeConstants.fallback,
+          fontWeight: FontWeight.w400,
+          fontSize: 26,
+        ),
+        titleLarge: TextStyle(
+          fontFamilyFallback: ThemeConstants.fallback,
+          fontWeight: FontWeight.w400,
+          fontSize: 25,
+        ),
+        titleMedium: TextStyle(
+            fontFamilyFallback: ThemeConstants.fallback,
+            fontSize: 23,
+            fontWeight: FontWeight.w500,
+            letterSpacing: 0.15),
+        titleSmall: TextStyle(
+            fontFamilyFallback: ThemeConstants.fallback,
+            fontWeight: FontWeight.w400,
+            fontSize: 20,
+            letterSpacing: 0.1),
+        //   labelLarge: TextStyle(
+        //       fontFamilyFallback: ThemeConstants.fallback,
+        //       fontWeight: FontWeight.w500,
+        //       fontSize: 14,
+        //       letterSpacing: 0.1),
+        //   labelMedium: TextStyle(
+        //       fontFamilyFallback: ThemeConstants.fallback,
+        //       fontWeight: FontWeight.w500,
+        //       fontSize: 12,
+        //       letterSpacing: 0.5),
+        //   labelSmall: TextStyle(
+        //       fontFamilyFallback: ThemeConstants.fallback,
+        //       fontWeight: FontWeight.w500,
+        //       fontSize: 11,
+        //       letterSpacing: 0.5),
+        bodyLarge: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: ThemeConstants.onLightBackground,
+            letterSpacing: 0.5)
+        //   bodyMedium: TextStyle(
+        //       fontFamilyFallback: ThemeConstants.fallback,
+        //       fontWeight: FontWeight.w400,
+        //       fontSize: 14,
+        //       letterSpacing: 0.25),
+        //   bodySmall: TextStyle(
+        //       fontFamilyFallback: ThemeConstants.fallback,
+        //       fontWeight: FontWeight.w400,
+        //       color: ThemeConstants.hideColor,
+        //       fontSize: 12,
+        //       letterSpacing: 0.4),
+        );
   }
 
   static SizedBox _padding(double multiplier) {
@@ -220,3 +243,34 @@ class MyAppTheme extends CustomAppThemeData {
     AppTheme.registerTheme<MyAppTheme>(_getTheme);
   }
 }
+// secondary: Colors.red,
+// onSecondary: Colors.red,
+// tertiary: Colors.red,
+// primary:Colors.red,
+// onPrimary:Colors.red,
+// primaryContainer:Colors.red,
+// onPrimaryContainer:Colors.red,
+//
+// secondaryContainer:Colors.red,
+// onSecondaryContainer:Colors.red,
+// onTertiary:Colors.red,
+// tertiaryContainer:Colors.red,
+// onTertiaryContainer:Colors.red,
+// error:Colors.red,
+// onError :Colors.red,
+// errorContainer:Colors.red,
+// onErrorContainer:Colors.red,
+// background :Colors.red,
+// onBackground :Colors.red,
+// surface:Colors.red,
+// onSurface :Colors.red,
+// surfaceVariant:Colors.red,
+// onSurfaceVariant:Colors.red,
+// outline:Colors.red,
+// outlineVariant:Colors.red,
+// shadow:Colors.red,
+// scrim:Colors.red,
+// inverseSurface:Colors.red,
+// onInverseSurface:Colors.red,
+// inversePrimary:Colors.red,
+// surfaceTint:Colors.red,

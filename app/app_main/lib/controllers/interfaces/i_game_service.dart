@@ -18,7 +18,7 @@ abstract class IGameService {
 
   bool get gameIsReady;
 
-  Lap? get currentLap;
+  Lap get currentLap;
 
   Team get currentTeam;
 
