@@ -8,3 +8,4 @@ export 'rules_widget.dart';
 export 'timer_widget.dart';
 export 'transition_container.dart';
 export 'transition_container_mixin.dart';
+export 'winner_animation_widget.dart';

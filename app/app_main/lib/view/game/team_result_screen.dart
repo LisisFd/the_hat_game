@@ -1,6 +1,7 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/navigation/app_routes.dart';
+import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
@@ -102,33 +103,44 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
   ///TODO addLocalization
   @override
   Widget build(BuildContext context) {
+    final theme = MyAppTheme.of(context);
     List<Widget> wordsWidgets = _words.map((w) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      return Column(
         children: [
-          Text(w.word),
-          GestureDetector(
-            key: ValueKey(w.status),
-            onTap: () {
-              _updateWordState(w);
-            },
-            child: Image(
-              image: w.status == WordStatus.right
-                  ? AppConfig.fillHatIcon
-                  : AppConfig.strokeHatIcon,
-              width: 20,
-            ),
+          theme.custom.padding1,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                w.word,
+                style: theme.material.textTheme.titleSmall,
+              ),
+              GestureDetector(
+                key: ValueKey(w.status),
+                onTap: () {
+                  _updateWordState(w);
+                },
+                child: Image(
+                  image: w.status == WordStatus.right
+                      ? AppConfig.fillHatIcon
+                      : AppConfig.strokeHatIcon,
+                  width: 30,
+                ),
+              ),
+            ],
           ),
+          theme.custom.padding1,
         ],
       );
     }).toList();
+
     Widget buttonWidget = _currentLap == Lap.third &&
             !_words.any((w) => w.status == WordStatus.active)
-        ? TextButton(
+        ? ElevatedMenuButton(
             onPressed: _end,
             child: const Text('End'),
           )
-        : TextButton(
+        : ElevatedMenuButton(
             onPressed: _continue,
             child: const Text('Continue'),
           );
@@ -137,17 +149,45 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
       child: MyAppWrap(
         body: Column(
           children: [
-            const Text('Points'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(_currentTeam.name),
-                Text(key: ValueKey(_plusPoints), '+$_plusPoints')
-              ],
+            theme.custom.padding5,
+            Text(
+              'Points',
+              style: theme.material.textTheme.titleLarge,
             ),
-            SingleChildScrollView(
-              child: Column(
-                children: wordsWidgets,
+            Expanded(
+              child: DefaultContainer(
+                margin: theme.custom.defaultAppMargin,
+                padding: theme.custom.defaultAppPadding,
+                child: Column(
+                  children: [
+                    Column(
+                      children: [
+                        theme.custom.padding1,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              _currentTeam.name,
+                              style: theme.material.textTheme.titleMedium,
+                            ),
+                            Text(
+                              key: ValueKey(_plusPoints),
+                              '+$_plusPoints',
+                              style: theme.material.textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                        theme.custom.padding1,
+                      ],
+                    ),
+                    Expanded(
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: wordsWidgets,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             buttonWidget,

@@ -14,6 +14,7 @@ class AppConfig {
   static const String animationSwipeLeft = 'assets/animations/swipe_left.json';
   static const String animationHatBounce = 'assets/animations/hat_bounce.json';
   static const String animationHatRotate = 'assets/animations/hat_rotate.json';
+  static const String animationWinner = 'assets/animations/winner.json';
 
   /// If you want to use ByteBrew analytics
   ///
