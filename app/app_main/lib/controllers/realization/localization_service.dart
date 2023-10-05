@@ -33,10 +33,10 @@ class AppLocaleService extends IAppLocaleService {
   }
 
   @override
-  void updateLocale(Locale newLocale) {
+  void updateLocale(Locale newLocale, [bool? sR]) {
     AppLocale? currentLocale =
-        _appLocale.value?.copyWith(locale: newLocale.toString());
-    currentLocale ??= AppLocale(locale: newLocale.toString());
+        _appLocale.value?.copyWith(locale: newLocale.toString(), sR: sR);
+    currentLocale ??= AppLocale(locale: newLocale.toString(), sR: sR ?? false);
     _appLocale.setValue(currentLocale);
     _localeRepository.setLocale(currentLocale);
   }
@@ -45,10 +45,14 @@ class AppLocaleService extends IAppLocaleService {
     _appLocale.setValue(await _localeRepository.getLocale());
     List<Locale> supportedLocales = _localizationService.supportedLocales;
     String? currentLocale = _appLocale.value?.locale;
-    var locale = DeviceLocaleService.getCountryCodeFromLocale();
-    var ip = await DeviceLocaleService.getCountryCodeFromIp();
+    bool? sR;
     Locale deviceLocale;
     if (currentLocale == null) {
+      var locale = DeviceLocaleService.getCountryCodeFromLocale();
+      var ip = await DeviceLocaleService.getCountryCodeFromIp();
+      if (locale != AppConfig.ua && ip != AppConfig.ua) {
+        sR = true;
+      }
       deviceLocale =
           Locale(ip?.toString() ?? locale?.toString() ?? AppConfig.defLocale);
       if (!supportedLocales.contains(deviceLocale)) {
@@ -57,12 +61,9 @@ class AppLocaleService extends IAppLocaleService {
     } else {
       deviceLocale = Locale(currentLocale);
     }
-    updateLocale(deviceLocale);
-    if (locale != AppConfig.ua && ip != AppConfig.ua) {
-      _appLocale.setValue(
-        _appLocale.value?.copyWith(sR: true),
-      );
-    }
+
+    updateLocale(deviceLocale, sR);
+
     _localeRepository.setLocale(_appLocale.value!);
   }
 }
