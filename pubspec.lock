@@ -329,6 +329,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_arb_translator:
+    dependency: "direct dev"
+    description:
+      name: flutter_arb_translator
+      sha256: "6f3da4bdfcd6e05b88077b1b269123b900a8ea0ab5fc7115d053b06be6f5c093"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.12"
   flutter_keychain:
     dependency: transitive
     description:
@@ -372,10 +380,10 @@ packages:
     dependency: transitive
     description:
       name: http
-      sha256: "5895291c13fa8a3bd82e76d5627f69e0d85ca6a30dcac95c4ea19a5d555879c2"
+      sha256: "759d1a329847dd0f39226c688d3e06a6b8679668e350e2891a6474f8b4bb8525"
       url: "https://pub.dev"
     source: hosted
-    version: "0.13.6"
+    version: "1.1.0"
   http_parser:
     dependency: transitive
     description:

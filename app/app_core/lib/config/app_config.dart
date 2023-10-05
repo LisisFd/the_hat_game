@@ -15,6 +15,13 @@ class AppConfig {
   static const String animationHatBounce = 'assets/animations/hat_bounce.json';
   static const String animationHatRotate = 'assets/animations/hat_rotate.json';
   static const String animationWinner = 'assets/animations/winner.json';
+  static const ua = 'ua';
+  static const defLocale = 'en';
+
+  static const flagUa = AssetImage('images/ua.png');
+  static const flagEn = AssetImage('images/en.png');
+  static const flagR = AssetImage('images/r.png');
+  static const flagUaEn = AssetImage('images/ua_en.png');
 
   /// If you want to use ByteBrew analytics
   ///

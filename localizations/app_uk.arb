@@ -1,0 +1,66 @@
+{
+  "appName": "Капелюх",
+  "btn_play": "Грати",
+  "btn_previous": "Назад",
+  "btn_next": "Далі",
+  "btn_continue": "Продовжити",
+  "btn_end": "Кінець",
+  "btn_start": "Старт",
+  "btn_stop": "Стоп",
+  "btn_add": "Додати",
+  "btn_menu": "Меню",
+  "btn_in_hat": "До капелюха",
+  "title_rules": "Правила",
+  "title_settings": "Налаштування",
+  "title_last_word": "Останнє слово",
+  "title_winner": "Переможець",
+  "title_round_timer": "Таймер",
+  "title_animation": "Анімація",
+  "title_points": "Рахунок",
+  "title_command_rate": "Командна рахунок",
+  "title_words_on_player": "Кількість слів на одного ігрока",
+  "title_new_name": "Нова назва",
+  "title_teams": "Команди",
+  "title_count_players": "Кількість гравців",
+  "title_words": "Слова",
+  "title_great": "Чудово",
+  "title_ready": "Гототуються до гри",
+  "title_language": "Оберіть мову:",
+  "description_great": "Будь ласка, передайте пристрій наступному гравцеві",
+  "error_input_word": "Будь ласка, напишіть слово",
+  "rules_alias": "Поясніть слова, використовуючи синоніми, антоніми, описи та різні підказки без використання спільнокореневих слів.",
+  "rules_one_word": "Оскільки на першому етапі ви вивчили всі слова в капелюсі, тепер ваше пояснення має містити лише одне слово.",
+  "rules_crocodile": "Тепер трохи порухаємося. Використовуйте тільки міміку, жести або танці, щоб показати своїм товаришам слово без звуку.",
+  "helper_game_text": "Змахніть папірець праворуч, якщо ваша команда вгадала слово, і вліво, якщо ви вирішили його пропустити.",
+  "helper_words_text": "Кожен гравець повинен написати слова, які ви відгадаєте під час гри. (Підказка: кількість слів, які повинен ввести кожен гравець, можна змінити в налаштуваннях)",
+  "title_round_number": "Раунд {number}",
+  "@title_round_number": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "1"
+      }
+    }
+  },
+  "title_player_number": "Гравець: {number}",
+  "@title_player_number": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "1"
+      }
+    }
+  },
+  "title_word_number": "Залишилося слів: {number}",
+  "@title_word_number": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "1"
+      }
+    }
+  },
+  "ua": "Українська",
+  "en": "Анлглійська",
+  "r": "Російська"
+}

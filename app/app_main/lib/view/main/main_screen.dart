@@ -2,10 +2,10 @@ import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/navigation.dart';
+import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
-//TODO: add localization
 class MainScreen extends StatefulWidget {
   static Widget pageBuilder(
       BuildContext context, PageArgumentsGeneric arguments) {
@@ -19,46 +19,50 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
-  final IGameService gameService = getWidgetService<IGameService>();
-  final AppRoutes appRoutes = getWidgetService<AppRoutes>();
-  final FlowFactory flowFactory = getWidgetService<FlowFactory>();
+  final IGameService _gameService = getWidgetService<IGameService>();
+  final IAppLocaleService _appLocaleService =
+      getWidgetService<IAppLocaleService>();
+  final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
+  final FlowFactory _flowFactory = getWidgetService<FlowFactory>();
 
   @override
   void initState() {
     super.initState();
-    listen(gameService.appGame);
+    listen(_gameService.appGame);
   }
 
   @override
   Widget build(BuildContext context) {
-    final IGameRestoreFlow gameRestoreFlow = flowFactory.getFlow(context);
+    final localization = context.localization();
+    final IGameRestoreFlow gameRestoreFlow = _flowFactory.getFlow(context);
     final AppLocalizations localize = context.localization();
     final Size device = MediaQuery.of(context).size;
     double hatWidth =
         (device.width > device.height ? device.height : device.width) / 2;
+    double flagWidth = hatWidth / 2.5;
     List<Widget> menu = [
-      if (gameService.gameIsNotEmpty)
+      if (_gameService.gameIsNotEmpty)
         ElevatedMenuButton(
           onPressed: gameRestoreFlow.restoreGame,
-          child: const Text('Continue'),
+          child: Text(localization.btn_continue),
         ),
       ElevatedMenuButton(
         onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
-          appRoutes.teamsScreen(),
+          _appRoutes.teamsScreen(),
         ),
-        child: Text(localize.screen_main_btn_play),
+        child: Text(localize.btn_play),
       ),
       ElevatedMenuButton(
         onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
-          appRoutes.rulesScreen(),
+          _appRoutes.rulesScreen(),
         ),
-        child: Text(localize.screen_main_btn_rules),
+        child: Text(localize.title_rules),
       ),
       ElevatedMenuButton(
         onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
-          appRoutes.settingsScreen(),
+          _appRoutes.settingsScreen(),
         ),
-        child: Text(localize.screen_main_btn_settings),
+        child: Text(localize.title_settings),
       ),
     ];
     return MyAppWrap(
@@ -66,9 +70,29 @@ class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Image(
-              image: AppConfig.fillHatIcon,
-              width: hatWidth,
+            Stack(
+              children: [
+                Image(
+                  image: AppConfig.fillHatIcon,
+                  width: hatWidth,
+                ),
+                Positioned(
+                  right: flagWidth / 1.3,
+                  bottom: flagWidth / 1.6,
+                  child: IconButton(
+                    color: ThemeConstants.lightBackground,
+                    onPressed: () async {
+                      Locale? locale = await FlagsDialog.show(context);
+                      if (locale == null) return;
+                      _appLocaleService.updateLocale(locale);
+                    },
+                    icon: Image(
+                      image: AppConfig.flagUaEn,
+                      width: flagWidth,
+                    ),
+                  ),
+                ),
+              ],
             ),
             Column(
               children: menu,

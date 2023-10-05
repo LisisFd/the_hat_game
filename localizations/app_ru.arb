@@ -1,0 +1,66 @@
+{
+  "appName": "Шляпа",
+  "btn_play": "Играть",
+  "btn_previous": "Предыдущий",
+  "btn_next": "Следующий",
+  "btn_continue": "Продолжить",
+  "btn_end": "Закончить",
+  "btn_start": "Начать",
+  "btn_stop": "Стоп",
+  "btn_add": "Добавить",
+  "btn_menu": "Меню",
+  "btn_in_hat": "В шляпу",
+  "title_rules": "Правила",
+  "title_settings": "Настройки",
+  "title_last_word": "Последнее слово",
+  "title_winner": "Победитель",
+  "title_round_timer": "Таймер",
+  "title_animation": "Анимация",
+  "title_points": "Точки",
+  "title_command_rate": "Счет команды",
+  "title_words_on_player": "Количество слов на игрока",
+  "title_new_name": "Новое имя",
+  "title_teams": "Команды",
+  "title_count_players": "Количество игроков",
+  "title_words": "Слова",
+  "title_great": "Отлично",
+  "title_language": "Выберите язык:",
+  "title_ready": "Готовятся к игре",
+  "description_great": "Пожалуйста, передайте устройство следующему игроку",
+  "error_input_word": "Пожалуйста, напишите слово",
+  "rules_alias": "Объясните слова, используя синонимы, антонимы, описания и различные подсказки без использования корневых слов.",
+  "rules_one_word": "Поскольку на первом этапе вы изучили все слова в шляпе, теперь ваше объяснение должно содержать только одно слово.",
+  "rules_crocodile": "Теперь немного подвигаемся. Используйте только мимику, жесты или пляски, чтобы показать своим товарищам слово без звука.",
+  "helper_game_text": "Смахните бумажку вправо, если ваша команда угадала слово, и влево, если вы решили его пропустить.",
+  "helper_words_text": "Каждый игрок должен написать слова, которые вы будете отгадывать во время игры. (Подсказка: количество слов, которые должен ввести каждый игрок, можно изменить в настройках)",
+  "title_round_number": "Раунд {number}",
+  "@title_round_number": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "1"
+      }
+    }
+  },
+  "title_player_number": "Игрок: {number}",
+  "@title_player_number": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "1"
+      }
+    }
+  },
+  "title_word_number": "Осталось слов: {number}",
+  "@title_word_number": {
+    "placeholders": {
+      "number": {
+        "type": "String",
+        "example": "1"
+      }
+    }
+  },
+  "ua": "Украинский",
+  "en": "Английский",
+  "r": "Русский"
+}

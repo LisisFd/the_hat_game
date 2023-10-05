@@ -1,4 +1,3 @@
-import 'package:app_main/domain/repositories/settings_local_repository.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_storage/core_storage.dart';
 
@@ -32,6 +31,14 @@ extension SettingsRepositoryFeature on ServiceScope {
   void addSettingsRepository() {
     registerSingletonWithDependencies<ISettingsRepository>(
         () => SettingsLocalRepository(storage: get<IKeyValueStorage>()),
+        dependsOn: [IKeyValueStorage]);
+  }
+}
+
+extension AppLocaleRepositoryFeature on ServiceScope {
+  void addAppLocaleRepository() {
+    registerSingletonWithDependencies<ILocaleRepository>(
+        () => LocaleRepository(storage: get<IKeyValueStorage>()),
         dependsOn: [IKeyValueStorage]);
   }
 }

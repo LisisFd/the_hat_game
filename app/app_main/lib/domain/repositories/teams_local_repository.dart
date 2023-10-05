@@ -13,15 +13,16 @@ class TeamsLocalRepository extends ITeamsRepository {
 
   @override
   Future<List<String>> getTeamsByLocale(String locale) async {
+    String currentLocale = locale.substring(0, 2);
     if (!_isInit) {
       await getTeams();
     }
-    if (locale == 'en') {
-      return _teams.en;
-    } else if (locale == 'ua') {
+    if (currentLocale == 'ru') {
+      return _teams.ru;
+    } else if (currentLocale == 'uk') {
       return _teams.ua;
     } else {
-      return _teams.ru;
+      return _teams.en;
     }
   }
 

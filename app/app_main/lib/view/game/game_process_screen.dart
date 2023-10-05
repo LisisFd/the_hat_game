@@ -1,5 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/app_routes.dart';
 import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
@@ -43,7 +44,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
 
   GameState get _gameState => _gameService.gameState;
 
-  bool _helper = false;
+  bool get _helper => _settingService.appSettings.value.isFirstLaunch;
   bool _wordView = false;
   bool _startBounce = false;
   bool _skipAnimation = false;
@@ -149,6 +150,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
 
   @override
   Widget build(BuildContext context) {
+    final localization = context.localization();
     final theme = MyAppTheme.of(context);
     Widget wordWidget = Stack(
       alignment: Alignment.center,
@@ -186,7 +188,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
                 ElevatedMenuButton(
                   lightStyle: false,
                   onPressed: _startGame,
-                  child: const Text('Start'),
+                  child: Text(localization.btn_start),
                 )
             ],
           ),
@@ -195,7 +197,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
           visible: _gameState == GameState.paused,
           child: ElevatedMenuButton(
             onPressed: _playGame,
-            child: const Text('Play'),
+            child: Text(localization.btn_play),
           ),
         ),
         Visibility(
@@ -214,7 +216,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
             fillColor: ColorPallet.colorBlue,
             shape: const CircleBorder(),
             padding: theme.custom.defaultAppPadding,
-            child: const Text('Stop'),
+            child: Text(localization.btn_stop),
           )
         : const SizedBox();
     Widget timerWidget = Column(
@@ -225,7 +227,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
                 onStop: _onStopTimer,
                 currentDuration: _gameService.roundTime,
               )
-            : const Text('Last word'),
+            : Text(localization.title_last_word),
         theme.custom.padding2,
       ],
     );
@@ -234,7 +236,9 @@ class _GameProcessScreenState extends State<GameProcessScreen>
         ? HelperGameWidget(
             onClose: () {
               setState(() {
-                _helper = false;
+                var settings = _settingService.appSettings.value;
+                _settingService
+                    .updateSettings(settings.copyWith(isFirstLaunch: false));
               });
             },
           )

@@ -1,5 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/app_routes.dart';
 import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
@@ -100,9 +101,9 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
     return true;
   }
 
-  ///TODO addLocalization
   @override
   Widget build(BuildContext context) {
+    final localization = context.localization();
     final theme = MyAppTheme.of(context);
     List<Widget> wordsWidgets = _words.map((w) {
       return Column(
@@ -138,11 +139,11 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
             !_words.any((w) => w.status == WordStatus.active)
         ? ElevatedMenuButton(
             onPressed: _end,
-            child: const Text('End'),
+            child: Text(localization.btn_end),
           )
         : ElevatedMenuButton(
             onPressed: _continue,
-            child: const Text('Continue'),
+            child: Text(localization.btn_continue),
           );
     return WillPopScope(
       onWillPop: _onWillPop,
@@ -151,7 +152,7 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
           children: [
             theme.custom.padding5,
             Text(
-              'Points',
+              localization.title_points,
               style: theme.material.textTheme.titleLarge,
             ),
             Expanded(

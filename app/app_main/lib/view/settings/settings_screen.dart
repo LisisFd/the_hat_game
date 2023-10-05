@@ -1,6 +1,7 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/domain/domain.dart';
+import 'package:app_main/localization.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
@@ -59,14 +60,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return true;
   }
 
-//TODO: add localizaton
   @override
   Widget build(BuildContext context) {
     final theme = MyAppTheme.of(context);
+    final localization = context.localization();
     final TheHatAppSettings currentSettings = appSettings;
     List<_SettingsModel> settingModels = [
       _SettingsModel(
-        title: 'Count words on player',
+        title: localization.title_words_on_player,
         action: Row(
           children: [
             IconButton(
@@ -101,14 +102,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       _SettingsModel(
-          title: 'Animation',
+          title: localization.title_animation,
           action: Switch(
               value: currentSettings.animation,
               onChanged: (val) {
                 _updateSettings(currentSettings.copyWith(animation: val));
               })),
       _SettingsModel(
-          title: 'Round timer',
+          title: localization.title_round_timer,
           action: Slider(
               max: _settingsService.defaultDuration.max,
               min: _settingsService.defaultDuration.min,
@@ -124,7 +125,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }),
           position: _SettingsPosition.vertical),
       _SettingsModel(
-        title: 'Last word',
+        title: localization.title_last_word,
         action: Switch(
             value: currentSettings.lastWord,
             onChanged: (val) {
@@ -144,7 +145,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
       child: MyAppWrap(
         appBar: AppBar(
-          title: const Text('Settings'),
+          title: Text(localization.title_settings),
         ),
         body: Padding(
           padding: theme.custom.defaultAppPadding,
@@ -164,7 +165,8 @@ class _SettingsElem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = MyAppTheme.of(context);
     List<Widget> widgets = [
-      Text(child.title, style: theme.material.textTheme.titleSmall),
+      Expanded(
+          child: Text(child.title, style: theme.material.textTheme.titleSmall)),
       child.action
     ];
     Widget finalWidget = child.position == _SettingsPosition.vertical
@@ -176,11 +178,13 @@ class _SettingsElem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: widgets,
           );
-    return DefaultContainer(
-        padding: theme.custom.defaultAppPadding / 2,
-        margin: EdgeInsets.symmetric(
-            vertical: theme.custom.defaultAppMargin.vertical / 2),
-        child: finalWidget);
+    return IntrinsicHeight(
+      child: DefaultContainer(
+          padding: theme.custom.defaultAppPadding / 2,
+          margin: EdgeInsets.symmetric(
+              vertical: theme.custom.defaultAppMargin.vertical / 2),
+          child: finalWidget),
+    );
   }
 }
 

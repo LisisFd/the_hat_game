@@ -1,4 +1,5 @@
 import 'package:app_core/app_core.dart';
+import 'package:app_main/localization.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:lottie/lottie.dart';
 
@@ -71,6 +72,7 @@ class _HelperGameWidgetState extends State<HelperGameWidget>
   @override
   Widget build(BuildContext context) {
     final theme = MyAppTheme.of(context);
+    final localization = context.localization();
     return Container(
       padding: theme.custom.defaultAppPadding,
       color: Colors.black.withOpacity(0.3),
@@ -88,7 +90,7 @@ class _HelperGameWidgetState extends State<HelperGameWidget>
                 ),
               )),
           Text(
-            'Свайпините слово в право если ваша команда отгадала слово или влево если решила пропустить',
+            localization.helper_game_text,
             style: theme.material.textTheme.bodyLarge
                 ?.copyWith(color: Colors.white),
             textAlign: TextAlign.center,
@@ -99,3 +101,6 @@ class _HelperGameWidgetState extends State<HelperGameWidget>
     );
   }
 }
+/*Swipe the piece of paper to the right if your team guessed the word and to the left if you decided to skip it*/
+/*Смахните бумажку вправо, если ваша команда угадала слово, и влево, если вы решили его пропустить.*/
+/*Змахніть папірець праворуч, якщо ваша команда вгадала слово, і вліво, якщо ви вирішили його пропустити.*/
