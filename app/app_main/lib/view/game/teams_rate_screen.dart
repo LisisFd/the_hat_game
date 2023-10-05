@@ -1,5 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/app_routes.dart';
 import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
@@ -59,19 +60,20 @@ class TeamsRateScreen extends StatelessWidget {
         .pushReplacementWithoutAnimation(appRoutes.gameProcess());
   }
 
-  ///TODO: add localization
   @override
   Widget build(BuildContext context) {
     _initScreen();
+
+    final localization = context.localization();
     final theme = MyAppTheme.of(context);
     final screen = MediaQuery.of(context).size;
     List<Widget> teamsWidgets = _getTeamsWidget(context);
 
     return MyAppWrap(
       appBar: AppBar(
-        title: const Text(
-          'Command Rate',
-          style: TextStyle(color: ThemeConstants.lightBackground),
+        title: Text(
+          localization.title_command_rate,
+          style: const TextStyle(color: ThemeConstants.lightBackground),
         ),
         iconTheme: const IconThemeData(color: ThemeConstants.lightBackground),
         backgroundColor: ColorPallet.colorBlue,
@@ -83,7 +85,6 @@ class TeamsRateScreen extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
                 color: ColorPallet.colorBlue,
-                //TODO: add to theme
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(20),
                   bottomRight: Radius.circular(20),
@@ -105,7 +106,7 @@ class TeamsRateScreen extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'Ready to game',
+                  localization.title_ready,
                   style: theme.material.textTheme.titleSmall
                       ?.copyWith(color: Colors.grey),
                 ),
@@ -119,7 +120,7 @@ class TeamsRateScreen extends StatelessWidget {
           ElevatedMenuButton(
             lightStyle: false,
             onPressed: () => _navigate(context),
-            child: const Text('Go'),
+            child: Text(localization.btn_next),
           ),
         ],
       ),

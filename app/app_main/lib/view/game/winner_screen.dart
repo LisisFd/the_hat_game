@@ -1,5 +1,6 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/app_routes.dart';
 import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
@@ -26,9 +27,9 @@ class WinnerScreen extends StatelessWidget {
         .pushReplacementWithoutAnimation(appRoutes.mainScreen());
   }
 
-  ///TODO addLocalization
   @override
   Widget build(BuildContext context) {
+    final localization = context.localization();
     final theme = MyAppTheme.of(context);
     final IGameService gameService = getWidgetService<IGameService>();
     List<Team> teams = gameService.teams.toList();
@@ -39,7 +40,7 @@ class WinnerScreen extends StatelessWidget {
 
     return MyAppWrap(
       appBar: AppBar(
-        title: const Text('Winner'),
+        title: Text(localization.title_winner),
         centerTitle: true,
       ),
       body: Column(
@@ -107,7 +108,7 @@ class WinnerScreen extends StatelessWidget {
           ),
           ElevatedMenuButton(
               onPressed: () => _navigateToMenu(context),
-              child: const Text('Menu'))
+              child: Text(localization.btn_menu))
         ],
       ),
     );

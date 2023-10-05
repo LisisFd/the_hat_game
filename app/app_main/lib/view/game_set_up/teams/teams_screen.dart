@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/domain/domain.dart';
+import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/app_routes.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
@@ -20,7 +21,6 @@ class TeamsScreen extends StatefulWidget {
   State<TeamsScreen> createState() => _TeamsScreenState();
 }
 
-/// TODO: add animation
 class _TeamsScreenState extends State<TeamsScreen> {
   static const int _minPlayers = 1;
   static const int _maxPlayers = 10;
@@ -74,6 +74,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
   }
 
   Widget _getRow(int index) {
+    final localization = context.localization();
     var theme = MyAppTheme.of(context);
     return ColoredBox(
       color: Colors.white,
@@ -96,7 +97,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                   String value = '';
                   bool isRenamed = await YesNoDialog.showWidget(
                     context: context,
-                    title: 'New name',
+                    title: localization.title_new_name,
                     descriptionWidget: TextFormField(
                       initialValue: _currentTeams[index].name,
                       onChanged: (val) {
@@ -124,17 +125,13 @@ class _TeamsScreenState extends State<TeamsScreen> {
     );
   }
 
-//TODO: add localization
   @override
   Widget build(BuildContext context) {
+    final localization = context.localization();
     var theme = MyAppTheme.of(context);
     return MyAppWrap(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            'Teams',
-          ),
-        ),
+        appBar:
+            AppBar(centerTitle: true, title: Text(localization.title_teams)),
         body: Column(
           children: [
             Expanded(
@@ -193,7 +190,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  'Count players',
+                                  localization.title_count_players,
                                   style: theme.material.textTheme.titleSmall,
                                 ),
                                 Row(
@@ -238,7 +235,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
                               onPressed: _addItem,
                               child: Container(
                                 margin: theme.custom.defaultAppMargin,
-                                child: const Text('Add'),
+                                child: Text(localization.btn_add),
                               ),
                             ),
                           ),
@@ -247,11 +244,8 @@ class _TeamsScreenState extends State<TeamsScreen> {
                     ),
                   ),
                   ElevatedMenuButton(
-                    onPressed: () => _createGame(context),
-                    child: const Text(
-                      'Next',
-                    ),
-                  ),
+                      onPressed: () => _createGame(context),
+                      child: Text(localization.btn_next)),
                 ],
               ),
             ),

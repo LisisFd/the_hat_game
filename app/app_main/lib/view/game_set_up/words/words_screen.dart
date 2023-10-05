@@ -1,6 +1,7 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/domain/domain.dart';
+import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/app_routes.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
@@ -20,7 +21,6 @@ class WordsScreen extends StatefulWidget {
   State<WordsScreen> createState() => _WordsScreenState();
 }
 
-//TODO: add localization
 class _WordsScreenState extends State<WordsScreen> {
   final IGameService _gameService = getWidgetService<IGameService>();
   final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
@@ -69,6 +69,7 @@ class _WordsScreenState extends State<WordsScreen> {
   }
 
   void _updateCurrentPlayer() {
+    final localization = context.localization();
     final int wordsCount = _words.length;
     final int newPlayer = (wordsCount / _wordOnOnePlayer).floor();
     final int oldPlayer = _playerNumber;
@@ -76,8 +77,8 @@ class _WordsScreenState extends State<WordsScreen> {
     if (oldPlayer != newPlayer) {
       DefaultAlertDialog.show(
           context: context,
-          title: 'Great',
-          description: 'Please, pass device to the next player');
+          title: localization.title_great,
+          description: localization.description_great);
     }
   }
 
@@ -106,14 +107,13 @@ class _WordsScreenState extends State<WordsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = context.localization();
     final theme = MyAppTheme.of(context);
     final padding = theme.custom.defaultAppMargin.vertical / 2;
     return MyAppWrap(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text(
-            'Words',
-          ),
+          title: Text(localization.title_words),
         ),
         body: LayoutBuilder(builder: (context, constraint) {
           return SingleChildScrollView(
@@ -140,7 +140,7 @@ class _WordsScreenState extends State<WordsScreen> {
                         horizontal: padding * 4, vertical: padding * 2),
                     padding: theme.custom.defaultAppPadding,
                     child: Text(
-                      'Введите слова потомушо ну типо надо как бі все мі люди и ну єто ті понял корч',
+                      localization.helper_words_text,
                       style: theme.material.textTheme.bodyLarge,
                       textAlign: TextAlign.center,
                     ),
@@ -169,7 +169,7 @@ class _WordsScreenState extends State<WordsScreen> {
                                       filled: true,
                                       border: OutlineInputBorder()),
                                   validator: (val) {
-                                    String? res = 'Please write a word';
+                                    String? res = localization.error_input_word;
                                     if (val != null && val.isNotEmpty) {
                                       res = null;
                                     }
@@ -190,11 +190,13 @@ class _WordsScreenState extends State<WordsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Player: $playerNumber',
+                                      localization.title_player_number(
+                                          playerNumber.toString()),
                                       style: theme.material.textTheme.bodyLarge,
                                     ),
                                     Text(
-                                      'Word number: $countWords',
+                                      localization.title_word_number(
+                                          countWords.toString()),
                                       style: theme.material.textTheme.bodyLarge,
                                     ),
                                   ],
@@ -207,9 +209,9 @@ class _WordsScreenState extends State<WordsScreen> {
                             lightStyle: false,
                             onPressed:
                                 !_gameIsReady ? _inTheHatPress : _nextPress,
-                            child: !_gameIsReady
-                                ? const Text('In the hat')
-                                : const Text('Next'),
+                            child: Text(!_gameIsReady
+                                ? localization.btn_in_hat
+                                : localization.btn_next),
                           ),
                         ],
                       ),

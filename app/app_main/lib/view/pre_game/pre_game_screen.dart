@@ -1,6 +1,7 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/domain/domain.dart';
+import 'package:app_main/localization.dart';
 import 'package:app_main/navigation/navigation.dart';
 import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
@@ -33,6 +34,7 @@ class PreGameScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localization = context.localization();
     final AppRoutes appRoutes = getWidgetService<AppRoutes>();
     final IGameService gameService = getWidgetService<IGameService>();
     gameService.setNewScreen(CurrentScreen.preGame);
@@ -43,12 +45,13 @@ class PreGameScreen extends StatelessWidget {
         children: [
           rules.widget,
           ElevatedMenuButton(
-              onPressed: () {
-                RootAppNavigation.of(context).pushReplacementWithoutAnimation(
-                  appRoutes.teamsRateScreen(),
-                );
-              },
-              child: const Text('OK')),
+            onPressed: () {
+              RootAppNavigation.of(context).pushReplacementWithoutAnimation(
+                appRoutes.teamsRateScreen(),
+              );
+            },
+            child: Text(localization.btn_next),
+          ),
         ],
       ),
     );

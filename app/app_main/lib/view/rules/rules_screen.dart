@@ -1,4 +1,5 @@
 import 'package:app_core/app_core.dart';
+import 'package:app_main/localization.dart';
 import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
 
@@ -47,9 +48,10 @@ class _RulesScreenState extends State<RulesScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = MyAppTheme.of(context);
+    final localization = context.localization();
     return MyAppWrap(
         appBar: AppBar(
-          title: const Text('Rules'),
+          title: Text(localization.title_rules),
         ),
         body: Column(
           children: [
@@ -65,11 +67,11 @@ class _RulesScreenState extends State<RulesScreen> {
                 children: [
                   OutlinedButton(
                     onPressed: _currentRule == _rules.first ? null : _prev,
-                    child: const Text('Previous'),
+                    child: Text(localization.btn_previous),
                   ),
                   OutlinedButton(
                     onPressed: _currentRule == _rules.last ? null : _next,
-                    child: const Text('Next'),
+                    child: Text(localization.btn_next),
                   ),
                 ],
               ),

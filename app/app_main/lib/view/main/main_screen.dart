@@ -5,7 +5,6 @@ import 'package:app_main/navigation/navigation.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
-//TODO: add localization
 class MainScreen extends StatefulWidget {
   static Widget pageBuilder(
       BuildContext context, PageArgumentsGeneric arguments) {
@@ -31,6 +30,7 @@ class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
 
   @override
   Widget build(BuildContext context) {
+    final localization = context.localization();
     final IGameRestoreFlow gameRestoreFlow = flowFactory.getFlow(context);
     final AppLocalizations localize = context.localization();
     final Size device = MediaQuery.of(context).size;
@@ -40,25 +40,25 @@ class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
       if (gameService.gameIsNotEmpty)
         ElevatedMenuButton(
           onPressed: gameRestoreFlow.restoreGame,
-          child: const Text('Continue'),
+          child: Text(localization.btn_continue),
         ),
       ElevatedMenuButton(
         onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
           appRoutes.teamsScreen(),
         ),
-        child: Text(localize.screen_main_btn_play),
+        child: Text(localize.btn_play),
       ),
       ElevatedMenuButton(
         onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
           appRoutes.rulesScreen(),
         ),
-        child: Text(localize.screen_main_btn_rules),
+        child: Text(localize.title_rules),
       ),
       ElevatedMenuButton(
         onPressed: () => RootAppNavigation.of(context).pushWithoutAnimation(
           appRoutes.settingsScreen(),
         ),
-        child: Text(localize.screen_main_btn_settings),
+        child: Text(localize.title_settings),
       ),
     ];
     return MyAppWrap(

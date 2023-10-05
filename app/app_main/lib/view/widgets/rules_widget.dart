@@ -22,15 +22,15 @@ class _RulesTranslations {
   }
 
   static String aliasTitle(AppLocalizations context) {
-    return context.rules_title(_aliasNum);
+    return context.title_round_number(_aliasNum);
   }
 
   static String oneWordTitle(AppLocalizations context) {
-    return context.rules_title(_oneWordNum);
+    return context.title_round_number(_oneWordNum);
   }
 
   static String crocodileTitle(AppLocalizations context) {
-    return context.rules_title(_crocodileNum);
+    return context.title_round_number(_crocodileNum);
   }
 }
 
