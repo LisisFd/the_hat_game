@@ -17,18 +17,16 @@ class PreGameScreen extends StatelessWidget {
   Rules _getCurrentRule(IGameService gameService) {
     Rules result = Rules.alias;
     Lap? lap = gameService.currentLap;
-    if (lap != null) {
-      switch (lap) {
-        case Lap.first:
-          result = Rules.alias;
-          break;
-        case Lap.second:
-          result = Rules.oneWord;
-          break;
-        case Lap.third:
-          result = Rules.crocodile;
-          break;
-      }
+    switch (lap) {
+      case Lap.first:
+        result = Rules.alias;
+        break;
+      case Lap.second:
+        result = Rules.oneWord;
+        break;
+      case Lap.third:
+        result = Rules.crocodile;
+        break;
     }
     return result;
   }
@@ -44,7 +42,7 @@ class PreGameScreen extends StatelessWidget {
       body: Column(
         children: [
           rules.widget,
-          TextButton(
+          ElevatedMenuButton(
               onPressed: () {
                 RootAppNavigation.of(context).pushReplacementWithoutAnimation(
                   appRoutes.teamsRateScreen(),

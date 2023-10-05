@@ -28,6 +28,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
   final AppRoutes _appRoutes = getWidgetService<AppRoutes>();
   final AppLifeStyleRepository _appLifeStyleRepository =
       getWidgetService<AppLifeStyleRepository>();
+
   final GlobalKey<TimerWidgetState> _timerKey = GlobalKey<TimerWidgetState>();
   final GlobalKey<TransitionContainerState> _animKey =
       GlobalKey<TransitionContainerState>();
@@ -42,15 +43,22 @@ class _GameProcessScreenState extends State<GameProcessScreen>
 
   GameState get _gameState => _gameService.gameState;
 
+  bool _helper = false;
+  bool _wordView = false;
+  bool _startBounce = false;
+  bool _skipAnimation = false;
+
   @override
   void initState() {
     _gameService.setNewScreen(CurrentScreen.process);
     _initGame();
-
     super.initState();
   }
 
   void _initGame() {
+    if (_gameState == GameState.paused || _gameState == GameState.lastWord) {
+      _skipAnimation = true;
+    }
     listenWith(_appLifeStyleRepository.appState, () {
       setState(() {
         if (_gameState == GameState.play) {
@@ -64,8 +72,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
 
   void _startGame() {
     setState(() {
-      _gameService.updateGame(gameState: GameState.play);
-      _timer?.start();
+      _startBounce = true;
     });
   }
 
@@ -80,7 +87,13 @@ class _GameProcessScreenState extends State<GameProcessScreen>
   void _playGame() {
     setState(() {
       _gameService.updateGame(gameState: GameState.play);
+    });
+  }
 
+  void _onRotateComplete() {
+    setState(() {
+      _wordView = true;
+      _skipAnimation = true;
       _timer?.start();
     });
   }
@@ -90,10 +103,8 @@ class _GameProcessScreenState extends State<GameProcessScreen>
     setState(() {
       _gameService.updateGame(time: timerTime);
       if (timerTime == Duration.zero) {
-        setState(() {
-          _gameService.updateGame(gameState: GameState.lastWord);
-          _gameService.saveGame();
-        });
+        _gameService.updateGame(gameState: GameState.lastWord);
+        _gameService.saveGame();
       }
     });
   }
@@ -128,88 +139,147 @@ class _GameProcessScreenState extends State<GameProcessScreen>
     return true;
   }
 
-  Widget _getButtonWidget() {
-    void Function()? fn;
-    Color color = Colors.grey;
-    switch (_gameState) {
-      case GameState.init:
-        fn = _startGame;
-        color = Colors.redAccent;
-      case GameState.play:
-        break;
-      case GameState.paused:
-        fn = _playGame;
-      case GameState.lastWord:
-        break;
-    }
-    return RawMaterialButton(
-      onPressed: fn,
-      elevation: 2.0,
-      fillColor: color,
-      shape: const CircleBorder(),
-      child: const SizedBox(
-        width: 150,
-        height: 150,
-      ),
-    );
+  @override
+  void dispose() {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: ThemeConstants.primaryColor,
+    ));
+    super.dispose();
   }
 
-  ///TODO: add theme
   @override
   Widget build(BuildContext context) {
-    Widget wordWidget = TransitionContainer(
-      key: _animKey,
-      color: Colors.redAccent,
-      onSkip: _checkWord,
-      child: Text(key: ValueKey(_word.id), _word.word),
-    );
-
-    Widget buttonWidget = _getButtonWidget();
-
-    Widget centerWidget =
-        _gameState == GameState.play || _gameState == GameState.lastWord
-            ? wordWidget
-            : buttonWidget;
-    Widget stopWidget =
-        _gameState == GameState.play && _gameState != GameState.lastWord
-            ? RawMaterialButton(
-                onPressed: _stopGame,
-                elevation: 2.0,
-                fillColor: _gameState == GameState.paused
-                    ? Colors.grey
-                    : Colors.redAccent,
-                shape: const CircleBorder(),
-                child: const Text('Stop'),
-              )
-            : const SizedBox();
-    Widget timerWidget = _gameState != GameState.lastWord
-        ? TimerWidget(
-            key: _timerKey,
-            onStop: _onStopTimer,
-            currentDuration: _gameService.roundTime,
+    final theme = MyAppTheme.of(context);
+    Widget wordWidget = Stack(
+      alignment: Alignment.center,
+      children: [
+        HatRotateWidget(
+          skipAnimation: _skipAnimation,
+          size: 200,
+          onComplete: _onRotateComplete,
+        ),
+        if (_wordView)
+          TransitionContainer(
+            key: _animKey,
+            color: const Color(0xFFFCF1D5),
+            onSkip: _checkWord,
+            child: Text(key: ValueKey(_word.id), _word.word),
           )
-        : const Text('Last word');
-    return WillPopScope(
-      onWillPop: _onWillPop,
-      child: MyAppWrap(
-        body: Center(
+      ],
+    );
+    Widget centerWidget = Column(
+      children: [
+        Visibility(
+          visible: _gameState == GameState.init,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  Text(_currentTeam.name),
-                  Text(_currentTeam.points.toString()),
-                ],
+              HatBounceWidget(
+                complete: _startBounce,
+                onStop: () {
+                  setState(() {
+                    _gameService.updateGame(gameState: GameState.play);
+                  });
+                },
+                size: 150,
               ),
-              centerWidget,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [const SizedBox(), timerWidget, stopWidget],
-              )
+              if (!_startBounce)
+                ElevatedMenuButton(
+                  lightStyle: false,
+                  onPressed: _startGame,
+                  child: const Text('Start'),
+                )
             ],
           ),
         ),
+        Visibility(
+          visible: _gameState == GameState.paused,
+          child: ElevatedMenuButton(
+            onPressed: _playGame,
+            child: const Text('Play'),
+          ),
+        ),
+        Visibility(
+            visible: _gameState == GameState.play ||
+                _gameState == GameState.lastWord,
+            child: wordWidget),
+      ],
+    );
+
+    Widget stopWidget = _gameState == GameState.play &&
+            _gameState != GameState.lastWord &&
+            _wordView
+        ? RawMaterialButton(
+            onPressed: _stopGame,
+            elevation: 2.0,
+            fillColor: ColorPallet.colorBlue,
+            shape: const CircleBorder(),
+            padding: theme.custom.defaultAppPadding,
+            child: const Text('Stop'),
+          )
+        : const SizedBox();
+    Widget timerWidget = Column(
+      children: [
+        _gameState != GameState.lastWord
+            ? TimerWidget(
+                key: _timerKey,
+                onStop: _onStopTimer,
+                currentDuration: _gameService.roundTime,
+              )
+            : const Text('Last word'),
+        theme.custom.padding2,
+      ],
+    );
+
+    Widget body = _helper
+        ? HelperGameWidget(
+            onClose: () {
+              setState(() {
+                _helper = false;
+              });
+            },
+          )
+        : Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(100),
+                    ),
+                    color: ColorPallet.colorBlue,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(_currentTeam.name,
+                          style: theme.material.textTheme.titleSmall?.copyWith(
+                              color: ThemeConstants.lightBackground)),
+                      Text(_currentTeam.points.toString(),
+                          style: theme.material.textTheme.headlineLarge
+                              ?.copyWith(
+                                  color: ThemeConstants.lightBackground)),
+                      theme.custom.padding4,
+                    ],
+                  ),
+                ),
+                centerWidget,
+                timerWidget,
+              ],
+            ),
+          );
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: MyAppWrap(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: ColorPallet.colorBlue,
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarColor: ColorPallet.colorBlue,
+          ),
+        ),
+        floatingActionButton: stopWidget,
+        body: body,
       ),
     );
   }

@@ -1,5 +1,8 @@
+import 'package:app_core/app_core.dart';
 import 'package:app_main/localization.dart';
 import 'package:core_flutter/core_flutter.dart';
+
+import 'default_text_container.dart';
 
 class _RulesTranslations {
   static const String _aliasNum = '1';
@@ -78,6 +81,8 @@ class _RulesWidgetState extends State<RulesWidget> {
   Widget build(BuildContext context) {
     final localization = context.localization();
 
+    final theme = MyAppTheme.of(context);
+
     return Center(
       child: Column(
         children: [
@@ -85,14 +90,18 @@ class _RulesWidgetState extends State<RulesWidget> {
             widget.title(
               localization,
             ),
+            style: theme.material.textTheme.headlineLarge,
           ),
           const Icon(
             Icons.flutter_dash_outlined,
-            size: 50,
+            size: 200,
           ),
-          Text(
-            widget.description(
-              localization,
+          theme.custom.padding5,
+          DefaultTextContainer(
+            child: Text(
+              widget.description(
+                localization,
+              ),
             ),
           ),
         ],

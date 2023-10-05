@@ -1,6 +1,7 @@
 import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/navigation/app_routes.dart';
+import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 
@@ -28,33 +29,83 @@ class WinnerScreen extends StatelessWidget {
   ///TODO addLocalization
   @override
   Widget build(BuildContext context) {
+    final theme = MyAppTheme.of(context);
     final IGameService gameService = getWidgetService<IGameService>();
     List<Team> teams = gameService.teams.toList();
+
     teams.sort((t, t2) => t2.points.compareTo(t.points));
     final Team winnerTeam = teams.removeAt(0);
-    List<Widget> teamsWidgets = teams.map((t) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(t.name),
-          Text(t.points.toString()),
-        ],
-      );
-    }).toList();
     _removeGame();
 
     return MyAppWrap(
+      appBar: AppBar(
+        title: const Text('Winner'),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
-          const Text('Winner'),
-          Text(winnerTeam.name),
-          Text(winnerTeam.points.toString()),
-          SingleChildScrollView(
+          DefaultContainer(
+            padding: theme.custom.defaultAppPadding,
             child: Column(
-              children: teamsWidgets,
+              children: [
+                const WinnerAnimationWidget(
+                  size: 300,
+                ),
+                Text(
+                  winnerTeam.name,
+                  style: theme.material.textTheme.headlineLarge,
+                ),
+                Text(
+                  winnerTeam.points.toString(),
+                  style: theme.material.textTheme.headlineLarge,
+                ),
+              ],
             ),
           ),
-          TextButton(
+          theme.custom.padding3,
+          Expanded(
+            child: ListView.builder(
+              itemCount: teams.length,
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Material(
+                        elevation: 3,
+                        child: Padding(
+                          padding: theme.custom.defaultAppPadding / 4,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                teams[index].name,
+                                style: theme.material.textTheme.titleMedium,
+                              ),
+                              Text(
+                                teams[index].points.toString(),
+                                style: theme.material.textTheme.titleMedium,
+                              ),
+                            ],
+                          ),
+                        )),
+                    if (index != teams.length - 1)
+                      ColoredBox(
+                        color: theme.custom.primaryColor.withOpacity(0),
+                        child: const SizedBox(
+                          width: double.infinity,
+                          height: 7,
+                        ),
+                      )
+                    else
+                      const SizedBox(
+                        height: 20,
+                      ),
+                  ],
+                );
+              },
+            ),
+          ),
+          ElevatedMenuButton(
               onPressed: () => _navigateToMenu(context),
               child: const Text('Menu'))
         ],

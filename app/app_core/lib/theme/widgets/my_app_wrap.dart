@@ -11,7 +11,7 @@ class MyAppWrap extends AppWrap {
     super.floatingActionButton,
     super.floatingActionButtonLocation,
     super.onWillPop,
-    super.backgroundColor = ThemeConstants.appColor,
+    super.backgroundColor = ThemeConstants.primaryColor,
     super.enableAuthentication = false,
   });
 }

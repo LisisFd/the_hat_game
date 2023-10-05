@@ -74,6 +74,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
   }
 
   Widget _getRow(int index) {
+    var theme = MyAppTheme.of(context);
     return ColoredBox(
       color: Colors.white,
       child: Row(
@@ -84,7 +85,7 @@ class _TeamsScreenState extends State<TeamsScreen> {
               padding: const EdgeInsets.only(left: 10),
               child: Text(
                 _currentTeams[index].name,
-                style: const TextStyle(fontSize: 25),
+                style: theme.material.textTheme.titleLarge,
               ),
             ),
           ),
@@ -126,123 +127,136 @@ class _TeamsScreenState extends State<TeamsScreen> {
 //TODO: add localization
   @override
   Widget build(BuildContext context) {
-    var theme = MyAppTheme.of(context).custom;
+    var theme = MyAppTheme.of(context);
     return MyAppWrap(
-        body: Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          child: const Text(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
             'Teams',
-            style: TextStyle(fontSize: 25),
-            textAlign: TextAlign.center,
           ),
         ),
-        Expanded(
-          child: AnimatedList(
-            key: _listTeamsKey,
-            initialItemCount: _currentTeams.length,
-            physics: CoreScrollPhysics.positionRetained,
-            itemBuilder:
-                (BuildContext context, int index, Animation<double> animation) {
-              return Column(
-                children: [
-                  Material(elevation: 3, child: _getRow(index)),
-                  if (index != _currentTeams.length - 1)
-                    ColoredBox(
-                      color: theme.primaryColor.withOpacity(0),
-                      child: const SizedBox(
-                        width: double.infinity,
-                        height: 7,
-                      ),
-                    )
-                  else
-                    const SizedBox(
-                      height: 20,
-                    ),
-                ],
-              );
-            },
-          ),
-        ),
-        ColoredBox(
-          color: MyAppTheme.getColorScheme().surface,
-          child: Column(
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                child: IntrinsicHeight(
-                  child: Stack(
+        body: Column(
+          children: [
+            Expanded(
+              child: AnimatedList(
+                key: _listTeamsKey,
+                initialItemCount: _currentTeams.length,
+                physics: CoreScrollPhysics.positionRetained,
+                itemBuilder: (BuildContext context, int index,
+                    Animation<double> animation) {
+                  return Column(
                     children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text(
-                              'Count players',
-                              style: TextStyle(fontSize: 15),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                      Material(elevation: 3, child: _getRow(index)),
+                      if (index != _currentTeams.length - 1)
+                        ColoredBox(
+                          color: theme.custom.primaryColor.withOpacity(0),
+                          child: const SizedBox(
+                            width: double.infinity,
+                            height: 7,
+                          ),
+                        )
+                      else
+                        const SizedBox(
+                          height: 20,
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            ColoredBox(
+              color: ColorPallet.colorBlue,
+              child: Column(
+                children: [
+                  Container(
+                    height: 3,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset:
+                              const Offset(0, 1), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: IntrinsicHeight(
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                IconButton(
-                                  onPressed: () {
-                                    if (_totalPlayers > _minPlayers) {
-                                      setState(() {
-                                        _totalPlayers--;
-                                      });
-                                    }
-                                  },
-                                  icon: const Icon(Icons.remove),
-                                ),
                                 Text(
-                                  _totalPlayers.toString(),
-                                  style: const TextStyle(fontSize: 25),
+                                  'Count players',
+                                  style: theme.material.textTheme.titleSmall,
                                 ),
-                                IconButton(
-                                  onPressed: () {
-                                    if (_totalPlayers < _maxPlayers) {
-                                      setState(() {
-                                        _totalPlayers++;
-                                      });
-                                    }
-                                  },
-                                  icon: const Icon(Icons.add),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {
+                                        if (_totalPlayers > _minPlayers) {
+                                          setState(() {
+                                            _totalPlayers--;
+                                          });
+                                        }
+                                      },
+                                      icon: const Icon(Icons.remove),
+                                    ),
+                                    Text(
+                                      _totalPlayers.toString(),
+                                      style:
+                                          theme.material.textTheme.titleLarge,
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        if (_totalPlayers < _maxPlayers) {
+                                          setState(() {
+                                            _totalPlayers++;
+                                          });
+                                        }
+                                      },
+                                      icon: const Icon(Icons.add),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: RawMaterialButton(
+                              elevation: 2.0,
+                              shape: const CircleBorder(),
+                              fillColor: ThemeConstants.lightBackground,
+                              onPressed: _addItem,
+                              child: Container(
+                                margin: theme.custom.defaultAppMargin,
+                                child: const Text('Add'),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: RawMaterialButton(
-                          elevation: 2.0,
-                          shape: const CircleBorder(),
-                          fillColor: Colors.white,
-                          onPressed: _addItem,
-                          child: Container(
-                              margin: const EdgeInsets.all(10),
-                              child: const Icon(Icons.add)),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  ElevatedMenuButton(
+                    onPressed: () => _createGame(context),
+                    child: const Text(
+                      'Next',
+                    ),
+                  ),
+                ],
               ),
-              MenuButton(
-                onPressed: () => _createGame(context),
-                child: Text(
-                  'Next',
-                  style: TextStyle(color: MyAppTheme.getColorScheme().surface),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ));
+            ),
+          ],
+        ));
   }
 }
 

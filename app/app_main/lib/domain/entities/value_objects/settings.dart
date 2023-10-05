@@ -9,6 +9,7 @@ class TheHatAppSettings implements IJsonWrite<TheHatAppSettings> {
   final bool animation;
   final Duration timePlayerTurn;
   final bool lastWord;
+  final bool isFirstLaunch;
 
   @override
   Map<String, dynamic> toJson() => _$TheHatAppSettingsToJson(this);
@@ -21,5 +22,6 @@ class TheHatAppSettings implements IJsonWrite<TheHatAppSettings> {
     this.animation = true,
     this.timePlayerTurn = const Duration(seconds: 60),
     this.lastWord = true,
+    this.isFirstLaunch = true,
   });
 }

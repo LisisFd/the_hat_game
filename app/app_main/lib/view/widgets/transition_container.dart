@@ -50,7 +50,7 @@ class TransitionContainerState extends State<TransitionContainer>
         _position = 0;
         var listener = _listener;
         if (listener != null) {
-          alignmentController.removeStatusListener(listener);
+          alignmentController?.removeStatusListener(listener);
         }
       });
     }
@@ -71,14 +71,14 @@ class TransitionContainerState extends State<TransitionContainer>
   }
 
   void _addControllerListeners() {
-    alignmentController.addListener(() {
+    alignmentController?.addListener(() {
       setState(() {
-        _dragAlignment = alignmentAnimation.value;
+        _dragAlignment = alignmentAnimation?.value ?? Alignment.center;
       });
     });
-    scaleController.addListener(() {
+    scaleController?.addListener(() {
       setState(() {
-        _multi = scaleAnimation.value;
+        _multi = scaleAnimation?.value ?? 1;
       });
     });
   }
@@ -142,27 +142,27 @@ class TransitionContainerState extends State<TransitionContainer>
       end = Alignment(-(width / 2) / _position, _dragAlignment.y);
     }
 
-    alignmentAnimation = alignmentController.drive(AlignmentTween(
+    alignmentAnimation = alignmentController?.drive(AlignmentTween(
       begin: _dragAlignment,
       end: withBreakPoints ? end : Alignment.center,
     ));
     if (!withBreakPoints) {
-      scaleAnimation = scaleController.drive(Tween<double>(
+      scaleAnimation = scaleController?.drive(Tween<double>(
         begin: _multi,
         end: _defaultScale,
       ));
-      scaleController.reset();
-      scaleController.forward();
+      scaleController?.reset();
+      scaleController?.forward();
     }
     listener(status) {
       _animationIsEnd(status, withBreakPoints, _dragAlignment.x > 0);
     }
 
     _listener = listener;
-    alignmentController.addStatusListener(listener);
+    alignmentController?.addStatusListener(listener);
 
-    alignmentController.reset();
-    alignmentController.forward();
+    alignmentController?.reset();
+    alignmentController?.forward();
   }
 
   void _animationIsEnd(
@@ -184,7 +184,7 @@ class TransitionContainerState extends State<TransitionContainer>
     _setUp();
     return GestureDetector(
       onPanDown: (details) {
-        alignmentController.stop();
+        alignmentController?.stop();
       },
       onPanUpdate: _onPanUpdate,
       onPanEnd: _onPanEnd,
@@ -200,18 +200,27 @@ class TransitionContainerState extends State<TransitionContainer>
             key: _widgetKey,
             scale: _multi,
             child: ScaleTransition(
-              scale: previewScaleAnimation,
+              scale: previewScaleAnimation ??
+                  CurvedAnimation(
+                    parent: previewScaleController ??
+                        AnimationController(
+                          vsync: this,
+                          duration: const Duration(milliseconds: 400),
+                        ),
+                    curve: Curves.fastOutSlowIn,
+                  ),
               child: AnimatedOpacity(
                 opacity: _isSetUp ? 1.0 : 0.0,
                 curve: Curves.easeInOut,
                 duration: const Duration(milliseconds: 300),
-                child: ColoredBox(
-                  color: widget.color,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 30, horizontal: 40),
-                    child: widget.child,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1.5),
+                    color: widget.color,
                   ),
+                  child: widget.child,
                 ),
               ),
             ),

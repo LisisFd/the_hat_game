@@ -106,100 +106,119 @@ class _WordsScreenState extends State<WordsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = MyAppTheme.of(context);
+    final padding = theme.custom.defaultAppMargin.vertical / 2;
     return MyAppWrap(
-        body: Column(
-      children: [
-        Column(
-          children: [
-            const Text(
-              'Words',
-              style: TextStyle(fontSize: 40),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 2,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-                color: const Color(0xFFFFE7D0),
-              ),
-              margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-              padding: const EdgeInsets.all(20),
-              child: const Text(
-                'Введите слова потомушо ну типо надо как бі все мі люди и ну єто ті понял корч',
-                style: TextStyle(fontSize: 20),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            'Words',
+          ),
         ),
-        Expanded(
-          child: ColoredBox(
-            color: Colors.white60,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 40),
-                      child: Form(
-                        key: _formKey,
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                              fillColor: Colors.white70,
-                              filled: true,
-                              border: OutlineInputBorder()),
-                          validator: (val) {
-                            String? res = 'Please write a word';
-                            if (val != null && val.isNotEmpty) {
-                              res = null;
-                            }
-                            return res;
-                          },
-                          onChanged: (val) {
-                            _currentWord = val;
-                          },
+        body: LayoutBuilder(builder: (context, constraint) {
+          return SingleChildScrollView(
+              child: ConstrainedBox(
+            constraints: BoxConstraints(minHeight: constraint.maxHeight),
+            child: IntrinsicHeight(
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 2,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
                         ),
-                      ),
+                      ],
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      color: const Color(0xFFFFE7D0),
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(20),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: padding * 4, vertical: padding * 2),
+                    padding: theme.custom.defaultAppPadding,
+                    child: Text(
+                      'Введите слова потомушо ну типо надо как бі все мі люди и ну єто ті понял корч',
+                      style: theme.material.textTheme.bodyLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
                       decoration: const BoxDecoration(
-                          borderRadius:
-                              BorderRadius.all(Radius.elliptical(30, 30))),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30)),
+                        color: ThemeConstants.lightBackground,
+                      ),
+                      padding: EdgeInsets.only(
+                          top: padding, left: padding, right: padding),
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Player: $playerNumber',
-                            style: const TextStyle(fontSize: 15),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Form(
+                                key: _formKey,
+                                child: TextFormField(
+                                  decoration: const InputDecoration(
+                                      fillColor: Colors.white70,
+                                      filled: true,
+                                      border: OutlineInputBorder()),
+                                  validator: (val) {
+                                    String? res = 'Please write a word';
+                                    if (val != null && val.isNotEmpty) {
+                                      res = null;
+                                    }
+                                    return res;
+                                  },
+                                  onChanged: (val) {
+                                    _currentWord = val;
+                                  },
+                                ),
+                              ),
+                              Container(
+                                padding:
+                                    EdgeInsets.symmetric(vertical: padding * 2),
+                                decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.elliptical(30, 30))),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Player: $playerNumber',
+                                      style: theme.material.textTheme.bodyLarge,
+                                    ),
+                                    Text(
+                                      'Word number: $countWords',
+                                      style: theme.material.textTheme.bodyLarge,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            'Word number: $countWords',
-                            style: const TextStyle(fontSize: 15),
+                          ElevatedMenuButton(
+                            key: ValueKey(_gameIsReady),
+                            lightStyle: false,
+                            onPressed:
+                                !_gameIsReady ? _inTheHatPress : _nextPress,
+                            child: !_gameIsReady
+                                ? const Text('In the hat')
+                                : const Text('Next'),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-                MenuButton(
-                  key: ValueKey(_gameIsReady),
-                  onPressed: !_gameIsReady ? _inTheHatPress : _nextPress,
-                  child: !_gameIsReady
-                      ? const Text('In the hat')
-                      : const Text('Next'),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
-      ],
-    ));
+          ));
+        }));
   }
 }

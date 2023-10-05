@@ -58,17 +58,21 @@ class _RulesScreenState extends State<RulesScreen> {
               child: _currentRule.widget,
             ),
             theme.custom.padding2,
-            Row(
-              children: [
-                TextButton(
-                  onPressed: _currentRule == _rules.first ? null : _prev,
-                  child: const Text('Previous'),
-                ),
-                TextButton(
-                  onPressed: _currentRule == _rules.last ? null : _next,
-                  child: const Text('Next'),
-                ),
-              ],
+            Container(
+              margin: theme.custom.defaultAppMargin,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  OutlinedButton(
+                    onPressed: _currentRule == _rules.first ? null : _prev,
+                    child: const Text('Previous'),
+                  ),
+                  OutlinedButton(
+                    onPressed: _currentRule == _rules.last ? null : _next,
+                    child: const Text('Next'),
+                  ),
+                ],
+              ),
             ),
           ],
         ));

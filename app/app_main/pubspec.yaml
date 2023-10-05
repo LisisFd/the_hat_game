@@ -26,6 +26,7 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   audioplayers: ^5.1.0
+  lottie: ^2.6.0
   #semi_app imports
   app_core:
     path: "../app_core"
