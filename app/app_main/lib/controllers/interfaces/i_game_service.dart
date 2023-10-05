@@ -26,6 +26,8 @@ abstract class IGameService {
 
   bool get gameIsNotEmpty;
 
+  bool get generalLastWord;
+
   GameState get gameState;
 
   void setNewScreen(CurrentScreen newScreen);
@@ -35,18 +37,19 @@ abstract class IGameService {
   void addWord(String word);
 
   void updateGame({
-    CurrentScreen? newScreen,
     GameState? gameState,
     Duration? time,
     int? pointPlus,
     List<Word>? words,
+    Team? anotherTeam,
+    bool isLast = false,
   });
 
   void setNewLap();
 
   void changeCurrentTeam();
 
-  void updateWord(bool isRight);
+  void updateWord(bool isRight, [Team? anotherTeam]);
 
   void saveGame();
 

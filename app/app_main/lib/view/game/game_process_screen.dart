@@ -110,22 +110,33 @@ class _GameProcessScreenState extends State<GameProcessScreen>
     });
   }
 
-  void _checkWord(bool right) {
-    if (right) {
-      _gameService.updateGame(pointPlus: _semanticOne);
-    }
-
+  void _checkWord(bool right) async {
     if (_isLast || _gameState == GameState.lastWord) {
+      _timer?.stop();
       _gameService.updateGame(
           time: _settingService.appSettings.value.timePlayerTurn,
           gameState: GameState.init);
-      _gameService.updateWord(right);
+      Team? anotherTeam;
+      if (_gameService.generalLastWord &&
+          right &&
+          _gameState == GameState.lastWord) {
+        anotherTeam = await TeamsDialog.show(context);
+      } else {
+        if (right) {
+          _gameService.updateGame(pointPlus: _semanticOne);
+        }
+      }
+      _gameService.updateWord(right, anotherTeam);
       _gameService.saveGame();
-      _timer?.stop();
-      RootAppNavigation.of(context)
-          .pushReplacementWithoutAnimation(_appRoutes.teamResult());
+      if (mounted) {
+        RootAppNavigation.of(context)
+            .pushReplacementWithoutAnimation(_appRoutes.teamResult());
+      }
     } else {
       setState(() {
+        if (right) {
+          _gameService.updateGame(pointPlus: _semanticOne);
+        }
         _gameService.updateWord(right);
       });
     }
@@ -227,7 +238,9 @@ class _GameProcessScreenState extends State<GameProcessScreen>
                 onStop: _onStopTimer,
                 currentDuration: _gameService.roundTime,
               )
-            : Text(localization.title_last_word),
+            : Text(_gameService.generalLastWord
+                ? localization.title_general_last_word
+                : localization.title_last_word),
         theme.custom.padding2,
       ],
     );

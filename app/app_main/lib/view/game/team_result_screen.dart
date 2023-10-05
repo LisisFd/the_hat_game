@@ -5,6 +5,7 @@ import 'package:app_main/navigation/app_routes.dart';
 import 'package:app_main/view/view.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
+import 'package:core_ui/core_ui.dart';
 
 import '../../domain/domain.dart';
 
@@ -26,10 +27,17 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
 
   Team get _currentTeam => _gameService.currentTeam;
 
+  Team? get _lastWordTeam => _gameService.appGame.value?.lastWordTeam;
+
   Lap get _currentLap => _gameService.currentLap;
 
-  int get _plusPoints =>
-      _words.where((w) => w.status == WordStatus.right).length;
+  int get _plusPoints {
+    int points = _words.where((w) => w.status == WordStatus.right).length;
+    if (_lastWordTeam?.name != _currentTeam.name && _lastWordTeam != null) {
+      points -= 1;
+    }
+    return points;
+  }
 
   late final List<Word> _words = _gameService.wordsWithStatus
       .where((w) => w.status == WordStatus.right || w.status == WordStatus.skip)
@@ -41,14 +49,25 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
     super.initState();
   }
 
-  void _updateWordState(Word word) {
+  void _updateWordState(Word word) async {
+    Team? anotherTeam;
+    bool isLast = false;
+    int wordIndex = _words.indexWhere((w) => w.id == word.id);
+    WordStatus newStatus =
+        word.status == WordStatus.right ? WordStatus.skip : WordStatus.right;
+    if (word.isLastWord && _gameService.generalLastWord) {
+      if (newStatus == WordStatus.right) {
+        anotherTeam = await TeamsDialog.show(context);
+      } else {
+        isLast = true;
+      }
+    }
     setState(() {
-      int wordIndex = _words.indexWhere((w) => w.id == word.id);
-      WordStatus newStatus =
-          word.status == WordStatus.right ? WordStatus.skip : WordStatus.right;
       _words[wordIndex] = _words[wordIndex].copyWith(status: newStatus);
       _gameService.updateGame(
-          pointPlus: newStatus == WordStatus.right ? 1 : -1);
+          pointPlus: newStatus == WordStatus.right ? 1 : -1,
+          anotherTeam: anotherTeam,
+          isLast: isLast);
     });
   }
 
@@ -105,7 +124,15 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
   Widget build(BuildContext context) {
     final localization = context.localization();
     final theme = MyAppTheme.of(context);
-    List<Widget> wordsWidgets = _words.map((w) {
+    final List<Widget> wordsWidgets = _words.map((w) {
+      String word = w.word;
+      if (w.isLastWord && _gameService.generalLastWord) {
+        if (w.status == WordStatus.skip) {
+          word += '(${localization.title_general})';
+        } else {
+          word += '(${_lastWordTeam?.name})';
+        }
+      }
       return Column(
         children: [
           theme.custom.padding1,
@@ -113,7 +140,7 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                w.word,
+                word,
                 style: theme.material.textTheme.titleSmall,
               ),
               GestureDetector(
@@ -177,6 +204,23 @@ class _TeamResultScreenState extends State<TeamResultScreen> {
                               style: theme.material.textTheme.titleMedium,
                             ),
                           ],
+                        ),
+                        AnimatedVisibility(
+                          visible: _lastWordTeam != null &&
+                              _lastWordTeam?.name != _currentTeam.name,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _lastWordTeam?.name ?? "null",
+                                style: theme.material.textTheme.titleMedium,
+                              ),
+                              Text(
+                                '+1',
+                                style: theme.material.textTheme.titleMedium,
+                              ),
+                            ],
+                          ),
                         ),
                         theme.custom.padding1,
                       ],

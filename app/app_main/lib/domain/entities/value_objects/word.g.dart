@@ -13,6 +13,8 @@ abstract class _$WordCWProxy {
 
   Word status(WordStatus status);
 
+  Word isLastWord(bool isLastWord);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Word(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -23,6 +25,7 @@ abstract class _$WordCWProxy {
     int? id,
     String? word,
     WordStatus? status,
+    bool? isLastWord,
   });
 }
 
@@ -42,6 +45,9 @@ class _$WordCWProxyImpl implements _$WordCWProxy {
   Word status(WordStatus status) => this(status: status);
 
   @override
+  Word isLastWord(bool isLastWord) => this(isLastWord: isLastWord);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Word(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -53,6 +59,7 @@ class _$WordCWProxyImpl implements _$WordCWProxy {
     Object? id = const $CopyWithPlaceholder(),
     Object? word = const $CopyWithPlaceholder(),
     Object? status = const $CopyWithPlaceholder(),
+    Object? isLastWord = const $CopyWithPlaceholder(),
   }) {
     return Word(
       id: id == const $CopyWithPlaceholder() || id == null
@@ -67,6 +74,11 @@ class _$WordCWProxyImpl implements _$WordCWProxy {
           ? _value.status
           // ignore: cast_nullable_to_non_nullable
           : status as WordStatus,
+      isLastWord:
+          isLastWord == const $CopyWithPlaceholder() || isLastWord == null
+              ? _value.isLastWord
+              // ignore: cast_nullable_to_non_nullable
+              : isLastWord as bool,
     );
   }
 }
@@ -86,12 +98,14 @@ Word _$WordFromJson(Map<String, dynamic> json) => Word(
       word: json['word'] as String,
       status: $enumDecodeNullable(_$WordStatusEnumMap, json['status']) ??
           WordStatus.active,
+      isLastWord: json['isLastWord'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$WordToJson(Word instance) => <String, dynamic>{
       'id': instance.id,
       'word': instance.word,
       'status': _$WordStatusEnumMap[instance.status]!,
+      'isLastWord': instance.isLastWord,
     };
 
 const _$WordStatusEnumMap = {

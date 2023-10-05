@@ -15,6 +15,8 @@ abstract class _$TheHatAppGameCWProxy {
 
   TheHatAppGame roundTime(Duration roundTime);
 
+  TheHatAppGame lastWordTeam(Team? lastWordTeam);
+
   TheHatAppGame words(List<Word> words);
 
   TheHatAppGame currentLap(Lap currentLap);
@@ -22,6 +24,8 @@ abstract class _$TheHatAppGameCWProxy {
   TheHatAppGame currentScreen(CurrentScreen currentScreen);
 
   TheHatAppGame gameState(GameState gameState);
+
+  TheHatAppGame generalLastWordGame(bool generalLastWordGame);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `TheHatAppGame(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -34,10 +38,12 @@ abstract class _$TheHatAppGameCWProxy {
     int? playersCount,
     int? countWordsOnPlayer,
     Duration? roundTime,
+    Team? lastWordTeam,
     List<Word>? words,
     Lap? currentLap,
     CurrentScreen? currentScreen,
     GameState? gameState,
+    bool? generalLastWordGame,
   });
 }
 
@@ -62,6 +68,10 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
   TheHatAppGame roundTime(Duration roundTime) => this(roundTime: roundTime);
 
   @override
+  TheHatAppGame lastWordTeam(Team? lastWordTeam) =>
+      this(lastWordTeam: lastWordTeam);
+
+  @override
   TheHatAppGame words(List<Word> words) => this(words: words);
 
   @override
@@ -73,6 +83,10 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
 
   @override
   TheHatAppGame gameState(GameState gameState) => this(gameState: gameState);
+
+  @override
+  TheHatAppGame generalLastWordGame(bool generalLastWordGame) =>
+      this(generalLastWordGame: generalLastWordGame);
 
   @override
 
@@ -87,10 +101,12 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
     Object? playersCount = const $CopyWithPlaceholder(),
     Object? countWordsOnPlayer = const $CopyWithPlaceholder(),
     Object? roundTime = const $CopyWithPlaceholder(),
+    Object? lastWordTeam = const $CopyWithPlaceholder(),
     Object? words = const $CopyWithPlaceholder(),
     Object? currentLap = const $CopyWithPlaceholder(),
     Object? currentScreen = const $CopyWithPlaceholder(),
     Object? gameState = const $CopyWithPlaceholder(),
+    Object? generalLastWordGame = const $CopyWithPlaceholder(),
   }) {
     return TheHatAppGame(
       teams: teams == const $CopyWithPlaceholder() || teams == null
@@ -111,6 +127,10 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
           ? _value.roundTime
           // ignore: cast_nullable_to_non_nullable
           : roundTime as Duration,
+      lastWordTeam: lastWordTeam == const $CopyWithPlaceholder()
+          ? _value.lastWordTeam
+          // ignore: cast_nullable_to_non_nullable
+          : lastWordTeam as Team?,
       words: words == const $CopyWithPlaceholder() || words == null
           ? _value.words
           // ignore: cast_nullable_to_non_nullable
@@ -129,6 +149,12 @@ class _$TheHatAppGameCWProxyImpl implements _$TheHatAppGameCWProxy {
           ? _value.gameState
           // ignore: cast_nullable_to_non_nullable
           : gameState as GameState,
+      generalLastWordGame:
+          generalLastWordGame == const $CopyWithPlaceholder() ||
+                  generalLastWordGame == null
+              ? _value.generalLastWordGame
+              // ignore: cast_nullable_to_non_nullable
+              : generalLastWordGame as bool,
     );
   }
 }
@@ -151,6 +177,9 @@ TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
       playersCount: json['playersCount'] as int,
       countWordsOnPlayer: json['countWordsOnPlayer'] as int,
       roundTime: Duration(microseconds: json['roundTime'] as int),
+      lastWordTeam: json['lastWordTeam'] == null
+          ? null
+          : Team.fromJson(json['lastWordTeam'] as Map<String, dynamic>),
       words: (json['words'] as List<dynamic>?)
               ?.map((e) => Word.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -162,6 +191,7 @@ TheHatAppGame _$TheHatAppGameFromJson(Map<String, dynamic> json) =>
               CurrentScreen.setUp,
       gameState: $enumDecodeNullable(_$GameStateEnumMap, json['gameState']) ??
           GameState.init,
+      generalLastWordGame: json['generalLastWordGame'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
@@ -174,6 +204,8 @@ Map<String, dynamic> _$TheHatAppGameToJson(TheHatAppGame instance) =>
       'currentLap': _$LapEnumMap[instance.currentLap]!,
       'currentScreen': _$CurrentScreenEnumMap[instance.currentScreen]!,
       'gameState': _$GameStateEnumMap[instance.gameState]!,
+      'generalLastWordGame': instance.generalLastWordGame,
+      'lastWordTeam': instance.lastWordTeam?.toJson(),
     };
 
 const _$LapEnumMap = {

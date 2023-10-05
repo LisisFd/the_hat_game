@@ -64,12 +64,6 @@ class _MainScreenState extends State<MainScreen> with SubjectWidgetContext {
         ),
         child: Text(localize.title_settings),
       ),
-      ElevatedButton(
-        onPressed: () {
-          TeamsDialog.show(context);
-        },
-        child: const Text('teams'),
-      ),
     ];
     return MyAppWrap(
       body: Center(
