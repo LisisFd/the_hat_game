@@ -5,10 +5,15 @@ import 'package:lottie/lottie.dart';
 class WinnerAnimationWidget extends StatefulWidget {
   final double? size;
   final bool complete;
+  final bool skipAnimation;
   final void Function()? onStop;
 
   const WinnerAnimationWidget(
-      {super.key, this.size, this.complete = false, this.onStop});
+      {super.key,
+      this.size,
+      this.complete = false,
+      this.onStop,
+      this.skipAnimation = false});
 
   @override
   State<WinnerAnimationWidget> createState() => _WinnerAnimationWidgetState();
@@ -26,7 +31,9 @@ class _WinnerAnimationWidgetState extends State<WinnerAnimationWidget>
     _winner = Lottie.asset(AppConfig.animationWinner,
         controller: _winnerController, onLoaded: (composition) {
       _winnerController?.duration = composition.duration;
-      _winnerController?.repeat();
+      if (!widget.skipAnimation) {
+        _winnerController?.repeat();
+      }
     });
 
     super.initState();

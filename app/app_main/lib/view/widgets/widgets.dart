@@ -7,6 +7,7 @@ export 'hat_rotate_widget.dart';
 export 'helper_game_widget.dart';
 export 'locale_flag_widget.dart';
 export 'rules_widget.dart';
+export 'teams_dialog.dart';
 export 'timer_widget.dart';
 export 'transition_container.dart';
 export 'transition_container_mixin.dart';

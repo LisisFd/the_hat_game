@@ -11,6 +11,7 @@ class Word implements IJsonWrite<Word> {
   final int id;
   final String word;
   final WordStatus status;
+  final bool isLastWord;
 
   @override
   Map<String, dynamic> toJson() => _$WordToJson(this);
@@ -29,5 +30,6 @@ class Word implements IJsonWrite<Word> {
     required this.id,
     required this.word,
     this.status = WordStatus.active,
+    this.isLastWord = false,
   });
 }

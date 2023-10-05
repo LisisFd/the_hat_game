@@ -26,6 +26,9 @@ class TheHatGameService extends IGameService {
   GameState get gameState => appGame.value?.gameState ?? GameState.values.first;
 
   @override
+  bool get generalLastWord => appGame.value?.generalLastWordGame ?? false;
+
+  @override
   Duration get roundTime {
     Duration? savedTime = appGame.value?.roundTime;
     if (savedTime == null || savedTime == Duration.zero) {
@@ -95,6 +98,7 @@ class TheHatGameService extends IGameService {
       playersCount: countOfPlayers,
       countWordsOnPlayer: _settingService.appSettings.value.countWordsOnPlayer,
       roundTime: _settingService.appSettings.value.timePlayerTurn,
+      generalLastWordGame: _settingService.appSettings.value.lastWord,
     );
     _saveGame(game);
   }
@@ -111,22 +115,45 @@ class TheHatGameService extends IGameService {
   }
 
   @override
-  void updateGame(
-      {GameState? gameState,
-      CurrentScreen? newScreen,
-      Duration? time,
-      int? pointPlus,
-      List<Word>? words}) {
+  void updateGame({
+    GameState? gameState,
+    Duration? time,
+    int? pointPlus,
+    List<Word>? words,
+    Team? anotherTeam,
+    bool isLast = false,
+  }) {
     int currentTeamIndex = teams.indexWhere((t) => t.name == currentTeam.name);
+    Team team = currentTeam;
+
+    if (anotherTeam != null) {
+      currentTeamIndex = teams.indexWhere((t) => t.name == anotherTeam?.name);
+      team = anotherTeam;
+      pointPlus ??= 1;
+      anotherTeam =
+          anotherTeam.copyWith(points: anotherTeam.points + pointPlus);
+    } else if (isLast) {
+      currentTeamIndex =
+          teams.indexWhere((t) => t.name == _appGame.value?.lastWordTeam?.name);
+      if (currentTeamIndex != -1) {
+        anotherTeam = _appGame.value!.lastWordTeam!;
+        team = anotherTeam;
+      }
+    }
+    team = team.copyWith(points: team.points + (pointPlus ?? 0));
     teams[currentTeamIndex] = teams[currentTeamIndex].copyWith(
-      points: currentTeam.points + (pointPlus ?? 0),
+      points: team.points,
     );
-    _appGame.setValue(_appGame.value?.copyWith(
+    anotherTeam ??= _appGame.value?.lastWordTeam;
+    _appGame.setValue(
+      _appGame.value?.copyWith(
         gameState: gameState,
         roundTime: time,
         teams: teams,
         words: words,
-        currentScreen: newScreen));
+        lastWordTeam: isLast ? null : anotherTeam,
+      ),
+    );
   }
 
   @override
@@ -156,28 +183,34 @@ class TheHatGameService extends IGameService {
   }
 
   @override
-  void updateWord(isRight) {
+  void updateWord(isRight, [Team? anotherTeam]) {
     TheHatAppGame? game = _appGame.value;
     if (game == null) {
       return;
     }
+    if (anotherTeam?.name == currentTeam.name) {
+      anotherTeam = null;
+    }
     List<Word> currentWords = game.words.toList();
     int indexWord = currentWords.indexWhere((w) => w.id == word.id);
     if (isRight) {
-      currentWords[indexWord] =
-          currentWords[indexWord].copyWith(status: WordStatus.right);
+      currentWords[indexWord] = currentWords[indexWord]
+          .copyWith(status: WordStatus.right, isLastWord: anotherTeam != null);
     } else {
       currentWords[indexWord] =
           currentWords[indexWord].copyWith(status: WordStatus.skip);
     }
-
-    _appGame.setValue(_appGame.value?.copyWith(words: currentWords));
+    updateGame(words: currentWords, anotherTeam: anotherTeam);
   }
 
   @override
   void setNewScreen(CurrentScreen newScreen) {
     if (_appGame.value?.currentScreen != newScreen) {
-      updateGame(newScreen: newScreen);
+      _appGame.setValue(
+        _appGame.value?.copyWith(
+          currentScreen: newScreen,
+        ),
+      );
       saveGame();
     }
   }

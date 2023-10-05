@@ -44,6 +44,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get title_settings => 'Налаштування';
 
   @override
+  String get title_general_last_word => 'Загальне останнє слово';
+
+  @override
   String get title_last_word => 'Останнє слово';
 
   @override
@@ -84,6 +87,12 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get title_language => 'Оберіть мову:';
+
+  @override
+  String get title_team_word => 'Оберіть команду:';
+
+  @override
+  String get title_general => 'загальне';
 
   @override
   String get description_great =>

@@ -29,15 +29,15 @@ class TeamsLocalRepository extends ITeamsRepository {
   @override
   Future<Teams> getTeams() async {
     Map<String, dynamic> json = {};
-    if (!_isInit) {
-      try {
-        json = await _readJson(_jsonPath);
-        _teams = Teams.fromJson(json);
-        _isInit = true;
-      } catch (e) {
-        log('Invalid reading teams operation');
-      }
+
+    try {
+      json = await _readJson(_jsonPath);
+      _teams = Teams.fromJson(json);
+      _isInit = true;
+    } catch (e) {
+      log('Invalid reading teams operation');
     }
+
     return _teams;
   }
 

@@ -109,7 +109,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 _updateSettings(currentSettings.copyWith(animation: val));
               })),
       _SettingsModel(
-          title: localization.title_round_timer,
+          title:
+              '${localization.title_round_timer}:${currentSettings.timePlayerTurn.inSeconds}',
           action: Slider(
               max: _settingsService.defaultDuration.max,
               min: _settingsService.defaultDuration.min,

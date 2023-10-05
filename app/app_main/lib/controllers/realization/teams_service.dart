@@ -7,7 +7,7 @@ class TeamsService extends ITeamsService {
   late final ITeamsRepository _teamsRepository;
   late final ILocaleRepository _localeRepository;
   late final AppSubjectContext _appSubjectContext;
-  final List<Team> _teams = [];
+  List<Team> _teams = [];
 
   @override
   List<Team> get teams => _teams;
@@ -31,10 +31,10 @@ class TeamsService extends ITeamsService {
   }
 
   Future<void> _initTeams(String? locale) async {
-    _teams.clear();
+    _teams = [];
     List<String> repoTeams =
         await _teamsRepository.getTeamsByLocale(locale ?? AppConfig.defLocale);
-    _teams.addAll(repoTeams.map((t) => Team(name: t)));
+    _teams = repoTeams.map((t) => Team(name: t)).toList();
   }
 }
 
