@@ -4,11 +4,16 @@ import 'package:lottie/lottie.dart';
 
 class HatBounceWidget extends StatefulWidget {
   final double? size;
+  final bool skipAnimation;
   final bool complete;
   final void Function()? onStop;
 
   const HatBounceWidget(
-      {super.key, this.size, this.complete = false, this.onStop});
+      {super.key,
+      this.size,
+      this.complete = false,
+      this.onStop,
+      this.skipAnimation = false});
 
   @override
   State<HatBounceWidget> createState() => _HatBounceWidgetState();
@@ -26,8 +31,10 @@ class _HatBounceWidgetState extends State<HatBounceWidget>
     _hatBounce = Lottie.asset(AppConfig.animationHatBounce,
         controller: _hatController, onLoaded: (composition) {
       _hatController?.duration = composition.duration;
-      _hatController?.forward();
-      _hatController?.addStatusListener(_listener);
+      if (!widget.skipAnimation) {
+        _hatController?.forward();
+        _hatController?.addStatusListener(_listener);
+      }
     });
 
     super.initState();

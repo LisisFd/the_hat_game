@@ -32,6 +32,8 @@ class WinnerScreen extends StatelessWidget {
     final localization = context.localization();
     final theme = MyAppTheme.of(context);
     final IGameService gameService = getWidgetService<IGameService>();
+    final ISettingService settingService = getWidgetService<ISettingService>();
+    bool skipAnimation = !settingService.appSettings.value.animation;
     List<Team> teams = gameService.teams.toList();
 
     teams.sort((t, t2) => t2.points.compareTo(t.points));
@@ -51,6 +53,7 @@ class WinnerScreen extends StatelessWidget {
               children: [
                 const WinnerAnimationWidget(
                   size: 300,
+                  skipAnimation: skipAnimation,
                 ),
                 Text(
                   winnerTeam.name,

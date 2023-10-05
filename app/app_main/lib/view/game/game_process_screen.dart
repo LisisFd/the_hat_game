@@ -47,7 +47,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
   bool get _helper => _settingService.appSettings.value.isFirstLaunch;
   bool _wordView = false;
   bool _startBounce = false;
-  bool _skipAnimation = false;
+  late bool _skipAnimation = !_settingService.appSettings.value.animation;
 
   @override
   void initState() {
@@ -73,7 +73,11 @@ class _GameProcessScreenState extends State<GameProcessScreen>
 
   void _startGame() {
     setState(() {
-      _startBounce = true;
+      if (_skipAnimation) {
+        _gameService.updateGame(gameState: GameState.play);
+      } else {
+        _startBounce = true;
+      }
     });
   }
 
@@ -188,6 +192,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
             children: [
               HatBounceWidget(
                 complete: _startBounce,
+                skipAnimation: _skipAnimation,
                 onStop: () {
                   setState(() {
                     _gameService.updateGame(gameState: GameState.play);
