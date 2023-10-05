@@ -237,6 +237,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
                 key: _timerKey,
                 onStop: _onStopTimer,
                 currentDuration: _gameService.roundTime,
+                baseDuration: _settingService.appSettings.value.timePlayerTurn,
               )
             : Text(_gameService.generalLastWord
                 ? localization.title_general_last_word
