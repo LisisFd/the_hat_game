@@ -51,7 +51,7 @@ class WinnerScreen extends StatelessWidget {
             padding: theme.custom.defaultAppPadding,
             child: Column(
               children: [
-                const WinnerAnimationWidget(
+                WinnerAnimationWidget(
                   size: 300,
                   skipAnimation: skipAnimation,
                 ),
