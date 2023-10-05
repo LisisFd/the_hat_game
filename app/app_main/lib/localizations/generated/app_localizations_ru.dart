@@ -83,6 +83,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get title_ready => 'Готовятся к игре';
 
   @override
+  String get title_language => 'Выберите язык:';
+
+  @override
   String get description_great =>
       'Пожалуйста, передайте устройство следующему игроку';
 
@@ -123,4 +126,13 @@ class AppLocalizationsRu extends AppLocalizations {
   String title_word_number(String number) {
     return 'Осталось слов: $number';
   }
+
+  @override
+  String get ua => 'Украинский';
+
+  @override
+  String get en => 'Английский';
+
+  @override
+  String get r => 'Русский';
 }

@@ -4,7 +4,6 @@ import 'package:core_get_it/core_get_it.dart';
 import 'package:core_storage/core_storage.dart';
 import 'package:core_utils/core_utils.dart';
 
-import '../../domain/repositories/app_life_style_repository.dart';
 import '../interfaces/interfaces.dart';
 
 class TheHatGameService extends IGameService {

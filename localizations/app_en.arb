@@ -25,6 +25,7 @@
   "title_words": "Words",
   "title_great": "Great",
   "title_ready": "Ready to game",
+  "title_language": "Choose a language:",
   "description_great": "Please, pass device to the next player",
   "error_input_word": "Please write a word",
   "rules_alias": "Explain words using synonyms, antonyms, descriptions and various hints without using cognate words.",
@@ -58,5 +59,8 @@
         "example": "1"
       }
     }
-  }
+  },
+  "ua": "Ukrainian",
+  "en": "English",
+  "r": "Russian"
 }

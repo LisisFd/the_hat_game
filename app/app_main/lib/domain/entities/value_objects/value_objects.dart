@@ -1,4 +1,5 @@
 //GENERATED BARREL FILE
+export 'app_locale.dart';
 export 'current_screen.dart';
 export 'duration_seconds.dart';
 export 'game_state.dart';

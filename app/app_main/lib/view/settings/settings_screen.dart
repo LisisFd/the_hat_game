@@ -165,7 +165,8 @@ class _SettingsElem extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = MyAppTheme.of(context);
     List<Widget> widgets = [
-      Text(child.title, style: theme.material.textTheme.titleSmall),
+      Expanded(
+          child: Text(child.title, style: theme.material.textTheme.titleSmall)),
       child.action
     ];
     Widget finalWidget = child.position == _SettingsPosition.vertical
@@ -177,11 +178,13 @@ class _SettingsElem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: widgets,
           );
-    return DefaultContainer(
-        padding: theme.custom.defaultAppPadding / 2,
-        margin: EdgeInsets.symmetric(
-            vertical: theme.custom.defaultAppMargin.vertical / 2),
-        child: finalWidget);
+    return IntrinsicHeight(
+      child: DefaultContainer(
+          padding: theme.custom.defaultAppPadding / 2,
+          margin: EdgeInsets.symmetric(
+              vertical: theme.custom.defaultAppMargin.vertical / 2),
+          child: finalWidget),
+    );
   }
 }
 

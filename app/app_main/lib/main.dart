@@ -1,6 +1,7 @@
 import "dart:async";
 
 import 'package:app_core/app_core.dart';
+import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/localization.dart';
 import 'package:app_main/services.dart';
 import 'package:core_app_test/core_app_testing.dart';
@@ -27,6 +28,8 @@ Future<GetIt> initFullApp() {
     container.addErrorHandling();
     container.addLocalization(supportedLocales: [
       const Locale("en"),
+      const Locale("uk"),
+      const Locale("ru"),
     ]);
 
     completer.complete(container);
@@ -54,32 +57,47 @@ Future _runWithDependencyInjection(
   runApp(rootWidget);
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with SubjectWidgetContext {
+  final RootAppNavigation _navigation = getWidgetService<RootAppNavigation>();
+  final LocalizationService _localizationService =
+      getWidgetService<LocalizationService>();
+  final IAppLocaleService _appLocaleService =
+      getWidgetService<IAppLocaleService>();
+
+  @override
+  void initState() {
+    listen(_appLocaleService.appLocale);
+    super.initState();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    RootAppNavigation navigation = getWidgetService<RootAppNavigation>();
-    LocalizationService localizationService =
-        getWidgetService<LocalizationService>();
     return MaterialApp(
         onGenerateTitle: (context) => context.localization().appName,
         debugShowCheckedModeBanner: false,
         theme: MyAppTheme.createMaterial(),
         themeMode: ThemeMode.light,
-        onGenerateInitialRoutes: navigation.onGenerateInitialRoutes,
-        onGenerateRoute: navigation.onGenerateRoute,
+        onGenerateInitialRoutes: _navigation.onGenerateInitialRoutes,
+        onGenerateRoute: _navigation.onGenerateRoute,
         builder: (context, widget) => widget == null
             ? const SizedBox.shrink()
             : AppTestWrap(
                 child: widget,
               ),
-        navigatorKey: navigation.rootContainer.navigatorKey,
-        supportedLocales: localizationService.supportedLocales,
+        navigatorKey: _navigation.rootContainer.navigatorKey,
+        supportedLocales: _localizationService.supportedLocales,
+        locale: _appLocaleService.locale,
         localizationsDelegates: [
           AppLocalizations.delegate,
-          ...localizationService.getLocalizationDelegates(),
+          ..._localizationService.getLocalizationDelegates(),
           CoreUiLocalization.delegate,
         ]);
   }

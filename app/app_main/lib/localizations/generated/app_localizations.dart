@@ -254,6 +254,12 @@ abstract class AppLocalizations {
   /// **'Ready to game'**
   String get title_ready;
 
+  /// No description provided for @title_language.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a language:'**
+  String get title_language;
+
   /// No description provided for @description_great.
   ///
   /// In en, this message translates to:
@@ -313,6 +319,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Words left: {number}'**
   String title_word_number(String number);
+
+  /// No description provided for @ua.
+  ///
+  /// In en, this message translates to:
+  /// **'Ukrainian'**
+  String get ua;
+
+  /// No description provided for @en.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get en;
+
+  /// No description provided for @r.
+  ///
+  /// In en, this message translates to:
+  /// **'Russian'**
+  String get r;
 }
 
 class _AppLocalizationsDelegate

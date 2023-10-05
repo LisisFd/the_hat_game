@@ -44,7 +44,7 @@ class _GameProcessScreenState extends State<GameProcessScreen>
 
   GameState get _gameState => _gameService.gameState;
 
-  bool _helper = false;
+  bool get _helper => _settingService.appSettings.value.isFirstLaunch;
   bool _wordView = false;
   bool _startBounce = false;
   bool _skipAnimation = false;
@@ -236,7 +236,9 @@ class _GameProcessScreenState extends State<GameProcessScreen>
         ? HelperGameWidget(
             onClose: () {
               setState(() {
-                _helper = false;
+                var settings = _settingService.appSettings.value;
+                _settingService
+                    .updateSettings(settings.copyWith(isFirstLaunch: false));
               });
             },
           )

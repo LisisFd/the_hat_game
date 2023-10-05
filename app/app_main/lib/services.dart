@@ -21,16 +21,19 @@ class AppServices {
     container.addErrorReporterService();
     container.addLoadingServiceWrapper();
     container.addAppRoutes();
-    //----------DOMAIN--------------------
+    container.addAppSubject();
+    //----------addAppSubject--------------------
     container.addTeamsRepository();
     container.addGameRepository();
     container.addSettingsRepository();
     container.addAppLifeStyleRepository();
+    container.addAppLocaleRepository();
     //---------CONTROLLERS----------------
     container.addTeamsServiceFeature();
     container.addSettingsServiceFeature();
     container.addTheHatGameServiceFeature();
     container.addGameRestoreFlowFeature();
+    container.addAppLocaleServiceFeature();
     //---------TEST---------------------
     if (kDebugMode) {
       container.addAppTestWidget(() => DebugNavigationWidget());
