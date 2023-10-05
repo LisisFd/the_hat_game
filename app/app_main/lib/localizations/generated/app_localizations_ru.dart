@@ -44,7 +44,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get title_settings => 'Настройки';
 
   @override
-  String get title_last_word => 'Последнее слово';
+  String get title_last_word => 'Общее последнее слово';
 
   @override
   String get title_winner => 'Победитель';
@@ -84,6 +84,9 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get title_language => 'Выберите язык:';
+
+  @override
+  String get title_team_word => 'Выберете команду:';
 
   @override
   String get description_great =>

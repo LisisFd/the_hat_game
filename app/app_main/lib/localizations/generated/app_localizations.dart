@@ -179,7 +179,7 @@ abstract class AppLocalizations {
   /// No description provided for @title_last_word.
   ///
   /// In en, this message translates to:
-  /// **'Last word'**
+  /// **'General last word'**
   String get title_last_word;
 
   /// No description provided for @title_winner.
@@ -259,6 +259,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Choose a language:'**
   String get title_language;
+
+  /// No description provided for @title_team_word.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a team:'**
+  String get title_team_word;
 
   /// No description provided for @description_great.
   ///

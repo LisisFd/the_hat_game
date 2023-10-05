@@ -44,7 +44,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get title_settings => 'Settings';
 
   @override
-  String get title_last_word => 'Last word';
+  String get title_last_word => 'General last word';
 
   @override
   String get title_winner => 'Winner';
@@ -84,6 +84,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get title_language => 'Choose a language:';
+
+  @override
+  String get title_team_word => 'Choose a team:';
 
   @override
   String get description_great => 'Please, pass device to the next player';
