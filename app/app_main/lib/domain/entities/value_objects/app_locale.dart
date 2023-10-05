@@ -1,6 +1,6 @@
 import 'package:core_api/core_api.dart';
 
-part 'app_locale.g.dart';
+part 'gen/app_locale.g.dart';
 
 @CopyWith()
 @JsonSerializable()

@@ -2,7 +2,7 @@ import 'package:core_api/core_api.dart';
 
 import '../entities.dart';
 
-part 'game.g.dart';
+part 'gen/game.g.dart';
 
 ///TODO: set generated directory
 @CopyWith()

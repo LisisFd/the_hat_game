@@ -1,6 +1,6 @@
 import 'package:core_api/core_api.dart';
 
-part 'team.g.dart';
+part 'gen/team.g.dart';
 
 @CopyWith()
 @JsonSerializable()

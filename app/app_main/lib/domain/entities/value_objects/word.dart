@@ -3,7 +3,7 @@ import 'package:core_crypto/core_crypto.dart';
 
 import 'word_status.dart';
 
-part 'word.g.dart';
+part 'gen/word.g.dart';
 
 @CopyWith()
 @JsonSerializable()
