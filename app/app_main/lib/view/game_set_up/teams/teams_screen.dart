@@ -22,7 +22,7 @@ class TeamsScreen extends StatefulWidget {
 }
 
 class _TeamsScreenState extends State<TeamsScreen> {
-  static const int _minPlayers = 1;
+  static const int _minPlayers = 2;
   static const int _maxPlayers = 10;
 
   final IGameService _gameService = getWidgetService<IGameService>();

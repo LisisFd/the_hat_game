@@ -4,12 +4,12 @@ import 'package:app_core/app_core.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/localization.dart';
 import 'package:app_main/services.dart';
-import 'package:core_app_test/core_app_testing.dart';
 import 'package:core_flutter/core_flutter.dart';
 import 'package:core_get_it/core_get_it.dart';
 import 'package:core_localization/core_localization.dart';
 import 'package:core_ui/core_ui.dart';
 import 'package:core_utils/core_utils.dart';
+import 'package:responsive_framework/responsive_wrapper.dart';
 
 Future runFullApp() async {
   var container = await initFullApp();
@@ -65,6 +65,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with SubjectWidgetContext {
+  static const double _appWidth = 390.0;
   final RootAppNavigation _navigation = getWidgetService<RootAppNavigation>();
   final LocalizationService _localizationService =
       getWidgetService<LocalizationService>();
@@ -80,6 +81,10 @@ class _MyAppState extends State<MyApp> with SubjectWidgetContext {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
         onGenerateTitle: (context) => context.localization().appName,
         debugShowCheckedModeBanner: false,
@@ -87,11 +92,13 @@ class _MyAppState extends State<MyApp> with SubjectWidgetContext {
         themeMode: ThemeMode.light,
         onGenerateInitialRoutes: _navigation.onGenerateInitialRoutes,
         onGenerateRoute: _navigation.onGenerateRoute,
-        builder: (context, widget) => widget == null
-            ? const SizedBox.shrink()
-            : AppTestWrap(
-                child: widget,
-              ),
+        builder: (context, widget) {
+          var deviceWidth = MediaQuery.of(context).size.width;
+          return ResponsiveWrapper.builder(
+            widget,
+            defaultScaleFactor: deviceWidth / _appWidth,
+          );
+        },
         navigatorKey: _navigation.rootContainer.navigatorKey,
         supportedLocales: _localizationService.supportedLocales,
         locale: _appLocaleService.locale,
