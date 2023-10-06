@@ -31,6 +31,8 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+app/app_main/lib/domain/entities/aggregates/gen/**
+app/app_main/lib/domain/entities/value_objects/gen/**
 
 # Symbolication related
 app.*.symbols

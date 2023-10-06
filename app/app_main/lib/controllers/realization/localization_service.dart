@@ -48,8 +48,11 @@ class AppLocaleService extends IAppLocaleService {
     bool? sR;
     Locale deviceLocale;
     if (currentLocale == null) {
-      var locale = DeviceLocaleService.getCountryCodeFromLocale();
-      var ip = await DeviceLocaleService.getCountryCodeFromIp();
+      String? locale;
+      if (!kIsWeb) {
+        locale = DeviceLocaleService.getCountryCodeFromLocale();
+      }
+      String? ip = await DeviceLocaleService.getCountryCodeFromIp();
       if (locale != AppConfig.ua && ip != AppConfig.ua) {
         sR = true;
       }

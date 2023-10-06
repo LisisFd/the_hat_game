@@ -50,3 +50,5 @@ jobs:
 
       - name: Start release build
         run: flutter build appbundle
+      - name: Start demo build web
+        run: flutter build web
