@@ -101,24 +101,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get error_input_word => 'Please write a word';
 
   @override
-  String get rules_alias =>
-      'Explain words using synonyms, antonyms, descriptions and various hints without using cognate words.';
+  String get rules_alias => 'Explain words using synonyms, antonyms, descriptions and various hints without using cognate words.';
 
   @override
-  String get rules_one_word =>
-      'Since at the first stage you learned all the words in the hat, now your explanation should contain only one word.';
+  String get rules_one_word => 'Since at the first stage you learned all the words in the hat, now your explanation should contain only one word.';
 
   @override
-  String get rules_crocodile =>
-      'Now let\'s move a little. Use only facial expressions, gestures or dances to show your comrades the word without making a sound';
+  String get rules_crocodile => 'Now let\'s move a little. Use only facial expressions, gestures or dances to show your comrades the word without making a sound';
 
   @override
-  String get helper_words_text =>
-      'Each player must write the words that you will guess during the game. (Hint: the number of words that each player must enter can be changed in the settings)';
+  String get helper_words_text => 'Each player must write the words that you will guess during the game. (Hint: the number of words that each player must enter can be changed in the settings)';
 
   @override
-  String get helper_game_text =>
-      'Swipe the piece of paper to the right if your team guessed the word and to the left if you decided to skip it';
+  String get helper_game_text => 'Swipe the piece of paper to the right if your team guessed the word and to the left if you decided to skip it';
 
   @override
   String title_round_number(String number) {

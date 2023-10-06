@@ -9,6 +9,7 @@ import 'package:core_get_it/core_get_it.dart';
 import 'package:core_localization/core_localization.dart';
 import 'package:core_ui/core_ui.dart';
 import 'package:core_utils/core_utils.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:responsive_framework/responsive_wrapper.dart';
 
 Future runFullApp() async {
@@ -85,7 +86,7 @@ class _MyAppState extends State<MyApp> with SubjectWidgetContext {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return MaterialApp(
+    Widget materialApp = MaterialApp(
         onGenerateTitle: (context) => context.localization().appName,
         debugShowCheckedModeBanner: false,
         theme: MyAppTheme.createMaterial(),
@@ -107,5 +108,13 @@ class _MyAppState extends State<MyApp> with SubjectWidgetContext {
           ..._localizationService.getLocalizationDelegates(),
           CoreUiLocalization.delegate,
         ]);
+    return kIsWeb
+        ? FlutterWebFrame(
+            builder: (context) {
+              return Center(child: materialApp);
+            },
+            maximumSize: const Size(_appWidth, _appWidth * 2),
+          )
+        : materialApp;
   }
 }
