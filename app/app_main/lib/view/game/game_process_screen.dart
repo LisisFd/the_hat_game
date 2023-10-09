@@ -117,9 +117,6 @@ class _GameProcessScreenState extends State<GameProcessScreen>
   void _checkWord(bool right) async {
     if (_isLast || _gameState == GameState.lastWord) {
       _timer?.stop();
-      _gameService.updateGame(
-          time: _settingService.appSettings.value.timePlayerTurn,
-          gameState: GameState.init);
       Team? anotherTeam;
       if (_gameService.generalLastWord &&
           right &&
@@ -130,6 +127,9 @@ class _GameProcessScreenState extends State<GameProcessScreen>
           _gameService.updateGame(pointPlus: _semanticOne);
         }
       }
+      _gameService.updateGame(
+          time: _settingService.appSettings.value.timePlayerTurn,
+          gameState: GameState.init);
       _gameService.updateWord(right, anotherTeam);
       _gameService.saveGame();
       if (mounted) {

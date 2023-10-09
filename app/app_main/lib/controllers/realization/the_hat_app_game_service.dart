@@ -111,6 +111,7 @@ class TheHatGameService extends IGameService {
     );
     currentWords.shuffle();
     TheHatAppGame? game = _appGame.value?.copyWith(words: currentWords);
+    game?.words.shuffle();
     _saveGame(game);
   }
 
@@ -125,7 +126,6 @@ class TheHatGameService extends IGameService {
   }) {
     int currentTeamIndex = teams.indexWhere((t) => t.name == currentTeam.name);
     Team team = currentTeam;
-
     if (anotherTeam != null) {
       currentTeamIndex = teams.indexWhere((t) => t.name == anotherTeam?.name);
       team = anotherTeam;
@@ -222,6 +222,7 @@ class TheHatGameService extends IGameService {
     TheHatAppGame? game =
         _appGame.value?.copyWith(currentLap: Lap.values[currentLapIndex + 1]);
     if (game == null) return;
+    game.words.shuffle();
     _appGame.setValue(game);
   }
 

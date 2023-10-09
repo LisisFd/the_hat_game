@@ -126,7 +126,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               }),
           position: _SettingsPosition.vertical),
       _SettingsModel(
-        title: localization.title_last_word,
+        title: localization.title_general_last_word,
         action: Switch(
             value: currentSettings.lastWord,
             onChanged: (val) {
