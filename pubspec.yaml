@@ -28,6 +28,7 @@ dependencies:
     path: "app/app_main"
   cupertino_icons: ^1.0.2
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
