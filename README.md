@@ -2,15 +2,19 @@
 
 The hat game
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### [Preview](https://lisisfd.github.io/the_hat_game/)
+## Stack
+1. [GetIt;](https://pub.dev/packages/get_it)
+2. [Arb Translator;](https://pub.dev/packages/flutter_arb_translator)
+3. [Responsive Framework;](https://pub.dev/packages/responsive_framework)
+4. [Lottie Animations;](https://pub.dev/packages/lottie)
+5. Core Flutter sunmodule - this is my private module that contains interface classes and feature implementations for faster deployment and development of the project.Example:
+  * Implementation of local storage for Web, Android, IOs.
+  * Google and IOs authentication
+  * Various Firebase services
+  * etc.
+6. Github actions:
+  * Set up
+  * Run tests
+  * Build apk,web
+  * Publish with Github pages
